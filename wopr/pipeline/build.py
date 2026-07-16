@@ -490,6 +490,58 @@ def build_month_tables(ged, cand) -> tuple[list[list], list[list]]:
     return [c_header] + c_rows, [d_header] + d_rows
 
 
+# ---------------------------------------------------------------- regime
+
+# OWID entity name -> our states.yaml name, ONLY where they truly differ
+# (the registry prefers plain modern UCDP names — do not "correct" those)
+OWID_NAMES = {
+    "United States": "United States of America",
+    "Democratic Republic of Congo": "DR Congo (Zaire)",
+    "Cote d'Ivoire": "Ivory Coast",
+    "Myanmar": "Myanmar (Burma)",
+    "Russia": "Russia (Soviet Union)",
+    "Yemen": "Yemen (North Yemen)",
+    "Vietnam": "Vietnam (North Vietnam)",
+    "Cambodia": "Cambodia (Kampuchea)",
+    "Zimbabwe": "Zimbabwe (Rhodesia)",
+    "Eswatini": "Kingdom of eSwatini (Swaziland)",
+    "Czechia": "Czech Republic",
+    "Bosnia and Herzegovina": "Bosnia-Herzegovina",
+    "South Yemen": "Yemen (South Yemen)",
+    "Yemen People's Republic": "Yemen (South Yemen)",
+    "Yemen Arab Republic": "Yemen (North Yemen)",
+    "East Germany": "German Democratic Republic",
+    "West Germany": "Germany",
+    "Madagascar": "Madagascar (Malagasy)",
+    "Democratic Republic of Vietnam": "Vietnam (North Vietnam)",
+    "Republic of Vietnam": "Vietnam, Republic of",
+}
+
+
+def build_regime(states, last_year: int) -> list[list]:
+    """data/tables/regime.csv: Regimes of the World (0–3) per gwno-year,
+    1945–present, name-matched from the OWID/V-Dem extract."""
+    by_name = {s["name"]: s["gwno"] for s in states}
+    rows = []
+    unmatched = set()
+    with open(SOURCES / "owid-regime.csv", newline="", encoding="utf-8-sig") as f:
+        for r in csv.DictReader(f):
+            year = int(r["Year"])
+            if year < YEAR_MIN - 1 or not r["Political regime"].strip().isdigit():
+                continue
+            name = OWID_NAMES.get(r["Entity"], r["Entity"])
+            gwno = by_name.get(name)
+            if gwno is None:
+                unmatched.add(r["Entity"])
+                continue
+            rows.append([to_gw(gwno, year), year, int(r["Political regime"])])
+    if unmatched:
+        print(f"  regime: no gwno for {len(unmatched)} OWID entities: {sorted(unmatched)[:8]}")
+    rows.sort()
+    dedup = {(g, y): v for g, y, v in rows}  # succession alias can collide; last wins
+    return [["gwno", "year", "regime"]] + [[g, y, v] for (g, y), v in sorted(dedup.items())]
+
+
 # ---------------------------------------------------------------- pair universe
 
 P5 = (2, 200, 220, 365, 710)
@@ -651,11 +703,13 @@ def main() -> None:
     dy_table = build_dyad_year(dyadic_rows, ged["dyad_year"], dyads)
     cm_table, dm_table = build_month_tables(ged, cand)
     pair_table = build_pair_year(states, dyadic_rows, last_year)
+    regime_table = build_regime(states, last_year)
     write_csv(TABLES / "country-year.csv", cy_table[0], cy_table[1:])
     write_csv(TABLES / "dyad-year.csv", dy_table[0], dy_table[1:])
     write_csv(TABLES / "country-month.csv", cm_table[0], cm_table[1:])
     write_csv(TABLES / "dyad-month.csv", dm_table[0], dm_table[1:])
     write_csv(TABLES / "pair-year.csv", pair_table[0], pair_table[1:])
+    write_csv(TABLES / "regime.csv", regime_table[0], regime_table[1:])
 
     meta = {
         "ucdp_release": manifest["ucdp_release"],

@@ -25,9 +25,11 @@
   reverted to frozen one-step; machinery retained** (docs/method.md).
   ~~Annual-grain intensity + neighbor~~ **done** (0.4.0: |minor/|war bands +
   country +nbr; additive backtest gains on death-threshold suites, mixed
-  cells documented). Still open: continuous tempo with a tune/validate
-  vantage split, self-level horizon decay curves, ACLED weeklies as a tempo
-  input, V-Dem covariate classes.
+  cells documented). ~~V-Dem covariate classes~~ **built, backtested,
+  rejected** (worse on every country suite — cell fragmentation; capability
+  and the regime table retained; docs/method.md). Still open: continuous
+  tempo AND regime variants behind a proper tune/validate vantage split,
+  self-level horizon decay curves, ACLED weeklies as a tempo input.
 - **Proper hierarchical model** replacing the moment-matched EB (partial
   pooling over region × bucket, fitted once at build time).
 - **Conflict-scope priors** (aggregate dyad substrate per conflict id).

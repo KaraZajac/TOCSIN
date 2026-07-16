@@ -56,6 +56,7 @@ def walk(grain: str, measure: str, types: tuple, threshold: int, substrate: dict
     members_by_sig[("__global__",)] = units
     # precompute observables (both look only backward / at Y itself)
     nbr = substrate.get("nbr_active") if grain == "country" else None
+    regime = None  # measured worse; see rate() and docs/method.md
     hits: dict[int, dict[int, bool]] = {}
     buckets: dict[int, dict[int, str]] = {}
     for u in units:
@@ -64,7 +65,7 @@ def walk(grain: str, measure: str, types: tuple, threshold: int, substrate: dict
             h = hit(u, y, spec)
             if h is None:
                 continue
-            b = bucket_of(u, y, spec, nbr)
+            b = bucket_of(u, y, spec, nbr, regime)
             if b is None:
                 continue
             hu[y], bu[y] = h, b

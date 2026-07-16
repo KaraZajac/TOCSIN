@@ -67,6 +67,17 @@ class TestHitAndBuckets(unittest.TestCase):
         self.assertEqual(bucket_of(u, 2012, s, nbr), "cold")
         self.assertEqual(bucket_of(u, 2011, s, None), "cold")
 
+    def test_regime_suffix_capability(self):
+        # capability retained and tested; the engine passes regime=None after
+        # the conditioning measured worse in the backtest (docs/method.md)
+        u = unit(1, "Africa", 2000, {})
+        s = spec(1)
+        regime = {(1, 2010): "mid"}
+        self.assertEqual(bucket_of(u, 2011, s, None, regime), "cold~mid")
+        self.assertEqual(bucket_of(u, 2011, s, {(1, 2010)}, regime), "cold+nbr~mid")
+        self.assertEqual(bucket_of(u, 2012, s, None, regime), "cold")  # no coverage, no suffix
+        self.assertEqual(coarse("cold+nbr~mid"), "cold")
+
     def test_run_broken_by_quiet_year_restarts_age(self):
         u = unit(1, "Africa", 2000, {2005: 30, 2006: 30, 2008: 30})
         s = spec(1)

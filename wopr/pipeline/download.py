@@ -40,6 +40,10 @@ GW_FILES = {
     "gw-states.tsv": f"{GW}/ksgmdw.txt",
     "gw-microstates.tsv": f"{GW}/microstates.txt",
     "gw-mindist.csv": "http://ksgleditsch.com/mindist/smallmdd.csv",
+    # V-Dem Regimes of the World (0 closed autocracy … 3 liberal democracy),
+    # via Our World in Data's maintained extract — V-Dem's own site is
+    # form-gated and unfetchable unattended
+    "owid-regime.csv": "https://ourworldindata.org/grapher/political-regime.csv",
 }
 
 

@@ -52,8 +52,8 @@ ACD_START = 1946
 
 
 def coarse(bucket: str) -> str:
-    """active-2-3|war -> active, cold+nbr -> cold (for badges/map keys)."""
-    base = bucket.split("|")[0].split("+")[0]
+    """active-2-3|war -> active, cold+nbr~mid -> cold (for badges/map keys)."""
+    base = bucket.split("|")[0].split("+")[0].split("~")[0]
     return "active" if base.startswith("active") else base
 
 
@@ -109,6 +109,23 @@ def load_neighbors(tables: Path = TABLES, km: int = 400) -> dict:
             out[a][y].add(b)
             out[b][y].add(a)
     return {g: dict(years) for g, years in out.items()}
+
+
+REGIME_BANDS = {0: "aut", 1: "mid", 2: "mid", 3: "dem"}  # Regimes of the World, collapsed a priori
+
+
+def load_regime(tables: Path = TABLES) -> dict:
+    """(gwno, year) -> 'aut'|'mid'|'dem' from the committed V-Dem/OWID table.
+    The middle band (electoral autocracies + electoral democracies) is the
+    anocracy belt the onset literature flags as riskiest."""
+    path = tables / "regime.csv"
+    if not path.exists():
+        return {}
+    out = {}
+    with open(path, newline="") as f:
+        for r in csv.DictReader(f):
+            out[(int(r["gwno"]), int(r["year"]))] = REGIME_BANDS[int(r["regime"])]
+    return out
 
 
 def _nbr_active(countries: dict, neighbors: dict) -> set:
@@ -212,6 +229,7 @@ def load_substrate(tables: Path = TABLES) -> dict:
         "partial": load_partial(tables, last),
         "neighbors": neighbors,
         "nbr_active": _nbr_active(countries, neighbors),
+        "regime": load_regime(tables),
     }
 
 
@@ -245,12 +263,14 @@ def war_year(u: Unit, year: int, spec: Spec) -> bool:
     return sum(row.get(t) or 0 for t in spec.types) >= WAR_DEATHS
 
 
-def bucket_of(u: Unit, year: int, spec: Spec, nbr: set | None = None) -> str | None:
+def bucket_of(u: Unit, year: int, spec: Spec, nbr: set | None = None, regime: dict | None = None) -> str | None:
     """Recency/episode-age bucket entering `year`, from history strictly
     before it. Active units are banded by consecutive hit-years (episode
     age) and by last year's intensity (|minor / |war). Non-active units get
     "+nbr" when `nbr` (the substrate's neighbor-at-war set, country grain)
-    flags a ≤400km neighbor in conflict last year. Runs touching the
+    flags a ≤400km neighbor in conflict last year, and "~aut/~mid/~dem" from
+    last year's regime band when `regime` covers the unit (V-Dem RoW,
+    collapsed; missing coverage simply omits the suffix). Runs touching the
     substrate start are left-censored (age reads low)."""
     lo, _ = spec.period
     start = max(lo, u.first_year if spec.measure == "acd-active" else max(u.first_year, DEATHS_START))
@@ -277,17 +297,23 @@ def bucket_of(u: Unit, year: int, spec: Spec, nbr: set | None = None) -> str | N
                     return f"{name}|{band}"
         base = "recent" if gap <= 3 else "dormant" if gap <= 10 else "cold"
     if nbr is not None and (u.id, year - 1) in nbr:
-        return f"{base}+nbr"
+        base = f"{base}+nbr"
+    if regime is not None:
+        band = regime.get((u.id, year - 1))
+        if band:
+            base = f"{base}~{band}"
     return base
 
 
-def unit_bucket_years(u: Unit, spec: Spec, bucket: str, nbr: set | None = None) -> tuple[int, int]:
+def unit_bucket_years(
+    u: Unit, spec: Spec, bucket: str, nbr: set | None = None, regime: dict | None = None
+) -> tuple[int, int]:
     """(hits k, exposure years n) for u restricted to years entered in `bucket`."""
     lo, hi = spec.period
     k = n = 0
     for y in range(lo + 1, hi + 1):
         h = hit(u, y, spec)
-        if h is None or bucket_of(u, y, spec, nbr) != bucket:
+        if h is None or bucket_of(u, y, spec, nbr, regime) != bucket:
             continue
         n += 1
         k += int(h)
@@ -345,14 +371,18 @@ def rate(spec: Spec, substrate: dict) -> dict:
         raise KeyError(f"unknown {spec.grain} id {spec.unit}")
     me = units[spec.unit]
     nbr = substrate.get("nbr_active") if spec.grain == "country" else None
+    # regime conditioning was built and backtested: WORSE on every country
+    # suite (cell fragmentation beats the anocracy signal — docs/method.md).
+    # The capability stays (bucket_of takes `regime`); the engine passes None.
+    regime = None
     # the unit's bucket is its status at the edge of observation — unobserved
     # years between the substrate end and as_of must not decay it toward cold
     bucket_year = min(spec.as_of, spec.period[1] + 1)
-    bucket = bucket_of(me, bucket_year, spec, nbr) or "cold"
+    bucket = bucket_of(me, bucket_year, spec, nbr, regime) or "cold"
     nowcast = nowcast_bucket(me, spec, substrate.get("partial"))
     if nowcast:
         bucket = nowcast["bucket"]
-    k_self, n_self = unit_bucket_years(me, spec, bucket, nbr)
+    k_self, n_self = unit_bucket_years(me, spec, bucket, nbr, regime)
 
     out = {
         "spec": spec.to_dict(),
@@ -368,7 +398,7 @@ def rate(spec: Spec, substrate: dict) -> dict:
     posteriors = {}
     for level in ("self", "region", "global"):
         members = class_units(spec, substrate, level)
-        counts = [unit_bucket_years(u, spec, bucket, nbr) for u in members]
+        counts = [unit_bucket_years(u, spec, bucket, nbr, regime) for u in members]
         K = sum(k for k, _ in counts)
         N = sum(n for _, n in counts)
         entry = {"units": len(members), "years": N, "hits": K, "rate": round(K / N, 4) if N else None}

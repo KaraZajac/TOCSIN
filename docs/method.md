@@ -89,15 +89,24 @@ rates are tiny against mostly-zero outcomes), but the class distinction is
 real and large — it is exactly the difference that matters for onset
 questions at year grain.
 
-**A measured negative result, kept on the record:** horizon-aware class
-rates — pricing a window g months past the data edge by class windows offset
-the same g — were built, ablated, and found **worse** (+.003 Brier overall,
-worst at long horizons). Mechanism: class-level decay pools units that exit
-conflict with units that persist, so it systematically underprices the
-persisters that dominate scoring. The engine therefore applies the one-step
-rate frozen across staleness (noted on affected outputs); the horizon
-machinery remains in `build_state(gaps=…)`, tested, for future self-level
-decay-curve work.
+**Measured negative results, kept on the record:**
+
+1. *Horizon-aware class rates* — pricing a window g months past the data
+   edge by class windows offset the same g — built, ablated, **worse**
+   (+.003 Brier, worst at long horizons). Mechanism: class-level decay pools
+   units that exit conflict with units that persist, underpricing the
+   persisters that dominate scoring. The engine applies the one-step rate
+   frozen across staleness; the machinery remains in `build_state(gaps=…)`.
+2. *V-Dem regime conditioning* — Regimes of the World collapsed a priori to
+   aut/mid/dem and suffixed onto non-active country buckets — built,
+   ablated, **worse on every country suite** (sb≥25 .04109→.04131;
+   all≥100 .03660→.03710; acd +.0003). Mechanism: a 3-way split stacked on
+   the neighbor split fragments non-active cells below the region fallback
+   threshold; estimator variance exceeds the anocracy signal, which region ×
+   neighbor × history already partially carries. The engine passes
+   `regime=None`; the capability is tested and the clean regime table
+   (`data/tables/regime.csv`, V-Dem RoW via OWID) stays committed for
+   display and for a future tune/validate-protocol revisit.
 
 Caveats: window-starts overlap, so class counts are not independent — rates
 and calibration read fine, but shrinkage/floors modestly overstate certainty.
