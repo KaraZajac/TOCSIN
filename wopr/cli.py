@@ -14,6 +14,7 @@
 
 import argparse
 import datetime
+import re
 import sys
 
 import yaml
@@ -72,10 +73,25 @@ def parse_window(args) -> tuple[str, str, str]:
     raise SystemExit("give a window: --year 2026 or --window 2026-07-01:2027-06-30")
 
 
+def resolve_pair(token: str) -> dict:
+    """'Venezuela,Guyana' -> pair scope with a<b gwnos and a display name."""
+    parts = [p.strip() for p in re.split(r"[,/|]| - ", token) if p.strip()]
+    if len(parts) != 2:
+        raise SystemExit("--pair wants two countries, e.g. --pair 'Venezuela,Guyana'")
+    (ga, na, _), (gb, nb, _) = (find_unit("country", p) for p in parts)
+    if ga == gb:
+        raise SystemExit("a pair needs two different countries")
+    a, b = min(ga, gb), max(ga, gb)
+    name = f"{na if ga == a else nb} – {nb if gb == b else na}"
+    return {"kind": "pair", "id": a * 1000 + b, "a": a, "b": b, "name": name}
+
+
 def scope_from_args(args) -> tuple[dict, list[str]]:
+    if getattr(args, "pair", None):
+        return resolve_pair(args.pair), ["sb"]
     picks = [(k, getattr(args, k)) for k in ("country", "dyad", "conflict", "actor") if getattr(args, k)]
     if len(picks) != 1:
-        raise SystemExit("give exactly one of --country / --dyad / --conflict / --actor")
+        raise SystemExit("give exactly one of --country / --dyad / --conflict / --actor / --pair")
     kind, token = picks[0]
     uid, name, types = find_unit(kind, token)
     return {"kind": kind, "id": uid, "name": name}, types
@@ -83,15 +99,20 @@ def scope_from_args(args) -> tuple[dict, list[str]]:
 
 def engine_prior(criteria: dict) -> dict | None:
     scope, types = criteria["scope"], criteria["types"]
-    if criteria["measure"] != "deaths" or scope["kind"] not in ("country", "dyad"):
+    if criteria["measure"] != "deaths" or scope["kind"] not in ("country", "dyad", "pair"):
         return None
     if scope["kind"] == "dyad" and types != ["sb"]:
         return None
+    if scope["kind"] == "pair" and criteria["threshold"] != 25:
+        return None  # pair substrate is UCDP activity, defined at the 25-death line
     sub = baserate.load_substrate()
     if scope["id"] not in sub[scope["kind"]]:
-        return None  # e.g. non-state dyad: no year substrate at this grain yet
+        return None  # e.g. non-state dyad, or a pair outside the relevance universe
     as_of = int(str(criteria["window"]["start"])[:4])
-    spec = baserate.Spec(scope["kind"], scope["id"], "deaths", tuple(types), criteria["threshold"], as_of)
+    if scope["kind"] == "pair":
+        spec = baserate.Spec("pair", scope["id"], "acd-active", (), 25, as_of)
+    else:
+        spec = baserate.Spec(scope["kind"], scope["id"], "deaths", tuple(types), criteria["threshold"], as_of)
     result = baserate.rate(spec, sub)
     result["unit_name"] = scope["name"]
     return {
@@ -114,6 +135,7 @@ def synthesize_question(criteria: dict) -> str:
         "dyad": f"in the dyad {scope['name']}",
         "conflict": f"in the conflict {scope['name']}",
         "actor": f"by {scope['name']}",
+        "pair": f"between the governments of {scope['name']} (either direction)",
     }[scope["kind"]]
     w = c["window"]
     return (
@@ -127,13 +149,21 @@ def synthesize_question(criteria: dict) -> str:
 
 def cmd_rate(args) -> None:
     scope, default_types = scope_from_args(args)
-    if scope["kind"] not in ("country", "dyad"):
-        raise SystemExit("rate supports --country and --dyad scopes (v0)")
+    if scope["kind"] not in ("country", "dyad", "pair"):
+        raise SystemExit("rate supports --country, --dyad, and --pair scopes")
     types = args.types.split(",") if args.types else default_types
     sub = baserate.load_substrate()
-    spec = baserate.Spec(
-        scope["kind"], scope["id"], args.measure, tuple(types), args.threshold, args.as_of or 0
-    )
+    if scope["kind"] == "pair":
+        if scope["id"] not in sub["pair"]:
+            raise SystemExit(
+                f"{scope['name']} is outside the relevance universe (not proximate, not same-region, "
+                "no P5 member) — there is no defensible denominator, so the engine declines"
+            )
+        spec = baserate.Spec("pair", scope["id"], "acd-active", (), 25, args.as_of or 0)
+    else:
+        spec = baserate.Spec(
+            scope["kind"], scope["id"], args.measure, tuple(types), args.threshold, args.as_of or 0
+        )
     result = baserate.rate(spec, sub)
     result["unit_name"] = scope["name"]
     print(baserate.render(result))
@@ -297,6 +327,7 @@ def main(argv: list[str] | None = None) -> None:
         p.add_argument("--dyad")
         p.add_argument("--conflict")
         p.add_argument("--actor")
+        p.add_argument("--pair", help="two countries, e.g. 'Venezuela,Guyana' (interstate pair)")
         p.add_argument("--types", help="comma subset of sb,ns,os")
         p.add_argument("--threshold", type=int, default=25)
 

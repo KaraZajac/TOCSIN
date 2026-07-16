@@ -334,3 +334,87 @@ dyad/acd-active:
       mean_p: 0.007
       observed: 0.009
       brier: 0.0097
+pair/acd-active:
+  n: 234136
+  base_rate: 0.0006
+  brier_engine: 0.0005
+  brier_climatology: 0.0006
+  skill_vs_climatology: 0.2264
+  log_engine: -0.003
+  calibration:
+  - bin: 0–10%
+    n: 233949
+    mean_p: 0.0
+    observed: 0.0
+  - bin: 10–20%
+    n: 45
+    mean_p: 0.123
+    observed: 0.044
+  - bin: 20–30%
+    n: 6
+    mean_p: 0.232
+    observed: 0.333
+  - bin: 30–40%
+    n: 56
+    mean_p: 0.343
+    observed: 0.375
+  - bin: 40–50%
+    n: 27
+    mean_p: 0.436
+    observed: 0.481
+  - bin: 50–60%
+    n: 17
+    mean_p: 0.544
+    observed: 0.647
+  - bin: 60–70%
+    n: 10
+    mean_p: 0.64
+    observed: 0.4
+  - bin: 70–80%
+    n: 18
+    mean_p: 0.746
+    observed: 0.667
+  - bin: 80–90%
+    n: 7
+    mean_p: 0.844
+    observed: 1.0
+  - bin: 90–100%
+    n: 1
+    mean_p: 0.9
+    observed: 0.0
+  by_bucket:
+    active-1:
+      n: 73
+      mean_p: 0.394
+      observed: 0.329
+      brier: 0.2478
+    active-2-3:
+      n: 35
+      mean_p: 0.47
+      observed: 0.657
+      brier: 0.2772
+    active-4-9:
+      n: 31
+      mean_p: 0.71
+      observed: 0.774
+      brier: 0.228
+    active-10+:
+      n: 1
+      mean_p: 0.001
+      observed: 1.0
+      brier: 0.9976
+    recent:
+      n: 136
+      mean_p: 0.044
+      observed: 0.066
+      brier: 0.0631
+    dormant:
+      n: 407
+      mean_p: 0.043
+      observed: 0.029
+      brier: 0.0293
+    cold:
+      n: 233453
+      mean_p: 0.0
+      observed: 0.0
+      brier: 0.0002

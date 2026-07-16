@@ -34,9 +34,12 @@ ZIPS = {
 }
 # v7 of the Gleditsch–Ward list (ksgmdw.txt, through 2020); the old
 # iisystem.dat/microstatessystem.dat URLs are frozen at the 2017 revision.
+# smallmdd is the Gleditsch–Ward dyadic minimum-distance data (km, 1875–2002),
+# the exposure substrate for the politically-relevant pair universe.
 GW_FILES = {
     "gw-states.tsv": f"{GW}/ksgmdw.txt",
     "gw-microstates.tsv": f"{GW}/microstates.txt",
+    "gw-mindist.csv": "http://ksgleditsch.com/mindist/smallmdd.csv",
 }
 
 

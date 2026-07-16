@@ -490,7 +490,122 @@ def build_month_tables(ged, cand) -> tuple[list[list], list[list]]:
     return [c_header] + c_rows, [d_header] + d_rows
 
 
-# ---------------------------------------------------------------- main
+# ---------------------------------------------------------------- pair universe
+
+P5 = (2, 200, 220, 365, 710)
+PAIR_KM = 400  # proximity threshold; coverage of interstate hits printed at build
+# land neighbors of states born after the distance data ends (2002)
+NEW_STATE_NEIGHBORS = {
+    341: [340, 344, 346, 339],            # Montenegro
+    347: [339, 340, 341, 343],            # Kosovo
+    626: [482, 490, 500, 501, 530, 625],  # South Sudan
+    860: [850],                           # East Timor
+}
+
+
+def build_pair_year(states, dyadic_rows, last_year: int) -> list[list]:
+    """The relevant pair universe: for every year, all country pairs that are
+    proximate (Gleditsch–Ward minimum distance ≤ PAIR_KM), in the same UCDP
+    region (standoff-era conflicts — Iran–Israel, Israel–Yemen — and divided
+    states are region-mates, not distance-mates), or involve a P5 state
+    (microstates join through the P5 rule only: Grenada 1983). This is the
+    exposure denominator observed dyads can't provide — pairs that never
+    fought are in here too. Distances end in 2002 and are carried forward
+    through the state-succession alias plus NEW_STATE_NEIGHBORS patches."""
+    by_abbrev = {s["abbrev"]: s["gwno"] for s in states}
+    membership = {s["gwno"]: system_years(s, last_year) for s in states if not s["microstate"]}
+    micro_membership = {s["gwno"]: system_years(s, last_year) for s in states if s["microstate"]}
+    region_of = {s["gwno"]: s["region"] for s in states}
+
+    def in_system(g, y):
+        return y in membership.get(g, ())
+
+    prox: dict[int, dict[tuple, int]] = defaultdict(dict)  # year -> {(a,b): km}
+    unmatched = set()
+    with open(SOURCES / "gw-mindist.csv", newline="") as f:
+        for r in csv.DictReader(f):
+            y = int(r["year"])
+            if y < YEAR_MIN:
+                continue
+            a, b = by_abbrev.get(r["ida"]), by_abbrev.get(r["idb"])
+            if a is None or b is None:
+                unmatched.add(r["ida"] if a is None else r["idb"])
+                continue
+            km = int(r["mindist"])
+            if km <= PAIR_KM and a != b:
+                prox[y][(min(a, b), max(a, b))] = km
+    if unmatched:
+        print(f"  pair universe: no gwno for mindist ids {sorted(unmatched)[:8]}")
+    data_end = max(prox)
+
+    # carry the last observed year forward through succession and new states
+    for y in range(data_end + 1, last_year + 1):
+        carried = {}
+        for (a, b), km in prox[data_end].items():
+            a2, b2 = to_gw(a, y), to_gw(b, y)
+            if a2 != b2:
+                carried[(min(a2, b2), max(a2, b2))] = km
+        for g, neighbors in NEW_STATE_NEIGHBORS.items():
+            if in_system(g, y):
+                for n in neighbors:
+                    n = to_gw(n, y)
+                    if n != g:
+                        carried[(min(g, n), max(g, n))] = 0
+        prox[y] = carried
+
+    hits: dict[tuple, dict] = {}
+    for r in dyadic_rows:
+        if CONFLICT_TYPES[r["type_of_conflict"]] != "interstate":
+            continue
+        y = int(r["year"])
+        war = r["intensity_level"] == "2"
+        side_a = [to_gw(g, y) for g in gwno_list(r["gwno_a"])]
+        side_b = [to_gw(g, y) for g in gwno_list(r["gwno_b"])]
+        for a in side_a:
+            for b in side_b:
+                if a == b:
+                    continue
+                key = (min(a, b), max(a, b), y)
+                h = hits.setdefault(key, {"war": False})
+                h["war"] = h["war"] or war
+
+    rows = []
+    covered = missed = 0
+    for y in range(YEAR_MIN, last_year + 1):
+        members = [g for g in membership if in_system(g, y)]
+        relevant: dict[tuple, tuple] = {}
+        for i, a in enumerate(members):  # same-region pairs
+            for b in members[i + 1 :]:
+                if region_of[a] == region_of[b]:
+                    relevant[(min(a, b), max(a, b))] = ("", "region")
+        for (a, b), km in prox.get(y, {}).items():
+            if in_system(a, y) and in_system(b, y):
+                relevant[(a, b)] = (km, "prox")
+        for g in P5:
+            g = to_gw(g, y)
+            if not in_system(g, y):
+                continue
+            for other in members + [m for m in micro_membership if y in micro_membership[m]]:
+                if other == g:
+                    continue
+                key = (min(g, other), max(g, other))
+                km = relevant.get(key, ("",))[0]
+                relevant[key] = (km, relevant[key][1] if key in relevant else "major")
+        for (a, b), (km, via) in sorted(relevant.items()):
+            h = hits.get((a, b, y))
+            rows.append([a * 1000 + b, a, b, y, km, via, 1 if h else 0, 1 if h and h["war"] else 0])
+        for (a, b, hy) in list(hits):
+            if hy == y and (a, b) not in relevant:
+                missed += 1
+        covered += sum(1 for (a, b, hy) in hits if hy == y and (a, b) in relevant)
+    total_hits = covered + missed
+    print(
+        f"  pair universe: {len(rows):,} pair-years; interstate hit coverage "
+        f"{covered}/{total_hits} ({covered / max(total_hits, 1):.1%}) via ≤{PAIR_KM}km ∪ same-region ∪ P5"
+        + (f"; {missed} hit pair-years outside (see method.md)" if missed else "")
+    )
+    header = ["pair_id", "gwno_a", "gwno_b", "year", "km", "via", "active", "war"]
+    return [header] + rows
 
 
 def dump_yaml(path: Path, obj) -> None:
@@ -535,10 +650,12 @@ def main() -> None:
     cy_table = build_country_year(states, cy_rows, acd_rows, last_year)
     dy_table = build_dyad_year(dyadic_rows, ged["dyad_year"], dyads)
     cm_table, dm_table = build_month_tables(ged, cand)
+    pair_table = build_pair_year(states, dyadic_rows, last_year)
     write_csv(TABLES / "country-year.csv", cy_table[0], cy_table[1:])
     write_csv(TABLES / "dyad-year.csv", dy_table[0], dy_table[1:])
     write_csv(TABLES / "country-month.csv", cm_table[0], cm_table[1:])
     write_csv(TABLES / "dyad-month.csv", dm_table[0], dm_table[1:])
+    write_csv(TABLES / "pair-year.csv", pair_table[0], pair_table[1:])
 
     meta = {
         "ucdp_release": manifest["ucdp_release"],
@@ -562,6 +679,7 @@ def main() -> None:
             "dyad_years": len(dy_table) - 1,
             "country_months": len(cm_table) - 1,
             "dyad_months": len(dm_table) - 1,
+            "pair_years": len(pair_table) - 1,
         },
     }
     dump_yaml(DATA / "meta.yaml", meta)

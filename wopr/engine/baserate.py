@@ -149,8 +149,28 @@ def load_substrate(tables: Path = TABLES) -> dict:
                 "acd": int(r["acd_intensity"]),
                 "sb": int(r["ged_deaths"]) if r["ged_deaths"] != "" else None,
             }
+    pairs: dict[int, Unit] = {}
+    region_of = {g: u.region[0] for g, u in countries.items()}
+    with open(tables / "pair-year.csv", newline="") as f:
+        for r in csv.DictReader(f):
+            pid, year = int(r["pair_id"]), int(r["year"])
+            u = pairs.get(pid)
+            if u is None:
+                a, b = int(r["gwno_a"]), int(r["gwno_b"])
+                regions = sorted({region_of.get(a, ""), region_of.get(b, "")} - {""})
+                u = pairs[pid] = Unit(pid, "", regions, year, year)
+            u.first_year = min(u.first_year, year)
+            u.last_year = max(u.last_year, year)
+            # exposure = row presence; a pair-year outside the universe has no row
+            u.years[year] = {"acd": 2 if r["war"] == "1" else 1 if r["active"] == "1" else 0}
     last = max(u.last_year for u in countries.values())
-    return {"country": countries, "dyad": dyads, "last_year": last, "partial": load_partial(tables, last)}
+    return {
+        "country": countries,
+        "dyad": dyads,
+        "pair": pairs,
+        "last_year": last,
+        "partial": load_partial(tables, last),
+    }
 
 
 def hit(u: Unit, year: int, spec: Spec) -> bool | None:
@@ -158,6 +178,10 @@ def hit(u: Unit, year: int, spec: Spec) -> bool | None:
     lo, hi = spec.period
     if year < lo or year > hi:
         return None
+    if spec.grain == "pair":
+        # exposure is the relevance universe itself: no row, no denominator
+        row = u.years.get(year)
+        return None if row is None else row.get("acd", 0) > 0
     if spec.measure == "acd-active":
         if year < u.first_year:
             return None
@@ -260,6 +284,8 @@ def eb_strength(members: list[tuple[int, int]]) -> float:
 def rate(spec: Spec, substrate: dict) -> dict:
     """The full ladder for a spec; ['p'] is the headline prior."""
     spec = spec.normalized(substrate["last_year"])
+    if spec.grain == "pair" and spec.measure != "acd-active":
+        raise ValueError("pair grain supports the acd-active measure only (deaths per pair: roadmap)")
     units = substrate[spec.grain]
     if spec.unit not in units:
         raise KeyError(f"unknown {spec.grain} id {spec.unit}")
@@ -333,6 +359,8 @@ def nowcast_bucket(u: Unit, spec: Spec, partial: dict | None) -> dict | None:
     is never treated as a quiet year. Applies only to questions about years
     strictly after the partial year — a question about the partial year
     itself must not see that year's own data in its prior."""
+    if spec.grain == "pair":
+        return None  # candidate months carry no pair attribution yet (roadmap)
     if not partial or spec.as_of <= partial["year"] or spec.period[1] != partial["year"] - 1:
         return None
     if spec.measure == "acd-active":

@@ -34,6 +34,7 @@ SUITE = (
     ("country", "deaths", ("sb", "ns", "os"), 100),
     ("country", "acd-active", (), 25),
     ("dyad", "acd-active", (), 25),
+    ("pair", "acd-active", (), 25),
 )
 
 
@@ -43,13 +44,16 @@ def walk(grain: str, measure: str, types: tuple, threshold: int, substrate: dict
     spec = Spec(grain, 0, measure, types, threshold).normalized(substrate["last_year"])
     lo, hi = spec.period
     units = list(substrate[grain].values())
-    members = {  # class membership, fixed over the walk
-        u.id: {
-            "region": [m for m in units if set(u.region) & set(m.region)] if u.region else units,
-            "global": units,
-        }
-        for u in units
+    # class membership dedupes by region signature: units with the same region
+    # set share exactly the same class, so counts and EB strength are computed
+    # once per (signature, bucket, year) instead of per unit — identical math,
+    # required for the ~4.5k-unit pair grain
+    sig_of = {u.id: tuple(sorted(set(u.region))) or ("__all__",) for u in units}
+    members_by_sig = {
+        sig: (units if sig == ("__all__",) else [m for m in units if set(m.region) & set(sig)])
+        for sig in set(sig_of.values())
     }
+    members_by_sig[("__global__",)] = units
     # precompute observables (both look only backward / at Y itself)
     hits: dict[int, dict[int, bool]] = {}
     buckets: dict[int, dict[int, str]] = {}
@@ -70,19 +74,27 @@ def walk(grain: str, measure: str, types: tuple, threshold: int, substrate: dict
     guk = gun = 0  # global unconditional running counts
     records = []
     for y in range(lo + 1, hi + 1):
+        cache: dict[tuple, tuple] = {}  # (sig, bucket) -> (K, N, M)
+
+        def stats(sig: tuple, b: str) -> tuple:
+            key = (sig, b)
+            if key not in cache:
+                counts = [(uk[m.id][b], un[m.id][b]) for m in members_by_sig[sig]]
+                K = sum(k for k, _ in counts)
+                N = sum(n for _, n in counts)
+                cache[key] = (K, N, eb_strength(counts) if N else 0.0)
+            return cache[key]
+
         if y - lo > burn_in:
             for u in units:
                 if y not in hits[u.id]:
                     continue
                 b = buckets[u.id][y]
                 posteriors = {}
-                for level in ("region", "global"):
-                    counts = [(uk[m.id][b], un[m.id][b]) for m in members[u.id][level]]
-                    K = sum(k for k, _ in counts)
-                    N = sum(n for _, n in counts)
+                for level, sig in (("region", sig_of[u.id]), ("global", ("__global__",))):
+                    K, N, M = stats(sig, b)
                     if not N:
                         continue
-                    M = eb_strength(counts)
                     posteriors[level] = ((uk[u.id][b] + M * (K / N)) / (un[u.id][b] + M), N)
                 if posteriors:
                     use = "region" if posteriors.get("region") and posteriors["region"][1] >= MIN_CLASS_YEARS else "global"

@@ -22,6 +22,7 @@ attribution.
 
 import csv
 import datetime
+import re
 
 import yaml
 
@@ -54,6 +55,18 @@ def match(row: dict, criteria: dict, year: int) -> bool:
         return to_gw(int(row["country_id"]), year) == sid
     if is_placeholder(row):
         return False  # unattributable to any dyad/conflict/actor id
+    if kind == "pair":
+        # interstate violence between the two governments, either direction;
+        # coalition sides carry comma-separated gwno lists
+        if row["type_of_violence"] != "1" or not row["gwnoa"] or not row["gwnob"]:
+            return False
+
+        def side(field):
+            return {to_gw(int(x), year) for x in re.split(r"[,;]", field) if x.strip().isdigit()}
+
+        sa, sb = side(row["gwnoa"]), side(row["gwnob"])
+        a, b = scope["a"], scope["b"]
+        return (a in sa and b in sb) or (a in sb and b in sa)
     if kind == "dyad":
         return int(row["dyad_new_id"]) == sid
     if kind == "conflict":

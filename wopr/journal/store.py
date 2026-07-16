@@ -14,7 +14,7 @@ import yaml
 
 from wopr.paths import QUESTIONS
 
-SCOPE_KINDS = ("country", "dyad", "conflict", "actor")
+SCOPE_KINDS = ("country", "dyad", "conflict", "actor", "pair")
 MEASURES = ("deaths", "events")
 TYPES = ("sb", "ns", "os")
 P_MIN, P_MAX = 0.001, 0.999
@@ -130,6 +130,10 @@ def validate_question(q: dict) -> list[str]:
         bad(f"scope.kind must be one of {SCOPE_KINDS}")
     if not isinstance(scope.get("id"), int):
         bad("scope.id must be an int (UCDP/G-W id)")
+    if scope.get("kind") == "pair" and not (
+        isinstance(scope.get("a"), int) and isinstance(scope.get("b"), int)
+    ):
+        bad("pair scope needs gwno ints a and b")
     if c.get("measure") not in MEASURES:
         bad(f"measure must be one of {MEASURES}")
     if not isinstance(c.get("threshold"), int) or c.get("threshold", 0) < 1:

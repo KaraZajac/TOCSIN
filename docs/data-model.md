@@ -13,7 +13,8 @@ release and the current candidate-GED monthly files, then fetches:
 | `ucdp-nonstate.csv`, `ucdp-onesided.csv` | non-state conflict, one-sided violence (year grain) |
 | `ucdp-cy.csv` | official organized-violence country-year aggregates |
 | `candidate/GEDEvent_*.csv` | preliminary monthly events past the annual cutoff |
-| `gw-iisystem.dat`, `gw-microstates.dat` | Gleditsch–Ward state system |
+| `gw-states.tsv`, `gw-microstates.tsv` | Gleditsch–Ward state system (v7) |
+| `gw-mindist.csv` | Gleditsch–Ward dyadic minimum distances (km, 1875–2002) |
 | `manifest.yaml` | release + download timestamps |
 
 Candidate files overlap and correct each other; consumers dedupe by event id
@@ -61,6 +62,10 @@ requires a myACLED access level above the automatic *Open* tier.
   grain including candidate months; `provisional=1` rows are candidate-based
   and get rebuilt/confirmed on the next release. Dyad-month excludes
   candidate events with placeholder (XXX) attribution.
+- `tables/pair-year.csv` — the relevance universe, 1946–present: one row per
+  relevant country pair per year (`via` = prox/region/major, `km` when
+  known), with UCDP interstate activity/war as the outcome. Exposure for the
+  pair grain is row presence.
 
 ## questions/ (committed — the journal)
 

@@ -1,0 +1,86 @@
+id: 2026-014
+slug: venezuela-guyana-interstate-violence-over-essequ
+title: 'Venezuela-Guyana: interstate violence over Essequibo (2027)'
+question: Will UCDP record ≥25 battle-related deaths (best estimate, state-based) between the governments
+  of Venezuela – Guyana (either direction) between 2027-01-01 and 2027-12-31 inclusive?
+created: '2026-07-16T13:04:03Z'
+status: open
+tags:
+- interstate
+- pair
+- americas
+criteria:
+  scope:
+    kind: pair
+    id: 101110
+    a: 101
+    b: 110
+    name: Venezuela – Guyana
+  types:
+  - sb
+  measure: deaths
+  threshold: 25
+  window:
+    start: '2027-01-01'
+    end: '2027-12-31'
+resolution_policy:
+  method: auto
+forecasts: []
+prior:
+  p: 0.0002
+  computed: '2026-07-16T13:04:06Z'
+  engine: 0.2.0
+  detail:
+    spec:
+      grain: pair
+      unit: 101110
+      measure: acd-active
+      types: []
+      threshold: 25
+      as_of: 2027
+      period:
+      - 1946
+      - 2025
+    unit_name: Venezuela – Guyana
+    bucket: cold
+    bucket_coarse: cold
+    bucket_data_end: 2025
+    levels:
+      self:
+        units: 1
+        years: 59
+        hits: 0
+        rate: 0.0
+      region:
+        units: 693
+        years: 46395
+        hits: 9
+        rate: 0.0002
+        M: 1000.0
+        posterior: 0.0002
+      global:
+        units: 4390
+        years: 238504
+        hits: 58
+        rate: 0.0002
+        M: 30.4
+        posterior: 0.0001
+    unconditional:
+      self:
+        years: 60
+        hits: 0
+        rate: 0.0
+      region:
+        years: 47169
+        hits: 10
+        rate: 0.0002
+      global:
+        years: 243609
+        hits: 167
+        rate: 0.0007
+    headline_level: region
+    p: 0.0002
+    notes:
+    - annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate
+    - 'as_of 2027 is 1 year(s) past the substrate (2025): bucket taken at the data edge, one-step rate
+      applied — slightly overstates persistence at longer horizons'

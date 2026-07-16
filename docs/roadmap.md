@@ -2,9 +2,11 @@
 
 ## V1 — make the outside view stronger
 
-- **Politically-relevant-dyad exposure** (COW contiguity + major powers) so
-  dyad questions about *never-conflict* pairs get a real denominator instead
-  of "no history".
+- ~~Politically-relevant-dyad exposure~~ **done** (the pair grain):
+  G-W minimum distance ≤400km ∪ same-region ∪ P5, 1946–present, 98.2% hit
+  coverage, walk-forward backtested. Follow-ups: per-pair GED death sums
+  (thresholds beyond activity), candidate-month pair nowcasting, and a pair
+  risk layer on the site.
 - **Covariate-widened reference classes**: regime type (V-Dem/Polity),
   GDP/capita, ethnic fractionalization — class = "countries like this one",
   not just "countries near this one". Sensitivity across class definitions in

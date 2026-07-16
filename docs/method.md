@@ -47,6 +47,34 @@ nobody has observed. If candidate months show the partial current year
 candidate months can't prove a quiet year). A question about the partial year
 itself never sees that year's own data in its prior.
 
+## The pair universe (every country against every country)
+
+Observed dyads answer "will this conflict recur?" — they cannot price a pair
+that never fought, because UCDP only contains pairs that did. The **pair
+grain** supplies the missing denominator: for every year since 1946, all
+country pairs that are *relevant* — Gleditsch–Ward minimum distance ≤400km,
+**or** same UCDP region (this is what admits standoff-era conflicts like
+Iran–Israel and Israel–Yemen, and divided states, which distance data
+handles badly), **or** at least one P5 member (microstates join only through
+this rule: Grenada 1983). ~244k pair-years; the outcome is UCDP interstate
+activity between primary parties.
+
+Measured coverage: 98.2% of interstate hit pair-years fall inside the
+universe. The three known misses are one-year colonial/joiner artifacts
+(Netherlands–Indonesia 1962, India–Hyderabad 1948, Iraq–Australia 2003) —
+kept outside deliberately, because adding pairs *because* they fought would
+select the denominator on the outcome. Distances end in 2002 and are carried
+forward through state succession plus hand-coded neighbors for states born
+later (Montenegro, Kosovo, South Sudan, Timor-Leste).
+
+Walk-forward, the pair grain prices an arbitrary relevant pair at ~0.0006/yr
+(cold pairs ≈ 0, dormant ≈ 3%, fresh interstate episodes continue ≈ 33%,
+entrenched ones ≈ 77%; skill +23% vs climatology — modest by construction
+for so rare an event). Pair questions resolve from GED interstate events
+between the two governments in either direction, coalition sides included.
+The pair substrate speaks only UCDP activity (≥25 deaths); other thresholds
+have no pair denominator yet.
+
 ## The ladder and shrinkage
 
 For target u in bucket B:
