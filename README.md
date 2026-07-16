@@ -101,6 +101,13 @@ Data terms and required citations: [DATA-RIGHTS.md](DATA-RIGHTS.md). UCDP
 annual releases land mid-year; candidate GED lands monthly with ~6 weeks of
 lag — `wopr pull && wopr build && wopr resolve` is the maintenance loop.
 
+Optional: with myACLED credentials in the repo-root `.env`
+(`ACLED_USERNAME`/`ACLED_PASSWORD`), `wopr acled` pulls ACLED's aggregate
+files (country-month political violence, country-year fatalities, weekly
+Admin-1 regionals) into `sources/acled/` — tempo signals for the future
+watchfloor, not resolution authorities (different ontology than UCDP; see
+docs/data-model.md).
+
 *WOPR: the War Operation Plan Response computer from* WarGames *(1983), which
 learned about unwinnable games by playing itself. The name will probably
 change; the scoring loop is the point.*

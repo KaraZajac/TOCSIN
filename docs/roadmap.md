@@ -29,10 +29,14 @@
 ## V2 — the watchfloor
 
 - **Early-warning board**: dyads/countries whose current-month tempo (from
-  the candidate feed) diverges hardest from their bucket-conditional base
-  rate — "heating up faster than history says it should".
-- ACLED as a second resolution authority (requires registered API key;
-  operational thresholds, protest/riot event classes UCDP doesn't cover).
+  the UCDP candidate feed + ACLED weekly Admin-1 aggregates, already pulled
+  by `wopr acled`) diverges hardest from their bucket-conditional base rate —
+  "heating up faster than history says it should".
+- ACLED event-level API as a second resolution authority (protest/riot
+  classes UCDP doesn't cover). **Blocked on access level**: the account's
+  automatic *Open* myACLED tier covers aggregates only; event-level needs an
+  upgrade/trial from ACLED's Access Team ("Request further access" in the
+  portal, or licensing@). The client (`acled.api_read`) is already wired.
 - Static site (Astro, like JUDGMENT): browsable questions, priors, reliability
   diagram, public timestamped forecasts.
 - Monthly cron: `wopr pull && wopr build && wopr resolve && wopr score`.

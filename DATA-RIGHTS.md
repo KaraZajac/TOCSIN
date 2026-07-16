@@ -11,6 +11,7 @@ sources live only in the gitignored `sources/` directory (regenerable via
 |---|---|---|---|
 | UCDP-derived tables | `data/tables/`, `data/registry/` (conflicts, dyads, non-state, one-sided), death counts in `data/` | Uppsala Conflict Data Program (UCDP) & PRIO: Armed Conflict Dataset, Dyadic ACD, GED, candidate GED, non-state, one-sided, organized-violence country-year — version pinned in `data/meta.yaml` | **CC BY 4.0**; cite UCDP as below |
 | Gleditsch–Ward state list | `data/registry/states.yaml` (system membership spells) | Gleditsch & Ward list of independent states, ksgleditsch.com | free for academic use **with citation** |
+| ACLED aggregates | `sources/acled/` only (gitignored; **never redistributed** in this repo, and not used in committed tables) | Armed Conflict Location & Event Data (ACLED), accessed via a registered myACLED account | ACLED Terms & Conditions/EULA: attribution required, no redistribution or resale; see acleddata.com |
 | Original contributions | the pipeline/engine/journal code, question files in `questions/`, computed priors and scorecards, documentation | this project | code MIT; data outputs CC BY 4.0 |
 
 **Required citations (UCDP):**
@@ -31,6 +32,11 @@ sources live only in the gitignored `sources/` directory (regenerable via
 **Gleditsch–Ward:** Gleditsch, Kristian S. & Michael D. Ward (1999) Interstate
 System Membership: A Revised List of the Independent States since 1816.
 *International Interactions* 25(4): 393–413.
+
+**ACLED (if its data informs any published output):** Raleigh, Clionadh,
+Andrew Linke, Håvard Hegre & Joakim Karlsen (2010) Introducing ACLED: An
+Armed Conflict Location and Event Data Project. *Journal of Peace Research*
+47(5): 651–660, plus ACLED's current attribution policy.
 
 **Citing this project:** see [CITATION.cff](CITATION.cff).
 
