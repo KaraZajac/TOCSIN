@@ -152,16 +152,49 @@ def build_countries(meta, states, conflicts, substrate):
             if int(r["attempts"]) > 0:
                 coups[int(r["gwno"])].append([int(r["year"]), int(r["attempts"]), int(r["successes"])])
 
-    # latest structural covariates per country (World Bank + EPR)
-    covariates = {}
+    # structural covariates per country — full recent series + latest value
     cov_cols = ["gdp_pc", "inflation", "pop_0014", "urban_pct", "infant_mort", "excluded_share"]
+    cov_series = defaultdict(lambda: defaultdict(list))
+    covariates = defaultdict(dict)
     with open(TABLES / "covariates.csv", newline="") as f:
         for r in csv.DictReader(f):
-            g = int(r["gwno"])
-            cur = covariates.setdefault(g, {})
+            g, y = int(r["gwno"]), int(r["year"])
             for c in cov_cols:
                 if r[c] != "":
-                    cur[c] = float(r[c])  # last (latest year) wins
+                    v = float(r[c])
+                    covariates[g][c] = v  # latest year wins
+                    if y >= last_year - 35:
+                        cov_series[g][c].append([y, v])
+
+    # global percentile of each country's latest value, per covariate
+    cov_pctl = {}
+    for c in cov_cols:
+        vals = sorted(v[c] for v in covariates.values() if c in v)
+        for g, cur in covariates.items():
+            if c in cur:
+                below = sum(1 for x in vals if x < cur[c])
+                cov_pctl.setdefault(g, {})[c] = round(below / (len(vals) - 1), 2) if len(vals) > 1 else 0.5
+
+    # honest risk-factor framing from the descriptive/protocol findings:
+    # (label, higher-is-riskier?, is it a validated engine covariate?)
+    RISK = {
+        "pop_0014": ("young population", True, "strong onset signal descriptively (~4× lift), but adds nothing once conflict history is conditioned on — see methods"),
+        "excluded_share": ("ethnically excluded population", True, "compounds with youth in the record; not yet an engine covariate"),
+        "gdp_pc": ("low income", False, "poverty is a classic conflict correlate"),
+        "infant_mort": ("high infant mortality", True, "a development/state-capacity proxy"),
+        "inflation": ("high inflation", True, "NOT predictive of onset in our test — shown for context only"),
+        "urban_pct": ("urbanization", True, "context only"),
+    }
+
+    def risk_factors(g):
+        out = []
+        for c, (label, hi_risky, note) in RISK.items():
+            if c not in covariates[g] or g not in cov_pctl or c not in cov_pctl[g]:
+                continue
+            p = cov_pctl[g][c]
+            elevated = p >= 0.66 if hi_risky else p <= 0.34
+            out.append({"factor": label, "value": covariates[g][c], "pctl": p, "elevated": elevated, "note": note})
+        return sorted(out, key=lambda r: -r["pctl"] if r else 0)
 
     by_country = defaultdict(list)
     for c in conflicts:
@@ -204,7 +237,9 @@ def build_countries(meta, states, conflicts, substrate):
             "tempo": [[mk, v["deaths"], v["provisional"]] for mk, v in sorted(tempo.get(g, {}).items())],
             "conflicts": sorted(by_country.get(g, []), key=lambda c: -c["last"]),
             "coups": sorted(coups.get(g, [])),
-            "covariates": covariates.get(g, {}),
+            "covariates": dict(covariates.get(g, {})),
+            "cov_series": {c: v for c, v in cov_series.get(g, {}).items()},
+            "risk_factors": risk_factors(g) if g in covariates else [],
         }
         if coups.get(g) is not None and g in substrate["country"]:
             try:

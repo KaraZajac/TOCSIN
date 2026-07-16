@@ -73,6 +73,10 @@ requires a myACLED access level above the automatic *Open* tier.
   committed data, not engine conditioning (measured worse — method.md).
 - `registry/peace-agreements.yaml` — UCDP PA dataset (irregular cadence,
   ends 2021): browsable context, manual-resolution support only.
+- `tables/covariates.csv` — World Bank WDI (income, inflation, age structure,
+  urbanization, infant mortality) + EPR ethnic-exclusion share per gwno-year.
+  Country-page context with global percentile ranks and honest risk-factor
+  framing; not an engine input (youth tested and rejected — method.md).
 
 ## questions/ (committed — the journal)
 

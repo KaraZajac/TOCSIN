@@ -7,7 +7,7 @@ import Bars from "../../components/Bars.astro";
 import ActivityStrip from "../../components/ActivityStrip.astro";
 import Meter from "../../components/Meter.astro";
 import { countries, summary } from "../../lib/data.js";
-import { fmtMonth, num, pct, url } from "../../lib/format.js";
+import { fmtMonth, num, ordinal, pct, url } from "../../lib/format.js";
 
 export function getStaticPaths() {
   return Object.values(countries()).map((c) => ({ params: { gwno: String(c.gwno) } }));
@@ -26,14 +26,27 @@ const ladderRows = ["self", "region", "global"].map((lvl) => ({ lvl, ...c.ladder
 const coups = c.coups || [];
 const lastCoup = coups.at(-1);
 const cov = c.covariates || {};
-const covRows = [
-  ["GDP per capita", cov.gdp_pc, (v) => `$${num(Math.round(v))}`],
-  ["Inflation (annual)", cov.inflation, (v) => `${v.toFixed(1)}%`],
-  ["Population under 14", cov.pop_0014, (v) => `${v.toFixed(0)}%`],
-  ["Urban population", cov.urban_pct, (v) => `${v.toFixed(0)}%`],
-  ["Infant mortality (per 1,000)", cov.infant_mort, (v) => v.toFixed(0)],
-  ["Population politically excluded", cov.excluded_share, (v) => `${(v * 100).toFixed(0)}%`],
-].filter((r) => r[1] != null);
+const covSeries = c.cov_series || {};
+const riskFactors = c.risk_factors || [];
+const ordinalPctl = (p) => `${ordinal(Math.round(p * 100))} pctl`;
+const fmtCov = {
+  gdp_pc: (v) => `$${num(Math.round(v))}`,
+  inflation: (v) => `${v.toFixed(1)}%`,
+  pop_0014: (v) => `${v.toFixed(0)}%`,
+  excluded_share: (v) => `${(v * 100).toFixed(0)}%`,
+  infant_mort: (v) => v.toFixed(0),
+  urban_pct: (v) => `${v.toFixed(0)}%`,
+};
+const factorKey = {
+  "young population": "pop_0014", "ethnically excluded population": "excluded_share",
+  "low income": "gdp_pc", "high infant mortality": "infant_mort",
+  "high inflation": "inflation", "urbanization": "urban_pct",
+};
+const seriesCharts = [
+  ["gdp_pc", "GDP per capita (US$)"],
+  ["inflation", "Inflation (annual %)"],
+  ["pop_0014", "Population under 14 (%)"],
+].filter(([k]) => (covSeries[k] || []).length > 3);
 ---
 
 <Base title={c.name} description={`Base rates and conflict history for ${c.name}.`}>
@@ -114,21 +127,47 @@ const covRows = [
     </div>
   )}
 
-  {covRows.length > 0 && (
+  {riskFactors.length > 0 && (
     <>
-      <h2>Structural conditions</h2>
+      <h2>Structural conditions & risk factors</h2>
       <div class="card viz">
         <p class="viz-sub">
-          latest World Bank & EPR values — the covariates behind conflict onset. In the record,
-          a young population and a large politically-excluded share are strong onset signals; high
-          inflation, notably, is not (see <a href={url("/methods")}>methods</a>).
+          latest World Bank & EPR values, ranked against all countries. "Elevated" marks the
+          riskier tail; the note says whether the factor actually predicts onset in the record —
+          youth and exclusion do, inflation notably doesn't (<a href={url("/methods")}>methods</a>).
         </p>
-        <div class="facts">
-          {covRows.map(([label, v, f]) => (
-            <div class="fact"><div class="k">{label}</div><div class="v">{f(v)}</div></div>
+        <table class="data">
+          <thead><tr><th>factor</th><th class="n">value</th><th>global rank</th><th class="n"></th><th>predictive?</th></tr></thead>
+          <tbody>
+            {riskFactors.map((r) => {
+              const k = factorKey[r.factor];
+              return (
+                <tr>
+                  <td>{r.factor}{r.elevated && <span class="badge status-open" style="margin-left:6px">elevated</span>}</td>
+                  <td class="n">{fmtCov[k] ? fmtCov[k](r.value) : r.value}</td>
+                  <td><Meter p={r.pctl} label={`${ordinalPctl(r.pctl)} globally`} /></td>
+                  <td class="n">{ordinalPctl(r.pctl)}</td>
+                  <td style="font-size:12px;color:var(--ink-2);max-width:34ch">{r.note}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      {seriesCharts.length > 0 && (
+        <div class="grid-2" style="margin-top:14px">
+          {seriesCharts.map(([k, title]) => (
+            <LineChart
+              title={title}
+              sub="World Bank, recent decades"
+              series={covSeries[k]}
+              fmt={fmtCov[k] || ((v) => String(v))}
+              markLast={true}
+              wash={true}
+            />
           ))}
         </div>
-      </div>
+      )}
     </>
   )}
 
