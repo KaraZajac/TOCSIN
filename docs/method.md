@@ -372,6 +372,31 @@ banding discretization, deliberately not tuned against the arena. (4) Month
 grain is VIEWS's home target; the annual-grain arena — WOPR's design center —
 opens as journal questions resolve.
 
+### The pools: the arena's most accurate forecast is nobody's model
+
+The arena also scores **equal-weight opinion pools** — zero fitted
+parameters, so scoring them on the same vantages is measurement, not tuning.
+Result: **pool(views, persistence) = 0.0399**, beating VIEWS alone (0.0412,
+−3.3%) and every other entrant; pool(all three) = 0.0409 also beats VIEWS.
+This is the classic combination result (Bates–Granger 1969; Clemen 1989;
+every M-competition): forecasters with *different* error structures average
+into something better than the best of them.
+
+The diagnostic detail: WOPR wins 70% of months against VIEWS yet *adding
+WOPR to the views+persistence pool makes it worse* (0.0409 vs 0.0399) —
+because at month grain WOPR **is** calibrated persistence; it duplicates the
+pool's recency member rather than diversifying it. Diversity, not individual
+skill, is what a pool pays for. VIEWS's covariate-ML signal is the orthogonal
+ingredient; WOPR's distinct value lies on the targets no other model prices
+(annual horizons, arbitrary thresholds, termination, coups) and in
+auditability — not in month-grain occurrence, where its information is
+already in the pool via persistence.
+
+Practical rule this establishes: **when a question has multiple credible
+forecasters, the best available number is their equal-weight pool, not the
+single best model** — and the site's arena table now reports the pools as
+the standing to beat.
+
 ## Scoring rules
 
 Brier `(p−o)²` and log score `ln p(outcome)`; calibration in decile bins; the

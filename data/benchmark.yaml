@@ -186,22 +186,116 @@ models:
       n: 36
       mean_p: 0.911
       observed: 0.194
+  pool:views+persist:
+    brier: 0.03987
+    skill_vs_climatology: 0.5675
+    calibration:
+    - bin: 0–10%
+      n: 6141
+      mean_p: 0.041
+      observed: 0.012
+    - bin: 10–20%
+      n: 172
+      mean_p: 0.143
+      observed: 0.308
+    - bin: 20–30%
+      n: 81
+      mean_p: 0.25
+      observed: 0.37
+    - bin: 30–40%
+      n: 130
+      mean_p: 0.354
+      observed: 0.3
+    - bin: 40–50%
+      n: 103
+      mean_p: 0.447
+      observed: 0.32
+    - bin: 50–60%
+      n: 111
+      mean_p: 0.549
+      observed: 0.532
+    - bin: 60–70%
+      n: 93
+      mean_p: 0.648
+      observed: 0.656
+    - bin: 70–80%
+      n: 97
+      mean_p: 0.76
+      observed: 0.825
+    - bin: 80–90%
+      n: 186
+      mean_p: 0.852
+      observed: 0.753
+    - bin: 90–100%
+      n: 566
+      mean_p: 0.946
+      observed: 0.965
+  pool:all-three:
+    brier: 0.04087
+    skill_vs_climatology: 0.5567
+    calibration:
+    - bin: 0–10%
+      n: 6090
+      mean_p: 0.03
+      observed: 0.012
+    - bin: 10–20%
+      n: 242
+      mean_p: 0.13
+      observed: 0.293
+    - bin: 20–30%
+      n: 92
+      mean_p: 0.254
+      observed: 0.228
+    - bin: 30–40%
+      n: 165
+      mean_p: 0.351
+      observed: 0.345
+    - bin: 40–50%
+      n: 48
+      mean_p: 0.454
+      observed: 0.333
+    - bin: 50–60%
+      n: 138
+      mean_p: 0.553
+      observed: 0.572
+    - bin: 60–70%
+      n: 63
+      mean_p: 0.643
+      observed: 0.762
+    - bin: 70–80%
+      n: 75
+      mean_p: 0.743
+      observed: 0.773
+    - bin: 80–90%
+      n: 240
+      mean_p: 0.868
+      observed: 0.825
+    - bin: 90–100%
+      n: 527
+      mean_p: 0.944
+      observed: 0.939
 by_horizon:
   h1-3:
     views: 0.03371
     wopr: 0.04131
     persistence: 0.03887
     climatology: 0.08774
+    pool:views+persist: 0.034
+    pool:all-three: 0.03536
   h4-6:
     views: 0.03962
     wopr: 0.04252
     persistence: 0.04006
     climatology: 0.09294
+    pool:views+persist: 0.03761
+    pool:all-three: 0.03821
   h7-12:
     views: 0.04579
     wopr: 0.05029
     persistence: 0.04705
     climatology: 0.09404
+    pool:views+persist: 0.04394
+    pool:all-three: 0.04495
 head_to_head:
   wopr_better_on: 5386
   views_better_on: 2271

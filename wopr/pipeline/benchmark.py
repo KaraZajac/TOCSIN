@@ -34,6 +34,15 @@ VANTAGE_RUNS = (
 )
 HORIZON = 12
 MODELS = ("views", "wopr", "persistence", "climatology")
+# equal-weight opinion pools — zero fitted parameters, so scoring them on the
+# same vantages is measurement, not tuning. The pool result is the arena's
+# central lesson: combining diverse forecasters beats the best member
+# (views+persist beats views), while adding a redundant one subtracts
+# (wopr duplicates persistence's recency signal at this grain).
+POOLS = {
+    "pool:views+persist": ("views", "persistence"),
+    "pool:all-three": ("views", "wopr", "persistence"),
+}
 
 
 def brier(p, o):
@@ -112,6 +121,10 @@ def collect(force_pull: bool = False) -> tuple[list[dict], dict]:
 
 def summarize(records: list[dict], dich: dict) -> dict:
     n = len(records)
+    for r in records:  # materialize pool probabilities per record
+        for name, members in POOLS.items():
+            r[name] = sum(r[m] for m in members) / len(members)
+    scored = MODELS + tuple(POOLS)
     out = {
         "target": "P(>=25 state-based deaths in a country-month), UCDP best estimate",
         "dich_semantics": dich,
@@ -123,7 +136,7 @@ def summarize(records: list[dict], dich: dict) -> dict:
         "head_to_head": {},
     }
     clim = sum(brier(r["climatology"], r["outcome"]) for r in records) / n
-    for m in MODELS:
+    for m in scored:
         b = sum(brier(r[m], r["outcome"]) for r in records) / n
         bins = []
         for i in range(10):
@@ -145,7 +158,7 @@ def summarize(records: list[dict], dich: dict) -> dict:
     for label, lo, hi in (("h1-3", 1, 3), ("h4-6", 4, 6), ("h7-12", 7, 12)):
         got = [r for r in records if lo <= r["h"] <= hi]
         out["by_horizon"][label] = {
-            m: round(sum(brier(r[m], r["outcome"]) for r in got) / len(got), 5) for m in MODELS
+            m: round(sum(brier(r[m], r["outcome"]) for r in got) / len(got), 5) for m in scored
         }
     wins = sum(1 for r in records if brier(r["wopr"], r["outcome"]) < brier(r["views"], r["outcome"]))
     ties = sum(1 for r in records if r["wopr"] == r["views"])
@@ -165,12 +178,12 @@ def render(s: dict) -> str:
         f"{s['n']:,} country-months across {len(s['vantages'])} vantages · "
         f"{s['provisional_share']:.0%} provisional outcomes",
         "",
-        f"{'model':<13} {'Brier':>8} {'skill':>7}    {'h1-3':>8} {'h4-6':>8} {'h7-12':>8}",
+        f"{'model':<19} {'Brier':>8} {'skill':>7}    {'h1-3':>8} {'h4-6':>8} {'h7-12':>8}",
     ]
-    for m in MODELS:
+    for m in sorted(s["models"], key=lambda k: s["models"][k]["brier"]):
         e = s["models"][m]
         lines.append(
-            f"{m:<13} {e['brier']:>8} {e['skill_vs_climatology']:>+6.1%}    "
+            f"{m:<19} {e['brier']:>8} {e['skill_vs_climatology']:>+6.1%}    "
             f"{s['by_horizon']['h1-3'][m]:>8} {s['by_horizon']['h4-6'][m]:>8} {s['by_horizon']['h7-12'][m]:>8}"
         )
     hh = s["head_to_head"]
