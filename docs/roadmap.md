@@ -36,9 +36,10 @@
 - ~~UCDP long tail~~ **done** (0.5.0): termination measure + hazard suite +
   auto-resolution; episode table (validated 99.6% vs Kreutz coding); PA
   registry (context; stale cadence); MIC identified as mediation data and
-  parked. Next in this family: Powell–Thyne coups (new question domain),
-  termination-outcome questions (how, not just whether), conflict-scope
-  termination.
+  parked. ~~Powell–Thyne coups~~ **done** (0.5.0: country-grain `coup`
+  measure, +18% skill vs climatology — the method generalizes past UCDP;
+  fetched via the Wayback CDX index). Next: termination-outcome questions
+  (how, not just whether), conflict-scope termination, coup-success split.
 - ~~Benchmark against VIEWS~~ **done** (`wopr benchmark`, data/benchmark.yaml):
   retrospective month-grain arena, VIEWS ahead on aggregate, persistence
   nearly ties it, WOPR's tempo gap priced at ~0.017 Brier. Follow-ups:

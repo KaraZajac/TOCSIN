@@ -1,0 +1,82 @@
+id: 2026-017
+slug: burkina-faso-coup-attempt-in-2027
+title: 'Burkina Faso: coup attempt in 2027?'
+question: Will Powell–Thyne record a coup attempt (successful or failed) in Burkina Faso during 2027?
+created: '2026-07-16T15:36:58Z'
+status: open
+tags:
+- coup
+- sahel
+criteria:
+  scope:
+    kind: country
+    id: 439
+    name: Burkina Faso
+  types:
+  - sb
+  measure: coup
+  threshold: 25
+  window:
+    start: '2027-01-01'
+    end: '2027-12-31'
+resolution_policy:
+  method: auto
+forecasts: []
+prior:
+  p: 0.0969
+  computed: '2026-07-16T15:37:00Z'
+  engine: 0.5.0
+  detail:
+    spec:
+      grain: country
+      unit: 439
+      measure: coup
+      types: []
+      threshold: 25
+      as_of: 2027
+      period:
+      - 1950
+      - 2025
+    unit_name: Burkina Faso
+    bucket: dormant+nbr
+    bucket_coarse: dormant
+    bucket_data_end: 2025
+    levels:
+      self:
+        units: 1
+        years: 4
+        hits: 1
+        rate: 0.25
+      region:
+        units: 52
+        years: 202
+        hits: 9
+        rate: 0.0446
+        M: 11.7
+        posterior: 0.0969
+      global:
+        units: 181
+        years: 350
+        hits: 12
+        rate: 0.0343
+        M: 24.8
+        posterior: 0.0642
+    unconditional:
+      self:
+        years: 66
+        hits: 9
+        rate: 0.1364
+      region:
+        years: 3152
+        hits: 192
+        rate: 0.0609
+      global:
+        years: 11229
+        hits: 423
+        rate: 0.0377
+    headline_level: region
+    p: 0.0969
+    notes:
+    - annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate
+    - 'as_of 2027 is 1 year(s) past the substrate (2025): bucket taken at the data edge, one-step rate
+      applied — slightly overstates persistence at longer horizons'

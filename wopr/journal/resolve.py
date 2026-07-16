@@ -132,6 +132,32 @@ def resolve_terminates(criteria: dict, meta: dict) -> dict | None:
     }
 
 
+def resolve_coup(criteria: dict) -> dict | None:
+    """Coup questions resolve from the committed Powell–Thyne table: yes ⇔
+    ≥1 attempt in the window year. P&T update ~annually, so a year resolves
+    when the table covers it; the dataset is the sole authority (no
+    provisional state, no candidate feed)."""
+    year = int(str(criteria["window"]["start"])[:4])
+    covered = False
+    attempts = 0
+    with open(DATA / "tables" / "coup.csv", newline="") as f:
+        for row in csv.DictReader(f):
+            if int(row["year"]) == year:
+                covered = True
+                if int(row["gwno"]) == criteria["scope"]["id"]:
+                    attempts = int(row["attempts"])
+    if not covered:
+        return None
+    return {
+        "outcome": "yes" if attempts else "no",
+        "decided_on": str(datetime.date(year, 12, 31)),
+        "resolved": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "method": "auto",
+        "provisional": False,
+        "basis": {"source": "powell-thyne", "attempts": attempts},
+    }
+
+
 def evaluate(criteria: dict, meta: dict) -> dict:
     """Count matching events in the window across annual + candidate data."""
     ged = SOURCES / "ucdp-ged.csv"
@@ -207,6 +233,8 @@ def run(questions: list[dict], dry_run: bool = False) -> list[tuple[dict, dict |
         if q["status"] == "open":
             if q["criteria"]["measure"] == "terminates":
                 res = resolve_terminates(q["criteria"], meta)
+            elif q["criteria"]["measure"] == "coup":
+                res = resolve_coup(q["criteria"])
             else:
                 res = decide(evaluate(q["criteria"], meta), meta)
             if res is None:

@@ -15,7 +15,7 @@ import yaml
 from wopr.paths import QUESTIONS
 
 SCOPE_KINDS = ("country", "dyad", "conflict", "actor", "pair")
-MEASURES = ("deaths", "events", "terminates")
+MEASURES = ("deaths", "events", "terminates", "coup")
 TYPES = ("sb", "ns", "os")
 P_MIN, P_MAX = 0.001, 0.999
 

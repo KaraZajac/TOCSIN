@@ -67,11 +67,13 @@ class Spec:
     as_of: int = 0  # forecast year; bucket uses history strictly before it
     period: tuple = ()  # substrate years, defaulted by measure
 
-    def normalized(self, last_year: int) -> "Spec":
+    def normalized(self, last_year: int, coup_span: tuple | None = None) -> "Spec":
         start = DEATHS_START if self.measure == "deaths" else ACD_START
         # terminates needs year+1 observable, so the scoreable period ends early
         hi = last_year - 1 if self.measure == "terminates" else last_year
         period = self.period or (start, hi)
+        if self.measure == "coup" and not self.period and coup_span:
+            period = coup_span  # Powell–Thyne coverage, not the UCDP span
         as_of = self.as_of or last_year + 1
         return Spec(self.grain, self.unit, self.measure, tuple(self.types), self.threshold, as_of, period)
 
@@ -222,12 +224,27 @@ def load_substrate(tables: Path = TABLES) -> dict:
             # exposure = row presence; a pair-year outside the universe has no row
             u.years[year] = {"acd": 2 if r["war"] == "1" else 1 if r["active"] == "1" else 0}
     last = max(u.last_year for u in countries.values())
+    coup_span = None
+    coup_path = tables / "coup.csv"
+    if coup_path.exists():
+        years = set()
+        with open(coup_path, newline="") as f:
+            for r in csv.DictReader(f):
+                gwno, y = int(r["gwno"]), int(r["year"])
+                years.add(y)
+                u = countries.get(gwno)
+                if u is not None and y in u.years:
+                    u.years[y]["coup"] = int(r["attempts"])
+                    u.years[y]["coup_s"] = int(r["successes"])
+        if years:
+            coup_span = (min(years), max(years))
     neighbors = load_neighbors(tables)
     return {
         "country": countries,
         "dyad": dyads,
         "pair": pairs,
         "last_year": last,
+        "coup_span": coup_span,
         "partial": load_partial(tables, last),
         "neighbors": neighbors,
         "nbr_active": _nbr_active(countries, neighbors),
@@ -249,6 +266,11 @@ def hit(u: Unit, year: int, spec: Spec) -> bool | None:
         if year < u.first_year or (u.years.get(year) or {}).get("acd", 0) == 0:
             return None
         return (u.years.get(year + 1) or {}).get("acd", 0) == 0
+    if spec.measure == "coup":
+        row = u.years.get(year)
+        if row is None or "coup" not in row:
+            return None  # outside Powell–Thyne coverage
+        return row["coup"] >= 1
     if spec.measure == "acd-active":
         if year < u.first_year:
             return None
@@ -274,11 +296,14 @@ def bucket_twin(spec: Spec) -> Spec:
 
 
 def war_year(u: Unit, year: int, spec: Spec) -> bool:
-    """Did `year` sit above the UCDP war line? (intensity 2, or ≥1,000 deaths
-    across the spec's categories — fixed line, independent of threshold)."""
+    """Did `year` sit above the intensity line? For deaths/activity that is
+    the UCDP war threshold; for coups the analogue is "included a SUCCESSFUL
+    coup" (|war = the latest coup year succeeded, |minor = attempts only)."""
     row = u.years.get(year) or {}
     if spec.measure == "acd-active":
         return row.get("acd", 0) >= 2
+    if spec.measure == "coup":
+        return row.get("coup_s", 0) >= 1
     return sum(row.get(t) or 0 for t in spec.types) >= WAR_DEATHS
 
 
@@ -384,11 +409,16 @@ def eb_strength(members: list[tuple[int, int]]) -> float:
 
 def rate(spec: Spec, substrate: dict) -> dict:
     """The full ladder for a spec; ['p'] is the headline prior."""
-    spec = spec.normalized(substrate["last_year"])
+    spec = spec.normalized(substrate["last_year"], substrate.get("coup_span"))
     if spec.grain == "pair" and spec.measure != "acd-active":
         raise ValueError("pair grain supports the acd-active measure only (deaths per pair: roadmap)")
     if spec.measure == "terminates" and spec.grain != "dyad":
         raise ValueError("terminates is a dyad-grain measure (episodes belong to dyads)")
+    if spec.measure == "coup":
+        if spec.grain != "country":
+            raise ValueError("coup is a country-grain measure")
+        if substrate.get("coup_span") is None:
+            raise ValueError("no coup table built — run `wopr pull && wopr build`")
     units = substrate[spec.grain]
     if spec.unit not in units:
         raise KeyError(f"unknown {spec.grain} id {spec.unit}")
@@ -469,8 +499,8 @@ def nowcast_bucket(u: Unit, spec: Spec, partial: dict | None) -> dict | None:
     is never treated as a quiet year. Applies only to questions about years
     strictly after the partial year — a question about the partial year
     itself must not see that year's own data in its prior."""
-    if spec.grain == "pair" or spec.measure == "terminates":
-        return None  # no pair attribution in candidates; termination needs the following year
+    if spec.grain == "pair" or spec.measure in ("terminates", "coup"):
+        return None  # no candidate feed for pairs, termination, or coups
     if not partial or spec.as_of <= partial["year"] or spec.period[1] != partial["year"] - 1:
         return None
     if spec.measure == "acd-active":
@@ -517,6 +547,7 @@ def render(result: dict) -> str:
         "deaths": f"{'/'.join(spec['types'])} deaths ≥ {spec['threshold']}",
         "acd-active": "UCDP active (≥25 deaths)",
         "terminates": "episode terminates (active this year, inactive the next)",
+        "coup": "coup attempt (Powell–Thyne; |war band = last coup year succeeded)",
     }[spec["measure"]]
     lines = [
         f"{result['unit_name']} ({spec['grain']} {spec['unit']}) — P({measure} in a calendar year)",

@@ -115,6 +115,19 @@ is discretization cost, left as-is deliberately (tuning bands on the same
 vantages the arena scores would be overfitting; a tune/validate split is
 future work). Country and dyad grains only; pairs stay annual.
 
+## Coups (the method leaves UCDP entirely)
+
+A country-grain measure over the **Powell–Thyne coup dataset** (1950–present,
+via the Wayback CDX index — the uky.edu host blocks unattended clients), a
+test of whether the reference-class method generalizes past UCDP outcomes.
+It does: same buckets (a coup year enters `active-1`; the intensity band is
+successful-vs-failed rather than war-vs-minor; recency/neighbor apply), and
+walk-forward (6,145 country-years, base rate 1.9%) it scores **+18% skill vs
+climatology** — the coup trap is real and the engine finds it (dormant coup
+states run ~3×, active states higher). Powell–Thyne uses its own G-W codes
+(`ccode_gw`); coups auto-resolve from the committed table (≥1 attempt = yes),
+the dataset its sole authority, on the same annual cadence as termination.
+
 ## Termination (the machinery inverted)
 
 `terminates` is a dyad-grain measure whose hit is "this was the episode's

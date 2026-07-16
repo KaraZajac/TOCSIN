@@ -130,6 +130,17 @@ def main() -> None:
         rate_ok = agree / total if total else 1.0
         check(rate_ok > 0.9, f"episode ends agree with activity-derived finals ({agree}/{total}, {rate_ok:.1%})")
 
+    coup_path = TABLES / "coup.csv"
+    if coup_path.exists():
+        coups = rows_of("coup.csv")
+        check(len({(c["gwno"], c["year"]) for c in coups}) == len(coups), "coup key unique")
+        check(
+            all(int(c["successes"]) <= int(c["attempts"]) for c in coups),
+            "coup successes never exceed attempts",
+        )
+        span = sorted(int(c["year"]) for c in coups)
+        check(span[0] <= 1955 and span[-1] >= 2020, f"coup coverage spans {span[0]}–{span[-1]}")
+
     questions = store.load_all()
     errs = [e for q in questions for e in store.validate_question(q)]
     for e in errs:

@@ -569,6 +569,37 @@ def build_peace_agreements(states) -> list[dict]:
     return out
 
 
+# ---------------------------------------------------------------- coups
+
+
+def build_coups(states, last_year: int) -> list[list]:
+    """data/tables/coup.csv from the Powell–Thyne country-year panel:
+    gwno, year, attempts, successes. P&T publish their own G-W codes
+    (ccode_gw) where they diverge from COW; coup slots code 1 = failed
+    attempt, 2 = successful coup."""
+    path = SOURCES / "pt-coups.tsv"
+    if not path.exists():
+        return [["gwno", "year", "attempts", "successes"]]
+    known = {s["gwno"] for s in states}
+    rows = []
+    unmatched = set()
+    with open(path, newline="", encoding="utf-8-sig") as f:
+        for r in csv.DictReader(f, delimiter="\t"):
+            year = int(r["year"])
+            gw = r.get("ccode_gw", "").strip()
+            gwno = to_gw(int(gw) if gw else int(r["ccode"]), year)
+            if gwno not in known:
+                unmatched.add(f"{r['country']}({gwno})")
+                continue
+            slots = [r.get(f"coup{i}", "").strip() for i in (1, 2, 3, 4)]
+            slots = [int(s) for s in slots if s and s != "0"]
+            rows.append([gwno, year, len(slots), sum(1 for s in slots if s == 2)])
+    if unmatched:
+        print(f"  coups: {len(unmatched)} unmatched P&T countries: {sorted(unmatched)[:6]}")
+    rows.sort()
+    return [["gwno", "year", "attempts", "successes"]] + rows
+
+
 # ---------------------------------------------------------------- regime
 
 # OWID entity name -> our states.yaml name, ONLY where they truly differ
@@ -784,6 +815,7 @@ def main() -> None:
     pair_table = build_pair_year(states, dyadic_rows, last_year)
     regime_table = build_regime(states, last_year)
     episode_table = build_episodes()
+    coup_table = build_coups(states, last_year)
     peace = build_peace_agreements(states)
     if peace:
         dump_yaml(REGISTRY / "peace-agreements.yaml", peace)
@@ -794,6 +826,7 @@ def main() -> None:
     write_csv(TABLES / "pair-year.csv", pair_table[0], pair_table[1:])
     write_csv(TABLES / "regime.csv", regime_table[0], regime_table[1:])
     write_csv(TABLES / "episode.csv", episode_table[0], episode_table[1:])
+    write_csv(TABLES / "coup.csv", coup_table[0], coup_table[1:])
 
     meta = {
         "ucdp_release": manifest["ucdp_release"],

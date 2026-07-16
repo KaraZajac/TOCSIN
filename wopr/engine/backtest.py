@@ -36,13 +36,16 @@ SUITE = (
     ("dyad", "acd-active", (), 25),
     ("dyad", "terminates", (), 25),
     ("pair", "acd-active", (), 25),
+    ("country", "coup", (), 1),
 )
 
 
 def walk(grain: str, measure: str, types: tuple, threshold: int, substrate: dict, burn_in: int = 5) -> list[dict]:
     """Score every observable unit-year, walking forward. Returns records
     {year, unit, bucket, level, p, outcome}."""
-    spec = Spec(grain, 0, measure, types, threshold).normalized(substrate["last_year"])
+    spec = Spec(grain, 0, measure, types, threshold).normalized(
+        substrate["last_year"], substrate.get("coup_span")
+    )
     lo, hi = spec.period
     units = list(substrate[grain].values())
     # class membership dedupes by region signature: units with the same region

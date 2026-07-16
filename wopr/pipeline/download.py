@@ -179,6 +179,35 @@ def main() -> None:
             continue
         fetch_file(url, dest)
 
+    # Powell–Thyne coups (country-year panel, updated ~annually). Their uky
+    # host rejects unattended clients, so the fallback of record is the
+    # Wayback Machine's newest 200-status snapshot, resolved through the CDX
+    # index and fetched with the id_ (raw content) URL — the year-hint
+    # redirect sometimes lands on an HTML interstitial instead of the file.
+    dest = SOURCES / "pt-coups.tsv"
+    manifest["files"]["pt-coups"] = dest.name
+    if not dest.exists() or force:
+        pt = "http://www.uky.edu/~clthyn2/coup_data/powell_thyne_ccode_year.txt"
+        try:
+            fetch_file(pt, dest)
+            assert dest.read_text(errors="replace")[:6] == "ccode\t"
+        except (SystemExit, AssertionError):
+            import json
+
+            cdx = (
+                "http://web.archive.org/cdx/search/cdx?url=uky.edu/~clthyn2/coup_data/"
+                "powell_thyne_ccode_year.txt&output=json&filter=statuscode:200&limit=-1"
+            )
+            rows = json.loads(_get(cdx, timeout=60))
+            if len(rows) < 2:
+                raise SystemExit("no Wayback snapshot of the Powell–Thyne file")
+            ts, orig = rows[-1][1], rows[-1][2]
+            fetch_file(f"https://web.archive.org/web/{ts}id_/{orig}", dest)
+            if dest.read_text(errors="replace")[:6] != "ccode\t":
+                raise SystemExit("Wayback snapshot did not contain the Powell–Thyne data file")
+    else:
+        print(f"  cached {dest.relative_to(ROOT)}")
+
     with open(SOURCES / "manifest.yaml", "w") as f:
         yaml.safe_dump(manifest, f, sort_keys=False)
     print("wrote sources/manifest.yaml")
