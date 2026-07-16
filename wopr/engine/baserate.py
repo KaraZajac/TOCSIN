@@ -68,8 +68,10 @@ class Spec:
     period: tuple = ()  # substrate years, defaulted by measure
 
     def normalized(self, last_year: int) -> "Spec":
-        start = ACD_START if self.measure == "acd-active" else DEATHS_START
-        period = self.period or (start, last_year)
+        start = DEATHS_START if self.measure == "deaths" else ACD_START
+        # terminates needs year+1 observable, so the scoreable period ends early
+        hi = last_year - 1 if self.measure == "terminates" else last_year
+        period = self.period or (start, hi)
         as_of = self.as_of or last_year + 1
         return Spec(self.grain, self.unit, self.measure, tuple(self.types), self.threshold, as_of, period)
 
@@ -242,6 +244,11 @@ def hit(u: Unit, year: int, spec: Spec) -> bool | None:
         # exposure is the relevance universe itself: no row, no denominator
         row = u.years.get(year)
         return None if row is None else row.get("acd", 0) > 0
+    if spec.measure == "terminates":
+        # at risk only while active; the hit is "this was the final year"
+        if year < u.first_year or (u.years.get(year) or {}).get("acd", 0) == 0:
+            return None
+        return (u.years.get(year + 1) or {}).get("acd", 0) == 0
     if spec.measure == "acd-active":
         if year < u.first_year:
             return None
@@ -252,6 +259,18 @@ def hit(u: Unit, year: int, spec: Spec) -> bool | None:
     row = u.years.get(year) or {}
     total = sum(row.get(t) or 0 for t in spec.types)
     return total >= spec.threshold
+
+
+def bucket_twin(spec: Spec) -> Spec:
+    """The spec whose history defines the bucket. For `terminates` the state
+    that matters is the episode itself — recency/age/intensity of ACTIVITY —
+    so the bucket scan runs on the acd-active twin, extended one year past
+    the terminates period: activity in the final data year is known even
+    though that year's terminality isn't."""
+    if spec.measure != "terminates":
+        return spec
+    period = (spec.period[0], spec.period[1] + 1)
+    return Spec(spec.grain, spec.unit, "acd-active", (), spec.threshold, spec.as_of, period)
 
 
 def war_year(u: Unit, year: int, spec: Spec) -> bool:
@@ -270,8 +289,10 @@ def bucket_of(u: Unit, year: int, spec: Spec, nbr: set | None = None, regime: di
     "+nbr" when `nbr` (the substrate's neighbor-at-war set, country grain)
     flags a ≤400km neighbor in conflict last year, and "~aut/~mid/~dem" from
     last year's regime band when `regime` covers the unit (V-Dem RoW,
-    collapsed; missing coverage simply omits the suffix). Runs touching the
-    substrate start are left-censored (age reads low)."""
+    collapsed; missing coverage simply omits the suffix). For `terminates`
+    the bucket is the episode's own activity state (the acd-active twin).
+    Runs touching the substrate start are left-censored (age reads low)."""
+    spec = bucket_twin(spec)
     lo, _ = spec.period
     start = max(lo, u.first_year if spec.measure == "acd-active" else max(u.first_year, DEATHS_START))
     if year <= start:  # no observable history yet
@@ -366,6 +387,8 @@ def rate(spec: Spec, substrate: dict) -> dict:
     spec = spec.normalized(substrate["last_year"])
     if spec.grain == "pair" and spec.measure != "acd-active":
         raise ValueError("pair grain supports the acd-active measure only (deaths per pair: roadmap)")
+    if spec.measure == "terminates" and spec.grain != "dyad":
+        raise ValueError("terminates is a dyad-grain measure (episodes belong to dyads)")
     units = substrate[spec.grain]
     if spec.unit not in units:
         raise KeyError(f"unknown {spec.grain} id {spec.unit}")
@@ -376,8 +399,10 @@ def rate(spec: Spec, substrate: dict) -> dict:
     # The capability stays (bucket_of takes `regime`); the engine passes None.
     regime = None
     # the unit's bucket is its status at the edge of observation — unobserved
-    # years between the substrate end and as_of must not decay it toward cold
-    bucket_year = min(spec.as_of, spec.period[1] + 1)
+    # years between the substrate end and as_of must not decay it toward cold.
+    # The edge is the BUCKET data's edge (for terminates, one year past the
+    # scoreable period: last year's activity is known, its terminality isn't).
+    bucket_year = min(spec.as_of, bucket_twin(spec).period[1] + 1)
     bucket = bucket_of(me, bucket_year, spec, nbr, regime) or "cold"
     nowcast = nowcast_bucket(me, spec, substrate.get("partial"))
     if nowcast:
@@ -444,8 +469,8 @@ def nowcast_bucket(u: Unit, spec: Spec, partial: dict | None) -> dict | None:
     is never treated as a quiet year. Applies only to questions about years
     strictly after the partial year — a question about the partial year
     itself must not see that year's own data in its prior."""
-    if spec.grain == "pair":
-        return None  # candidate months carry no pair attribution yet (roadmap)
+    if spec.grain == "pair" or spec.measure == "terminates":
+        return None  # no pair attribution in candidates; termination needs the following year
     if not partial or spec.as_of <= partial["year"] or spec.period[1] != partial["year"] - 1:
         return None
     if spec.measure == "acd-active":
@@ -488,11 +513,11 @@ def notes(spec: Spec) -> list[str]:
 
 def render(result: dict) -> str:
     spec = result["spec"]
-    measure = (
-        f"{'/'.join(spec['types'])} deaths ≥ {spec['threshold']}"
-        if spec["measure"] == "deaths"
-        else "UCDP active (≥25 deaths)"
-    )
+    measure = {
+        "deaths": f"{'/'.join(spec['types'])} deaths ≥ {spec['threshold']}",
+        "acd-active": "UCDP active (≥25 deaths)",
+        "terminates": "episode terminates (active this year, inactive the next)",
+    }[spec["measure"]]
     lines = [
         f"{result['unit_name']} ({spec['grain']} {spec['unit']}) — P({measure} in a calendar year)",
         f"as of {spec['as_of']} · bucket: {result['bucket']} (history through {result['bucket_data_end']})"

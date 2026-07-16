@@ -105,6 +105,31 @@ def main() -> None:
     check(frac < 0.02, f"GED monthly sums match official country-year sb deaths ({len(diffs)} diffs, {frac:.1%})",
           f"worst: {sorted(diffs, key=lambda d: abs(d[1]-d[2]), reverse=True)[:3]}")
 
+    episode_path = TABLES / "episode.csv"
+    if episode_path.exists():
+        eps = rows_of("episode.csv")
+        check(len({e["epid"] for e in eps}) == len(eps), "episode ids unique")
+        # cross-check: UCDP-coded episode end years vs our activity-derived
+        # final years (dyad active in y, inactive in y+1). Coding rules differ
+        # slightly (episode gaps), so this is a warning-level agreement rate.
+        dy_active = defaultdict(set)
+        for r in rows_of("dyad-year.csv"):
+            if r["acd_intensity"] != "0":
+                dy_active[int(r["dyad_id"])].add(int(r["year"]))
+        agree = disagree = 0
+        for e in eps:
+            if e["terminated"] != "1" or not e["end_year"]:
+                continue
+            end = int(e["end_year"])
+            active = dy_active.get(int(e["dyad_id"]), set())
+            if end in active and end + 1 not in active:
+                agree += 1
+            else:
+                disagree += 1
+        total = agree + disagree
+        rate_ok = agree / total if total else 1.0
+        check(rate_ok > 0.9, f"episode ends agree with activity-derived finals ({agree}/{total}, {rate_ok:.1%})")
+
     questions = store.load_all()
     errs = [e for q in questions for e in store.validate_question(q)]
     for e in errs:

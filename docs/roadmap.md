@@ -33,6 +33,12 @@
 - **Proper hierarchical model** replacing the moment-matched EB (partial
   pooling over region × bucket, fitted once at build time).
 - **Conflict-scope priors** (aggregate dyad substrate per conflict id).
+- ~~UCDP long tail~~ **done** (0.5.0): termination measure + hazard suite +
+  auto-resolution; episode table (validated 99.6% vs Kreutz coding); PA
+  registry (context; stale cadence); MIC identified as mediation data and
+  parked. Next in this family: Powell–Thyne coups (new question domain),
+  termination-outcome questions (how, not just whether), conflict-scope
+  termination.
 - ~~Benchmark against VIEWS~~ **done** (`wopr benchmark`, data/benchmark.yaml):
   retrospective month-grain arena, VIEWS ahead on aggregate, persistence
   nearly ties it, WOPR's tempo gap priced at ~0.017 Brier. Follow-ups:

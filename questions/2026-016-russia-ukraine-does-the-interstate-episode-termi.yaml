@@ -1,0 +1,84 @@
+id: 2026-016
+slug: russia-ukraine-does-the-interstate-episode-termi
+title: 'Russia-Ukraine: does the interstate episode terminate in 2026?'
+question: Will the UCDP episode in the dyad Government of Russia (Soviet Union) - Government of Ukraine
+  terminate in 2026 — active (≥25 battle-related deaths) in 2026, inactive in 2027?
+created: '2026-07-16T15:20:11Z'
+status: open
+tags:
+- interstate
+- termination
+criteria:
+  scope:
+    kind: dyad
+    id: 14117
+    name: Government of Russia (Soviet Union) - Government of Ukraine
+  types:
+  - sb
+  measure: terminates
+  threshold: 25
+  window:
+    start: '2026-01-01'
+    end: '2026-12-31'
+resolution_policy:
+  method: auto
+forecasts: []
+prior:
+  p: 0.0789
+  computed: '2026-07-16T15:21:12Z'
+  engine: 0.4.0
+  detail:
+    spec:
+      grain: dyad
+      unit: 14117
+      measure: terminates
+      types: []
+      threshold: 25
+      as_of: 2026
+      period:
+      - 1946
+      - 2024
+    unit_name: Government of Russia (Soviet Union) - Government of Ukraine
+    bucket: active-4-9|war
+    bucket_coarse: active
+    bucket_data_end: 2024
+    levels:
+      self:
+        units: 1
+        years: 0
+        hits: 0
+        rate: null
+      region:
+        units: 64
+        years: 2
+        hits: 0
+        rate: 0.0
+        M: 50.0
+        posterior: 0.0
+      global:
+        units: 697
+        years: 228
+        hits: 18
+        rate: 0.0789
+        M: 23.2
+        posterior: 0.0789
+    unconditional:
+      self:
+        years: 3
+        hits: 0
+        rate: 0.0
+      region:
+        years: 188
+        hits: 74
+        rate: 0.3936
+      global:
+        years: 3440
+        hits: 934
+        rate: 0.2715
+    headline_level: global
+    p: 0.0789
+    notes:
+    - annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate
+    - 'as_of 2026 is 1 year(s) past the substrate (2024): bucket taken at the data edge, one-step rate
+      applied — slightly overstates persistence at longer horizons'
+    - dyad universe = dyads UCDP ever observed; this is a recurrence rate, not a rate for arbitrary pairs

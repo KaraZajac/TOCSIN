@@ -1,0 +1,3494 @@
+- id: 1402
+  name: Declaration of intent
+  date: '1975-12-01'
+  year: 1975
+  conflicts:
+  - 318
+  dyads:
+  - 699
+  incompatibility: '2'
+- id: 1406
+  name: Joint Iranian-Iraqi Communiqué  (“Algiers Agreement”)
+  date: '1975-03-06'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1407
+  name: Protocol to the Joint Iranian-Iraqi Communiqué (“Tehran Protocol”)
+  date: '1975-03-17'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1408
+  name: Record between Iran, Algeria and Iraq dated 20 April 1975
+  date: '1975-04-20'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1409
+  name: Record between Iran, Algeria and Iraq dated 20 May 1975
+  date: '1975-05-20'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1410
+  name: Treaty concerning the State frontier and neighbourly relations
+  date: '1975-06-13'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1411
+  name: Annex I to the Protocol concerning the Redemarcation of the Land Frontier between Iran and Iraq
+  date: '1975-12-21'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1412
+  name: Addendum to Treaty concerning the State Frontier and neighbourly Relations between Iran and Iraq
+  date: '1975-12-26'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1413
+  name: Agreement between Iran and Iraq concerning Frontier Commissioners
+  date: '1975-12-26'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1414
+  name: Agreement between Iran and Iraq concerning the Rules governing Navigation on the Shatt Al’Arab
+  date: '1975-12-26'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1415
+  name: Record no. 2 between Iran and Iraq  dated 26 December 1975
+  date: '1975-12-26'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1416
+  name: Record no. 1 between Iran and Iraq dated 26 December 1975
+  date: '1975-12-26'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1417
+  name: Agreement concerning the Use of Frontier Watercourses
+  date: '1975-12-26'
+  year: 1975
+  conflicts:
+  - 324
+  dyads:
+  - 707
+  incompatibility: '3'
+- id: 1422
+  name: Tripoli Agreement
+  date: '1976-12-23'
+  year: 1976
+  conflicts:
+  - 308
+  dyads:
+  - 656
+  incompatibility: '1'
+- id: 1389
+  name: Western Contact Group (WCG) Settlement Proposal
+  date: '1978-07-12'
+  year: 1978
+  conflicts:
+  - 298
+  dyads:
+  - 641
+  incompatibility: '1'
+- id: 1426
+  name: Basic Charter (Fundamental Charter)
+  date: '1978-08-25'
+  year: 1978
+  conflicts:
+  - 288
+  dyads:
+  - 601
+  incompatibility: '2'
+- id: 1427
+  name: Khartoum Agreement
+  date: '1978-01-22'
+  year: 1978
+  conflicts:
+  - 288
+  dyads:
+  - 601
+  incompatibility: '2'
+- id: 1399
+  name: Lancaster House Agreement
+  date: '1979-12-21'
+  year: 1979
+  conflicts:
+  - 318
+  dyads:
+  - 701
+  incompatibility: '2'
+- id: 1403
+  name: Algiers Agreement
+  date: '1979-08-10'
+  year: 1979
+  conflicts:
+  - 428
+  dyads:
+  - 893
+  incompatibility: '1'
+- id: 1425
+  name: Kuwait agreement
+  date: '1979-03-30'
+  year: 1979
+  conflicts:
+  - 320
+  dyads:
+  - 703
+  incompatibility: '3'
+- id: 1428
+  name: Kano Accord
+  date: '1979-03-15'
+  year: 1979
+  conflicts:
+  - 288
+  dyads:
+  - 601
+  - 602
+  incompatibility: '2'
+- id: 1405
+  name: Chad-Nigeria Agreement
+  date: '1983-07-11'
+  year: 1983
+  conflicts:
+  - 349
+  dyads:
+  - 773
+  incompatibility: '1'
+- id: 1391
+  name: Joint Declaration on a Cessation of Armed Activity and Conflict
+  date: '1984-10-03'
+  year: 1984
+  conflicts:
+  - 332
+  dyads:
+  - 722
+  incompatibility: '2'
+- id: 1501
+  name: Acuerdo entre el Gobierno y el Movimiento 19 de Abril (M-19) y el Partido Comunista De Colombia (M-L) y su organización
+    guerrillera, Ejército Popular de Liberación (EPL) ("Acuerdos de Corinto")
+  date: '1984-08-24'
+  year: 1984
+  conflicts:
+  - 289
+  dyads:
+  - 626
+  - 625
+  incompatibility: '2'
+- id: 1387
+  name: Nairobi Peace Agreement
+  date: '1985-12-17'
+  year: 1985
+  conflicts:
+  - 314
+  dyads:
+  - 681
+  incompatibility: '2'
+- id: 1424
+  name: Jeddah Accord
+  date: '1987-01-04'
+  year: 1987
+  conflicts:
+  - 308
+  dyads:
+  - 656
+  incompatibility: '1'
+- id: 1388
+  name: Gulu Peace Accord (Pece Peace Agreement)
+  date: '1988-06-03'
+  year: 1988
+  conflicts:
+  - 314
+  dyads:
+  - 685
+  incompatibility: '2'
+- id: 1404
+  name: DUP/SPLM Sudan Peace Agreement
+  date: '1988-11-16'
+  year: 1988
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1423
+  name: Memorandum of Understanding with TNV
+  date: '1988-08-12'
+  year: 1988
+  conflicts:
+  - 335
+  dyads:
+  - 738
+  incompatibility: '1'
+- id: 1521
+  name: Sapoa Agreement
+  date: '1988-03-23'
+  year: 1988
+  conflicts:
+  - 336
+  dyads:
+  - 742
+  incompatibility: '2'
+- id: 1021
+  name: The Gbadolite declaration
+  date: '1989-06-22'
+  year: 1989
+  conflicts:
+  - 327
+  dyads:
+  - 714
+  incompatibility: '2'
+- id: 1420
+  name: Algiers Agreement
+  date: '1989-08-31'
+  year: 1989
+  conflicts:
+  - 361
+  dyads:
+  - 788
+  incompatibility: '1'
+- id: 1075
+  name: Bamako Ceasefire Agreement
+  date: '1990-11-28'
+  year: 1990
+  conflicts:
+  - 341
+  dyads:
+  - 760
+  - 759
+  incompatibility: '2'
+- id: 1082
+  name: The Oslo Accord
+  date: '1990-03-30'
+  year: 1990
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1100
+  name: Banjul IV Agreement
+  date: '1990-12-21'
+  year: 1990
+  conflicts:
+  - 341
+  dyads:
+  - 760
+  - 759
+  incompatibility: '2'
+- id: 1102
+  name: Geneva Agreement
+  date: '1990-04-04'
+  year: 1990
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1103
+  name: General Agenda and Timetable for the Comprehensive Negotiating Process
+  date: '1990-05-21'
+  year: 1990
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1104
+  name: Agreement on Human Rights
+  date: '1990-07-26'
+  year: 1990
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1301
+  name: Banjul III Agreement
+  date: '1990-10-24'
+  year: 1990
+  conflicts:
+  - 341
+  dyads:
+  - 760
+  incompatibility: '2'
+- id: 1393
+  name: Groote Schuur Minute
+  date: '1990-05-04'
+  year: 1990
+  conflicts:
+  - 345
+  dyads:
+  - 766
+  incompatibility: '2'
+- id: 1394
+  name: Pretoria Minute
+  date: '1990-08-06'
+  year: 1990
+  conflicts:
+  - 345
+  dyads:
+  - 766
+  incompatibility: '2'
+- id: 1502
+  name: Political Agreement between the National Government, the Political Parties, M-19 and the Catholic Church as Moral
+    and Spiritual Guardian of the Process
+  date: '1990-03-09'
+  year: 1990
+  conflicts:
+  - 289
+  dyads:
+  - 625
+  incompatibility: '2'
+- id: 1522
+  name: Managua Protocol on Disarmament
+  date: '1990-05-30'
+  year: 1990
+  conflicts:
+  - 336
+  dyads:
+  - 742
+  incompatibility: '2'
+- id: 1534
+  name: 'Agreement Establishing a Union between the State of the Yemen
+
+    Arab Republic and the State of the People''s Democratic Republic of
+
+    Yemen'
+  date: '1990-04-22'
+  year: 1990
+  conflicts:
+  - 320
+  dyads:
+  - 703
+  incompatibility: '3'
+- id: 1557
+  name: Endeavour accord on dialogue and return of services to Bougainville
+  date: '1990-08-05'
+  year: 1990
+  conflicts:
+  - 369
+  dyads:
+  - 797
+  incompatibility: '1'
+- id: 1572
+  name: Acuerdo Gobierno Nacional - Ejécito Popular de Liberacion, Pueblo Nuevo y Juan José
+  date: '1990-08-26'
+  year: 1990
+  conflicts:
+  - 289
+  dyads:
+  - 626
+  incompatibility: '2'
+- id: 1573
+  name: Acuerdo entre el PCC M-L, EPL, Quintín Lame y PRT y Partidos Políticos Signatarios del Acuerdo Para la Constituyente
+  date: '1990-09-24'
+  year: 1990
+  conflicts:
+  - 289
+  dyads:
+  - 626
+  incompatibility: '2'
+- id: 1574
+  name: Acuerdo Gobierno Nacional-EPL y PCC – ML, Labores, Belmira, Antioquia
+  date: '1990-09-28'
+  year: 1990
+  conflicts:
+  - 289
+  dyads:
+  - 626
+  incompatibility: '2'
+- id: 1640
+  name: 'The Taif Agreement '
+  date: '1990-04-28'
+  year: 1990
+  conflicts:
+  - 260
+  dyads:
+  - 533
+  incompatibility: '2'
+- id: 1014
+  name: Lomé Agreement
+  date: '1991-02-13'
+  year: 1991
+  conflicts:
+  - 341
+  dyads:
+  - 760
+  - 759
+  incompatibility: '2'
+- id: 1022
+  name: The Bicesse Agreement
+  date: '1991-05-31'
+  year: 1991
+  conflicts:
+  - 327
+  dyads:
+  - 714
+  incompatibility: '2'
+- id: 1039
+  name: Tamanrasset Accord
+  date: '1991-01-06'
+  year: 1991
+  conflicts:
+  - 372
+  dyads:
+  - 800
+  incompatibility: '1'
+- id: 1041
+  name: Mopti Accord
+  date: '1991-12-18'
+  year: 1991
+  conflicts:
+  - 372
+  dyads:
+  - 800
+  incompatibility: '1'
+- id: 1062
+  name: The Final Communique of the Fourth Meeting of the Committee of Five of the Economic Community of West African States
+    of the Liberian Crisis, held in Yamoussoukro IV on the 29 and 30 October 1991 (Yamoussoukro IV Peace Agreement)
+  date: '1991-10-30'
+  year: 1991
+  conflicts:
+  - 341
+  dyads:
+  - 760
+  - 759
+  incompatibility: '2'
+- id: 1069
+  name: Brioni Agreement
+  date: '1991-07-12'
+  year: 1991
+  conflicts:
+  - 384
+  dyads:
+  - 824
+  incompatibility: '1'
+- id: 1076
+  name: The Honiara Declaration
+  date: '1991-01-23'
+  year: 1991
+  conflicts:
+  - 369
+  dyads:
+  - 797
+  incompatibility: '1'
+- id: 1079
+  name: Acuerdo Final Gobierno Nacional-Ejército Popular De Liberación
+  date: '1991-02-15'
+  year: 1991
+  conflicts:
+  - 289
+  dyads:
+  - 626
+  incompatibility: '2'
+- id: 1083
+  name: The Mexico Accord
+  date: '1991-04-26'
+  year: 1991
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1084
+  name: The Querétaro Agreement
+  date: '1991-07-25'
+  year: 1991
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1105
+  name: Mexico Agreements
+  date: '1991-04-27'
+  year: 1991
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1106
+  name: New York Agreement
+  date: '1991-09-25'
+  year: 1991
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1107
+  name: The Compressed Negotiations
+  date: '1991-09-25'
+  year: 1991
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1108
+  name: New York Act
+  date: '1991-12-31'
+  year: 1991
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1113
+  name: The Paris Agreement
+  date: '1991-10-23'
+  year: 1991
+  conflicts:
+  - 300
+  dyads:
+  - 647
+  - 646
+  - 644
+  incompatibility: '2'
+- id: 1302
+  name: Basic Principles
+  date: '1991-10-18'
+  year: 1991
+  conflicts:
+  - 332
+  dyads:
+  - 722
+  incompatibility: '2'
+- id: 1303
+  name: Agreement on Establishment and Recognition of Political Parties
+  date: '1991-11-13'
+  year: 1991
+  conflicts:
+  - 332
+  dyads:
+  - 722
+  incompatibility: '2'
+- id: 1308
+  name: The Protocol on the Agreed Agenda
+  date: '1991-05-28'
+  year: 1991
+  conflicts:
+  - 332
+  dyads:
+  - 722
+  incompatibility: '2'
+- id: 1320
+  name: N’sele Cease-fire Agreement
+  date: '1991-03-29'
+  year: 1991
+  conflicts:
+  - 374
+  dyads:
+  - 804
+  incompatibility: '2'
+- id: 1395
+  name: CODESA Declaration of Intent
+  date: '1991-12-20'
+  year: 1991
+  conflicts:
+  - 345
+  dyads:
+  - 766
+  incompatibility: '2'
+- id: 1503
+  name: Caracas Agenda
+  date: '1991-06-06'
+  year: 1991
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  - 624
+  - 626
+  incompatibility: '2'
+- id: 1571
+  name: Accord between the Cambodian People's Party (CPP) and the National United Front for an Independent, Neutral, Peaceful
+    and Cooperative Cambodia (FUNCINPEC)
+  date: '1991-11-20'
+  year: 1991
+  conflicts:
+  - 300
+  dyads:
+  - 647
+  incompatibility: '2'
+- id: 1575
+  name: Declaración del Gobierno Nacional y el PCC (ML) y el EPL, Juan José, Córdoba
+  date: '1991-01-29'
+  year: 1991
+  conflicts:
+  - 289
+  dyads:
+  - 626
+  incompatibility: '2'
+- id: 1020
+  name: The Acordo Geral de Paz (AGP)
+  date: '1992-10-04'
+  year: 1992
+  conflicts:
+  - 332
+  dyads:
+  - 722
+  incompatibility: '2'
+- id: 1040
+  name: Pacte National
+  date: '1992-04-11'
+  year: 1992
+  conflicts:
+  - 372
+  dyads:
+  - 800
+  incompatibility: '1'
+- id: 1042
+  name: El Geneina agreement
+  date: '1992-10-31'
+  year: 1992
+  conflicts:
+  - 288
+  dyads:
+  - 614
+  incompatibility: '2'
+- id: 1109
+  name: New York Act II
+  date: '1992-01-16'
+  year: 1992
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1110
+  name: The Chapultepec Peace Agreement
+  date: '1992-01-16'
+  year: 1992
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1300
+  name: Final Communiqué of the ECOWAS Committee of Five on Liberia ("Geneva Agreement")
+  date: '1992-04-07'
+  year: 1992
+  conflicts:
+  - 341
+  dyads:
+  - 759
+  incompatibility: '2'
+- id: 1306
+  name: Agreement on Principles of the Electoral Act
+  date: '1992-03-12'
+  year: 1992
+  conflicts:
+  - 332
+  dyads:
+  - 722
+  incompatibility: '2'
+- id: 1307
+  name: Joint Declaration on the Conclusion of the Peace Process
+  date: '1992-08-07'
+  year: 1992
+  conflicts:
+  - 332
+  dyads:
+  - 722
+  incompatibility: '2'
+- id: 1321
+  name: The Protocol of Agreement between the Government of the Republic of Rwanda and the Rwandese Patriotic Front on the
+    Rule of Law
+  date: '1992-08-18'
+  year: 1992
+  conflicts:
+  - 374
+  dyads:
+  - 804
+  incompatibility: '2'
+- id: 1396
+  name: Record of Understanding
+  date: '1992-09-26'
+  year: 1992
+  conflicts:
+  - 345
+  dyads:
+  - 766
+  incompatibility: '2'
+- id: 1523
+  name: Protocol of Agreement on Power-sharing within the Framework of  broad-based Transitional Government between the Government
+    of the Republic of Rwanda and the Rwandese Patriotic Front
+  date: '1992-10-30'
+  year: 1992
+  conflicts:
+  - 374
+  dyads:
+  - 804
+  incompatibility: '2'
+- id: 1565
+  name: Peshawar Accord
+  date: '1992-04-24'
+  year: 1992
+  conflicts:
+  - 333
+  dyads:
+  - 729
+  - 726
+  - 727
+  - 725
+  - 730
+  - 732
+  incompatibility: '2'
+- id: 1591
+  name: Acuerdo Complementario del 22 de Diciembre de 1992
+  date: '1992-12-22'
+  year: 1992
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1596
+  name: Final Document of the Moscow Meeting (Moscow Ceasefire)
+  date: '1992-09-03'
+  year: 1992
+  conflicts:
+  - 392
+  dyads:
+  - 839
+  incompatibility: '1'
+- id: 1002
+  name: Arusha Accords
+  date: '1993-08-04'
+  year: 1993
+  conflicts:
+  - 374
+  dyads:
+  - 804
+  incompatibility: '2'
+- id: 1015
+  name: Cotonou Peace Agreement
+  date: '1993-07-25'
+  year: 1993
+  conflicts:
+  - 341
+  dyads:
+  - 759
+  incompatibility: '2'
+- id: 1036
+  name: Paris Accord
+  date: '1993-06-10'
+  year: 1993
+  conflicts:
+  - 430
+  dyads:
+  - 895
+  incompatibility: '2'
+- id: 1043
+  name: Tripoli 1 Agreement
+  date: '1993-10-16'
+  year: 1993
+  conflicts:
+  - 288
+  dyads:
+  - 612
+  incompatibility: '2'
+- id: 1050
+  name: Addis Ababa Agreement
+  date: '1993-03-27'
+  year: 1993
+  conflicts:
+  - 337
+  dyads:
+  - 747
+  - 743
+  - 745
+  incompatibility: '2'
+- id: 1066
+  name: The Governors Island agreement
+  date: '1993-07-03'
+  year: 1993
+  conflicts:
+  - 381
+  dyads:
+  - 815
+  incompatibility: '2'
+- id: 1071
+  name: Memorandum of settlement and Bodoland Autonomous Council Act, 1993
+  date: '1993-02-20'
+  year: 1993
+  conflicts:
+  - 421
+  dyads:
+  - 884
+  incompatibility: '1'
+- id: 1121
+  name: Memorandum of Settlement - 23 August 1993
+  date: '1993-08-23'
+  year: 1993
+  conflicts:
+  - 335
+  dyads:
+  - 739
+  incompatibility: '1'
+- id: 1128
+  name: Afghan Peace Accord and Annex on the Division of Powers ("Islamabad accord")
+  date: '1993-03-07'
+  year: 1993
+  conflicts:
+  - 333
+  dyads:
+  - 726
+  - 732
+  incompatibility: '2'
+- id: 1132
+  name: Jalalabad accord
+  date: '1993-05-20'
+  year: 1993
+  conflicts:
+  - 333
+  dyads:
+  - 726
+  incompatibility: '2'
+- id: 1133
+  name: Declaration of Principles on Interim Self-Government Arrangements/ Oslo Agreement
+  date: '1993-09-13'
+  year: 1993
+  conflicts:
+  - 234
+  dyads:
+  - 476
+  incompatibility: '1'
+- id: 1322
+  name: The Protocols of Agreement between the Government of the Republic of Rwanda and the Rwandese Patriotic Front on Power-Sharing
+    within the Framework of a Broad-Based Transitional Government
+  date: '1993-01-09'
+  year: 1993
+  conflicts:
+  - 374
+  dyads:
+  - 804
+  incompatibility: '2'
+- id: 1323
+  name: The Protocol of Agreement between the Government of the Republic of Rwanda and the Rwandese Patriotic Front on the
+    Repatriation of Refugees and the Resettlement of Displaced Persons
+  date: '1993-06-09'
+  year: 1993
+  conflicts:
+  - 374
+  dyads:
+  - 804
+  incompatibility: '2'
+- id: 1324
+  name: The Protocol Agreement between the Government of the Republic of Rwanda and the Rwandese Patriotic Front on the integration
+    of Armed Forces of the two parties
+  date: '1993-08-03'
+  year: 1993
+  conflicts:
+  - 374
+  dyads:
+  - 804
+  incompatibility: '2'
+- id: 1325
+  name: The Protocol of Agreement between the Government of the Republic of Rwanda and the Rwandese Patriotic Front on Miscellaneous
+    Issues and Final Provisions
+  date: '1993-08-03'
+  year: 1993
+  conflicts:
+  - 374
+  dyads:
+  - 804
+  incompatibility: '2'
+- id: 1397
+  name: Interim Constitution
+  date: '1993-11-18'
+  year: 1993
+  conflicts:
+  - 345
+  dyads:
+  - 766
+  incompatibility: '2'
+- id: 1524
+  name: Statement of Understanding (Cipanas Understanding)
+  date: '1993-04-16'
+  year: 1993
+  conflicts:
+  - 308
+  dyads:
+  - 656
+  incompatibility: '1'
+- id: 1564
+  name: 'Medjugorje Agreement '
+  date: '1993-05-18'
+  year: 1993
+  conflicts:
+  - 398
+  dyads:
+  - 848
+  incompatibility: '1'
+- id: 1570
+  name: The Vance-Owen Plan
+  date: '1993-05-02'
+  year: 1993
+  conflicts:
+  - 389
+  - 398
+  dyads:
+  - 835
+  - 848
+  incompatibility: '1'
+- id: 1593
+  name: Acuerdo Complementario del 5 de Febrero de 1993
+  date: '1993-02-05'
+  year: 1993
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1597
+  name: Memorandum of understanding between the Georgian and Abkhaz sides at the negotiations held in Geneva
+  date: '1993-12-01'
+  year: 1993
+  conflicts:
+  - 392
+  dyads:
+  - 839
+  incompatibility: '1'
+- id: 1009
+  name: Accord de paix et de la reconciliation nationale
+  date: '1994-12-26'
+  year: 1994
+  conflicts:
+  - 379
+  dyads:
+  - 810
+  incompatibility: '2'
+- id: 1016
+  name: Akosombo Peace Agreement
+  date: '1994-09-12'
+  year: 1994
+  conflicts:
+  - 341
+  dyads:
+  - 759
+  incompatibility: '2'
+- id: 1023
+  name: The Lusaka Protocol
+  date: '1994-11-20'
+  year: 1994
+  conflicts:
+  - 327
+  dyads:
+  - 714
+  incompatibility: '2'
+- id: 1037
+  name: Ouagadougou Accord
+  date: '1994-10-09'
+  year: 1994
+  conflicts:
+  - 373
+  dyads:
+  - 803
+  incompatibility: '1'
+- id: 1044
+  name: Bangui-2 Agreement
+  date: '1994-08-11'
+  year: 1994
+  conflicts:
+  - 288
+  dyads:
+  - 613
+  incompatibility: '2'
+- id: 1072
+  name: The Washington Agreement
+  date: '1994-03-01'
+  year: 1994
+  conflicts:
+  - 398
+  dyads:
+  - 848
+  incompatibility: '1'
+- id: 1078
+  name: Honiara Commitments to Peace
+  date: '1994-09-03'
+  year: 1994
+  conflicts:
+  - 369
+  dyads:
+  - 797
+  incompatibility: '1'
+- id: 1085
+  name: The Framework Agreement for the Resumption of Negotiations between the Government of Guatemala and the Guatemalan
+    National Revolutionary Unity
+  date: '1994-01-10'
+  year: 1994
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1086
+  name: The Agreement on a Timetable for Negotiations on a Firm and Lasting Peace in Guatemala
+  date: '1994-03-29'
+  year: 1994
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1087
+  name: The Comprehensive Agreement on Human Rights
+  date: '1994-03-29'
+  year: 1994
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1088
+  name: The Agreement on the Resettlement of Population Groups Uprooted by the Armed Conflict
+  date: '1994-06-17'
+  year: 1994
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1089
+  name: The Agreement for the Establishment of the Commission to Clarify Past Human Rights Violations and Acts of Violence
+    that have Caused the Guatemalan Population to Suffer
+  date: '1994-06-23'
+  year: 1994
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1116
+  name: Abeche agreement
+  date: '1994-10-12'
+  year: 1994
+  conflicts:
+  - 288
+  dyads:
+  - 614
+  incompatibility: '2'
+- id: 1130
+  name: Declaration on measures for a political settlement of the Georgian/Abkhaz conflict
+  date: '1994-04-04'
+  year: 1994
+  conflicts:
+  - 392
+  dyads:
+  - 839
+  incompatibility: '1'
+- id: 1134
+  name: Agreement on the Gaza Strip and the Jericho Area
+  date: '1994-05-04'
+  year: 1994
+  conflicts:
+  - 234
+  dyads:
+  - 476
+  incompatibility: '1'
+- id: 1135
+  name: Agreement on Preparatory Transfer of Powers and Responsibilities Between Israel and the PLO
+  date: '1994-08-29'
+  year: 1994
+  conflicts:
+  - 234
+  dyads:
+  - 476
+  incompatibility: '1'
+- id: 1142
+  name: Nairobi Declaration on National Reconciliation
+  date: '1994-03-24'
+  year: 1994
+  conflicts:
+  - 337
+  dyads:
+  - 747
+  incompatibility: '2'
+- id: 1299
+  name: Agreement on the clarification of the Akosombo Agreement
+  date: '1994-12-21'
+  year: 1994
+  conflicts:
+  - 341
+  dyads:
+  - 759
+  incompatibility: '2'
+- id: 1421
+  name: Agreement between the Great Socialist People’s Libyan Arab Jamahiriya and the Republic of Chad concerning the practical
+    modalities for the implementation of the Judgment delivered by the International Court of Justice on 3 February 1994
+  date: '1994-04-04'
+  year: 1994
+  conflicts:
+  - 361
+  dyads:
+  - 788
+  incompatibility: '1'
+- id: 1566
+  name: Declaration Concerning the Constitution of the Federation of Bosnia and Herzegovina
+  date: '1994-03-18'
+  year: 1994
+  conflicts:
+  - 398
+  dyads:
+  - 848
+  incompatibility: '1'
+- id: 1567
+  name: Comprehensive Peace Agreement
+  date: '1994-12-20'
+  year: 1994
+  conflicts:
+  - 389
+  dyads:
+  - 835
+  incompatibility: '1'
+- id: 1592
+  name: Timetable for the Implementation of the Most Important Outstanding Agreements
+  date: '1994-05-19'
+  year: 1994
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1594
+  name: Joint Declaration Signed on 4 October 1994 by the Representatives of the Govt of El Salvador and of the Frente Farabundo
+    Marti para la Liberacion Nacional (FMLN)
+  date: '1994-10-04'
+  year: 1994
+  conflicts:
+  - 316
+  dyads:
+  - 697
+  incompatibility: '2'
+- id: 1598
+  name: Communiqué on the second round of negotiations between the Georgian and Abkhaz sides
+  date: '1994-01-13'
+  year: 1994
+  conflicts:
+  - 392
+  dyads:
+  - 839
+  incompatibility: '1'
+- id: 1017
+  name: Abuja Agreement to Supplement the Cotonou and Akosombo, Agreements as subsequently clarified by the Accra Agreement
+    ("Abuja Peace Agreement")
+  date: '1995-08-19'
+  year: 1995
+  conflicts:
+  - 341
+  dyads:
+  - 759
+  incompatibility: '2'
+- id: 1038
+  name: Agreement establishing permanent peace between the government of Niger and ORA
+  date: '1995-04-15'
+  year: 1995
+  conflicts:
+  - 373
+  dyads:
+  - 803
+  incompatibility: '1'
+- id: 1058
+  name: GRP-RAM/SFP/YOU General Agreement for Peace
+  date: '1995-10-13'
+  year: 1995
+  conflicts:
+  - 209
+  dyads:
+  - 412
+  incompatibility: '2'
+- id: 1073
+  name: The General Framework Agreement for Peace in Bosnia and Herzegovina (the Dayton Agreement)
+  date: '1995-12-14'
+  year: 1995
+  conflicts:
+  - 389
+  dyads:
+  - 834
+  - 835
+  incompatibility: '1'
+- id: 1074
+  name: The Erdut Agreement
+  date: '1995-11-12'
+  year: 1995
+  conflicts:
+  - 390
+  dyads:
+  - 836
+  - 837
+  incompatibility: '1'
+- id: 1090
+  name: The Agreement on the Identity and Rights of Indigenous Peoples
+  date: '1995-03-31'
+  year: 1995
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1117
+  name: The Dougia Accord
+  date: '1995-11-22'
+  year: 1995
+  conflicts:
+  - 288
+  dyads:
+  - 610
+  incompatibility: '2'
+- id: 1136
+  name: Israeli-Palestinian Interim Agreement on the West Bank and the Gaza Strip ("Oslo II")
+  date: '1995-09-28'
+  year: 1995
+  conflicts:
+  - 234
+  dyads:
+  - 476
+  incompatibility: '1'
+- id: 1144
+  name: Protocol on the Fundamental Principles of Establishing Peace and National Accord in Tajikistan
+  date: '1995-08-17'
+  year: 1995
+  conflicts:
+  - 395
+  dyads:
+  - 842
+  incompatibility: '2'
+- id: 1515
+  name: Protocol on Further Transfer of Powers and Responsibilities
+  date: '1995-08-27'
+  year: 1995
+  conflicts:
+  - 234
+  dyads:
+  - 476
+  incompatibility: '1'
+- id: 1568
+  name: Agreed Basic Principles signed on 8 September 1995 at Geneva
+  date: '1995-09-08'
+  year: 1995
+  conflicts:
+  - 389
+  dyads:
+  - 835
+  incompatibility: '1'
+- id: 1569
+  name: Further Agreed Basic Principles (additional to those issued 8 September 1995, in Geneva)
+  date: '1995-09-08'
+  year: 1995
+  conflicts:
+  - 389
+  dyads:
+  - 835
+  incompatibility: '1'
+- id: 1610
+  name: 'Protocol on the negotiating principles for the peace agreement concluded
+
+    between the Government and the Zapatista National Liberation Army
+
+    (Ejército zapatista de liberación nacional, EZLN)'
+  date: '1995-09-11'
+  year: 1995
+  conflicts:
+  - 400
+  dyads:
+  - 850
+  incompatibility: '2'
+- id: 1011
+  name: Abidjan Peace Agreement
+  date: '1996-11-30'
+  year: 1996
+  conflicts:
+  - 382
+  dyads:
+  - 818
+  incompatibility: '2'
+- id: 1018
+  name: Supplement to the Abuja Accord ("Abuja II Peace Agreement")
+  date: '1996-08-17'
+  year: 1996
+  conflicts:
+  - 341
+  dyads:
+  - 759
+  incompatibility: '2'
+- id: 1064
+  name: Final agreement on the implementation of the 1976 Tripoli Agreement between the Government of the Republic of the
+    Philippines (GRP) and the Moro National Liberation Front (MNLF)
+  date: '1996-09-02'
+  year: 1996
+  conflicts:
+  - 308
+  dyads:
+  - 656
+  incompatibility: '1'
+- id: 1070
+  name: The San Andrés Accords
+  date: '1996-02-16'
+  year: 1996
+  conflicts:
+  - 400
+  dyads:
+  - 850
+  incompatibility: '2'
+- id: 1081
+  name: The Agreement for a Firm and Lasting Peace
+  date: '1996-12-29'
+  year: 1996
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1091
+  name: The Agreement on Socio-economic Aspects and the Agrarian Situation
+  date: '1996-05-06'
+  year: 1996
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1092
+  name: The Agreement on the Strengthening of Civilian Power and the Role of the Armed Forces in a Democratic Society
+  date: '1996-09-19'
+  year: 1996
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1093
+  name: The Agreement on a Definitive Ceasefire
+  date: '1996-12-04'
+  year: 1996
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1094
+  name: The Agreement on Constitutional Reforms and the Electoral Regime
+  date: '1996-12-07'
+  year: 1996
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1095
+  name: The Agreement on the Basis for the Legal Integration of the URNG
+  date: '1996-12-12'
+  year: 1996
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1097
+  name: The Agreement on the Implementation, Compliance and Verification Timetable for the Peace Agreements
+  date: '1996-12-29'
+  year: 1996
+  conflicts:
+  - 233
+  dyads:
+  - 469
+  incompatibility: '2'
+- id: 1131
+  name: Mahipar agreement
+  date: '1996-05-24'
+  year: 1996
+  conflicts:
+  - 333
+  dyads:
+  - 726
+  incompatibility: '2'
+- id: 1147
+  name: Agreement between the President of the Republic of Tajikistan, E.S. Rakhmonov, and the leader of the United Tajik-Opposition,
+    S.A. Huri, on the results of the meeting held in Moscow 23 December 1996
+  date: '1996-12-23'
+  year: 1996
+  conflicts:
+  - 395
+  dyads:
+  - 842
+  incompatibility: '2'
+- id: 1539
+  name: Protocol on the main functions and powers of the Commission on National Reconciliation
+  date: '1996-12-23'
+  year: 1996
+  conflicts:
+  - 395
+  dyads:
+  - 842
+  incompatibility: '2'
+- id: 1615
+  name: Joint Declaration that the Federal Government and the Ezln Shall Submit to National Debating and Decision-Making Bodies
+  date: '1996-02-16'
+  year: 1996
+  conflicts:
+  - 400
+  dyads:
+  - 850
+  incompatibility: '2'
+- id: 1616
+  name: Joint Proposals That the Federal Government and the EZLN Agree to Remit to the National Debating and Decision-Making
+    Bodies in Accordance with Paragraph 1.4 of the Rules of Procedure
+  date: '1996-02-16'
+  year: 1996
+  conflicts:
+  - 400
+  dyads:
+  - 850
+  incompatibility: '2'
+- id: 1617
+  name: Commitments for Chiapas by the State and Federal Governments and the EZLN under Paragraph 1,3 of the Rules of Procedure
+  date: '1996-02-16'
+  year: 1996
+  conflicts:
+  - 400
+  dyads:
+  - 850
+  incompatibility: '2'
+- id: 1618
+  name: Actions and Measures for the Chiapas Joint Commitments and Proposals From the State and Federal Governments, and the
+    EZLN
+  date: '1996-02-16'
+  year: 1996
+  conflicts:
+  - 400
+  dyads:
+  - 850
+  incompatibility: '2'
+- id: 1045
+  name: National reconciliation agreement
+  date: '1997-10-03'
+  year: 1997
+  conflicts:
+  - 288
+  dyads:
+  - 614
+  incompatibility: '2'
+- id: 1057
+  name: Chittagong Hill Tracts Peace Accord
+  date: '1997-12-02'
+  year: 1997
+  conflicts:
+  - 322
+  dyads:
+  - 705
+  incompatibility: '1'
+- id: 1060
+  name: The Cairo Declaration on Somalia
+  date: '1997-12-22'
+  year: 1997
+  conflicts:
+  - 337
+  dyads:
+  - 747
+  incompatibility: '2'
+- id: 1119
+  name: The Moscow Declaration - General agreement on the Establishment of Peace and National Accord in Tajikistan
+  date: '1997-06-27'
+  year: 1997
+  conflicts:
+  - 395
+  dyads:
+  - 842
+  incompatibility: '2'
+- id: 1123
+  name: Memorandum on the Basis for Normalization of Relations between the Republic of Moldova and Transdniestria
+  date: '1997-05-08'
+  year: 1997
+  conflicts:
+  - 394
+  dyads:
+  - 841
+  incompatibility: '1'
+- id: 1137
+  name: Protocol on Redeployment in Hebron
+  date: '1997-01-15'
+  year: 1997
+  conflicts:
+  - 234
+  dyads:
+  - 476
+  incompatibility: '1'
+- id: 1312
+  name: Statute of the Commission on National Reconciliation
+  date: '1997-02-21'
+  year: 1997
+  conflicts:
+  - 395
+  dyads:
+  - 842
+  incompatibility: '2'
+- id: 1313
+  name: Tehran Joint statement
+  date: '1997-01-19'
+  year: 1997
+  conflicts:
+  - 395
+  dyads:
+  - 842
+  incompatibility: '2'
+- id: 1315
+  name: Protocol on political issues
+  date: '1997-05-18'
+  year: 1997
+  conflicts:
+  - 395
+  dyads:
+  - 842
+  incompatibility: '2'
+- id: 1317
+  name: Protocol on the guarantees of implementation of the General Agreement on Establishment of Peace and National Accord
+    in Tajikistan
+  date: '1997-05-28'
+  year: 1997
+  conflicts:
+  - 395
+  dyads:
+  - 842
+  incompatibility: '2'
+- id: 1318
+  name: Protocol on military issues
+  date: '1997-03-08'
+  year: 1997
+  conflicts:
+  - 395
+  dyads:
+  - 842
+  incompatibility: '2'
+- id: 1563
+  name: Protocole d'accord additionnel entre le Gouvernement de la Republique du Niger et l'Union des Forces de la Resistance
+    Armee (FPLS, MUR, FAR) et les Forces Armees Revolutionnaires du Sahara
+  date: '1997-11-23'
+  year: 1997
+  conflicts:
+  - 430
+  dyads:
+  - 896
+  incompatibility: '2'
+- id: 1576
+  name: Addis Ababa Agreement
+  date: '1997-12-13'
+  year: 1997
+  conflicts:
+  - 407
+  dyads:
+  - 860
+  incompatibility: '1'
+- id: 1019
+  name: Abuja Peace Agreement
+  date: '1998-11-01'
+  year: 1998
+  conflicts:
+  - 410
+  dyads:
+  - 866
+  incompatibility: '2'
+- id: 1046
+  name: Donya agreement
+  date: '1998-05-07'
+  year: 1998
+  conflicts:
+  - 288
+  dyads:
+  - 615
+  incompatibility: '2'
+- id: 1063
+  name: The Good Friday Agreement
+  date: '1998-04-10'
+  year: 1998
+  conflicts:
+  - 315
+  dyads:
+  - 692
+  incompatibility: '1'
+- id: 1125
+  name: Acta Presidencial de Brasilia
+  date: '1998-10-26'
+  year: 1998
+  conflicts:
+  - 403
+  dyads:
+  - 854
+  incompatibility: '1'
+- id: 1138
+  name: The Wye River Memorandum
+  date: '1998-10-23'
+  year: 1998
+  conflicts:
+  - 234
+  dyads:
+  - 476
+  - 479
+  incompatibility: '1'
+- id: 1505
+  name: Declaration of Viana
+  date: '1998-02-09'
+  year: 1998
+  conflicts:
+  - 289
+  dyads:
+  - 624
+  incompatibility: '2'
+- id: 1533
+  name: 'Declaration by the participants to the peace negotiations on Burundi,
+
+    involving all the parties to the Burundi conflict'
+  date: '1998-06-21'
+  year: 1998
+  conflicts:
+  - 287
+  dyads:
+  - 594
+  - 595
+  - 593
+  incompatibility: '2'
+- id: 1558
+  name: Lincoln Agreement on Peace, Security and Development on Bougainville
+  date: '1998-01-23'
+  year: 1998
+  conflicts:
+  - 369
+  dyads:
+  - 797
+  incompatibility: '1'
+- id: 1583
+  name: Comprehensive Peru-Ecuadorian Agreement on Border Integration, Development and Neighbourly Relations
+  date: '1998-10-26'
+  year: 1998
+  conflicts:
+  - 403
+  dyads:
+  - 854
+  incompatibility: '1'
+- id: 1599
+  name: Additional Protocol to the Abuja Accord of 1 November 1998 Concerning the Formation of the Government of National
+    Unity of Guinea-Bissau
+  date: '1998-12-15'
+  year: 1998
+  conflicts:
+  - 410
+  dyads:
+  - 866
+  incompatibility: '2'
+- id: 1004
+  name: Lusaka Accord
+  date: '1999-08-31'
+  year: 1999
+  conflicts:
+  - 283
+  dyads:
+  - 586
+  - 585
+  incompatibility: '2'
+- id: 1013
+  name: Lomé Peace Agreement
+  date: '1999-07-07'
+  year: 1999
+  conflicts:
+  - 382
+  dyads:
+  - 818
+  incompatibility: '2'
+- id: 1026
+  name: Ceasefire and ending hostilities agreement between the High Command of the Security Forces and the High Command of
+    the Self-Defence Forces of Resistance
+  date: '1999-12-29'
+  year: 1999
+  conflicts:
+  - 408
+  dyads:
+  - 861
+  - 863
+  - 864
+  incompatibility: '2'
+- id: 1118
+  name: Reconciliation agreement
+  date: '1999-07-03'
+  year: 1999
+  conflicts:
+  - 288
+  dyads:
+  - 610
+  incompatibility: '2'
+- id: 1140
+  name: The Sharm el-Sheik Memorandum Wye II
+  date: '1999-09-04'
+  year: 1999
+  conflicts:
+  - 234
+  dyads:
+  - 476
+  - 479
+  incompatibility: '1'
+- id: 1329
+  name: Common Agenda for the Path to a New Colombia
+  date: '1999-05-06'
+  year: 1999
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1512
+  name: Lahore Declaration
+  date: '1999-02-21'
+  year: 1999
+  conflicts:
+  - 218
+  dyads:
+  - 422
+  incompatibility: '1'
+- id: 1513
+  name: Memorandum of Understanding between the Governments of India and Pakistan
+  date: '1999-02-21'
+  year: 1999
+  conflicts:
+  - 218
+  dyads:
+  - 422
+  incompatibility: '1'
+- id: 1559
+  name: Fundamental Principles for the Future of Bougainville (The Hutjena Minute)
+  date: '1999-06-30'
+  year: 1999
+  conflicts:
+  - 369
+  dyads:
+  - 797
+  incompatibility: '1'
+- id: 1560
+  name: The Hutjena Record
+  date: '1999-12-15'
+  year: 1999
+  conflicts:
+  - 369
+  dyads:
+  - 797
+  incompatibility: '1'
+- id: 1614
+  name: Agreement on Ending Hostilities in the Republic of Congo
+  date: '1999-11-16'
+  year: 1999
+  conflicts:
+  - 408
+  dyads:
+  - 861
+  - 863
+  - 864
+  incompatibility: '2'
+- id: 1003
+  name: Arusha Peace and Reconciliation Agreement for Burundi
+  date: '2000-08-28'
+  year: 2000
+  conflicts:
+  - 287
+  dyads:
+  - 593
+  - 594
+  - 595
+  incompatibility: '2'
+- id: 1008
+  name: Agreement between the Government of the State of Eritrea and the Government of the Federal Democratic Republic of
+    Ethiopia (Algiers accord)
+  date: '2000-12-12'
+  year: 2000
+  conflicts:
+  - 409
+  dyads:
+  - 865
+  incompatibility: '1'
+- id: 1010
+  name: Accord Cadre de Reforme et de Concorde Civile
+  date: '2000-02-07'
+  year: 2000
+  conflicts:
+  - 379
+  dyads:
+  - 811
+  incompatibility: '2'
+- id: 1024
+  name: The Famboni Declaration
+  date: '2000-08-26'
+  year: 2000
+  conflicts:
+  - 407
+  dyads:
+  - 860
+  incompatibility: '1'
+- id: 1143
+  name: Abuja Ceasefire Agreement
+  date: '2000-11-10'
+  year: 2000
+  conflicts:
+  - 382
+  dyads:
+  - 818
+  incompatibility: '2'
+- id: 1511
+  name: Agreement on cessation of hostilities between the Government of the Federal Democratic Republic of Ethiopia and the
+    Government of the State of Eritrea
+  date: '2000-06-18'
+  year: 2000
+  conflicts:
+  - 409
+  dyads:
+  - 865
+  incompatibility: '1'
+- id: 1561
+  name: Loloata Understanding
+  date: '2000-03-23'
+  year: 2000
+  conflicts:
+  - 369
+  dyads:
+  - 797
+  incompatibility: '1'
+- id: 1562
+  name: Gateway Communique
+  date: '2000-06-09'
+  year: 2000
+  conflicts:
+  - 369
+  dyads:
+  - 797
+  incompatibility: '1'
+- id: 1578
+  name: Metodología y Temática para las Discusiones, Comunicado No. 8, Mesa Nacional de Diálogos y Negociación
+  date: '2000-01-28'
+  year: 2000
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1025
+  name: The Famboni II Agreement
+  date: '2001-02-17'
+  year: 2001
+  conflicts:
+  - 407
+  dyads:
+  - 860
+  incompatibility: '1'
+- id: 1080
+  name: Bougainville Peace Agreement
+  date: '2001-08-30'
+  year: 2001
+  conflicts:
+  - 369
+  dyads:
+  - 797
+  incompatibility: '1'
+- id: 1098
+  name: The Ohrid Agreement
+  date: '2001-08-13'
+  year: 2001
+  conflicts:
+  - 417
+  dyads:
+  - 877
+  incompatibility: '2'
+- id: 1122
+  name: Los Pozos Agreement
+  date: '2001-02-09'
+  year: 2001
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1146
+  name: Accord de reforme et concorde civile
+  date: '2001-05-12'
+  year: 2001
+  conflicts:
+  - 379
+  dyads:
+  - 811
+  incompatibility: '2'
+- id: 1288
+  name: Declaration of Fundamental Principles for the Inter-Congolese dialogue
+  date: '2001-05-04'
+  year: 2001
+  conflicts:
+  - 283
+  dyads:
+  - 586
+  - 585
+  incompatibility: '2'
+- id: 1328
+  name: San Francisco de la Sombra Accord
+  date: '2001-10-05'
+  year: 2001
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1332
+  name: Agreement on Peace between the government of the Republic of the Philippines and the Moro Islamic Liberation Front
+  date: '2001-06-22'
+  year: 2001
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1005
+  name: Global and Inclusive Agreement on the Transition in the Democratic Republic of Congo ("Pretoria Agreement")
+  date: '2002-12-17'
+  year: 2002
+  conflicts:
+  - 283
+  dyads:
+  - 586
+  - 585
+  incompatibility: '2'
+- id: 1049
+  name: Tripoli 2 agreement
+  date: '2002-01-07'
+  year: 2002
+  conflicts:
+  - 288
+  dyads:
+  - 616
+  incompatibility: '2'
+- id: 1065
+  name: Ceasefire Agreement between the Transitional Government of Burundi and the Conseil national pour la défense de ladémocratie-Forces
+    pour la défense de la démocratie
+  date: '2002-12-02'
+  year: 2002
+  conflicts:
+  - 287
+  dyads:
+  - 597
+  incompatibility: '2'
+- id: 1111
+  name: Cessation of Hostilities Framework Agreement
+  date: '2002-12-09'
+  year: 2002
+  conflicts:
+  - 366
+  dyads:
+  - 794
+  incompatibility: '1'
+- id: 1120
+  name: Agreement for a Timetable for the Future of the Peace Process
+  date: '2002-01-20'
+  year: 2002
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1126
+  name: Memorandum of Understanding or Memorandum of Intent
+  date: '2002-04-04'
+  year: 2002
+  conflicts:
+  - 327
+  dyads:
+  - 714
+  incompatibility: '2'
+- id: 1145
+  name: Yumbe Peace Agreement
+  date: '2002-12-24'
+  year: 2002
+  conflicts:
+  - 314
+  dyads:
+  - 691
+  incompatibility: '2'
+- id: 1277
+  name: Machakos Protocol
+  date: '2002-07-20'
+  year: 2002
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1291
+  name: Political agreement on consensual management of the transition in the Democratic Republic of the Congo
+  date: '2002-04-19'
+  year: 2002
+  conflicts:
+  - 283
+  dyads:
+  - 585
+  incompatibility: '2'
+- id: 1552
+  name: Memorandum of Understanding on Cessation of Hostilities between the Government of the Sudan and the Sudan People´s
+    Liberation Movement/Army
+  date: '2002-10-15'
+  year: 2002
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1553
+  name: Memorandum of Understanding between the Government of the Sudan and the Sudan People´s Liberation Movement/Army on
+    Aspects of Structures of Government
+  date: '2002-11-18'
+  year: 2002
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1600
+  name: Points for Further Consultation
+  date: '2002-02-03'
+  year: 2002
+  conflicts:
+  - 366
+  dyads:
+  - 794
+  incompatibility: '1'
+- id: 1099
+  name: Global Ceasefire agreement between Transitional Government and the Forces pour la defence de la democratie (CNDD-FDD)
+    of Mr. Nkúrunziza
+  date: '2003-11-16'
+  year: 2003
+  conflicts:
+  - 287
+  dyads:
+  - 597
+  incompatibility: '2'
+- id: 1101
+  name: Comprehensive Peace Agreement Between the Government of Liberia and the Liberians United for Reconciliation and Democracy
+    (LURD) and the Movement for Democracy in Liberia (MODEL) and Political Parties ("Accra Peace Agreement")
+  date: '2003-08-18'
+  year: 2003
+  conflicts:
+  - 341
+  dyads:
+  - 762
+  - 761
+  incompatibility: '2'
+- id: 1127
+  name: Agreement on the transitional arrangements in the Comoros
+  date: '2003-12-20'
+  year: 2003
+  conflicts:
+  - 407
+  dyads:
+  - 860
+  incompatibility: '1'
+- id: 1139
+  name: Linas-Marcoussis Peace Accords
+  date: '2003-01-25'
+  year: 2003
+  conflicts:
+  - 419
+  dyads:
+  - 879
+  - 880
+  - 881
+  incompatibility: '2'
+- id: 1141
+  name: Agreement on Ceasefire and Cessation of Hostilities Between the Government of the Republic of Liberia and Liberians
+    United for Reconciliation and Democracy and the Movement for Democracy in Liberia ("Accra Ceasefire Agreement")
+  date: '2003-06-17'
+  year: 2003
+  conflicts:
+  - 341
+  dyads:
+  - 762
+  - 761
+  incompatibility: '2'
+- id: 1278
+  name: Agreement on Security Arrangements During the Interim Period
+  date: '2003-09-25'
+  year: 2003
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1285
+  name: The Pretoria Protocol on Outstanding Political, Defence and Security Power Sharing Issues in Burundi
+  date: '2003-11-02'
+  year: 2003
+  conflicts:
+  - 287
+  dyads:
+  - 597
+  incompatibility: '2'
+- id: 1287
+  name: Pretoria Protocol on Political, Defence and Security Power Sharing in Burundi
+  date: '2003-10-08'
+  year: 2003
+  conflicts:
+  - 287
+  dyads:
+  - 597
+  incompatibility: '2'
+- id: 1289
+  name: The Constitution of the Transition
+  date: '2003-04-01'
+  year: 2003
+  conflicts:
+  - 283
+  dyads:
+  - 586
+  - 585
+  incompatibility: '2'
+- id: 1290
+  name: Inter-Congolese Political Negotiations - The Final Act
+  date: '2003-04-02'
+  year: 2003
+  conflicts:
+  - 283
+  dyads:
+  - 586
+  - 585
+  incompatibility: '2'
+- id: 1292
+  name: Accra II
+  date: '2003-03-07'
+  year: 2003
+  conflicts:
+  - 419
+  dyads:
+  - 879
+  - 880
+  - 881
+  incompatibility: '2'
+- id: 1489
+  name: Forces Technical Agreement (FTA) between the Transitional Government of the Republic of Burundi and the CNDD-FDD
+  date: '2003-11-02'
+  year: 2003
+  conflicts:
+  - 287
+  dyads:
+  - 597
+  incompatibility: '2'
+- id: 1582
+  name: Accords de Paix et de cessation des hostilités dans le département de Pool
+  date: '2003-03-17'
+  year: 2003
+  conflicts:
+  - 408
+  dyads:
+  - 864
+  incompatibility: '2'
+- id: 1279
+  name: Protocol Between the GOS and SPLM on Power Sharing
+  date: '2004-05-26'
+  year: 2004
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1280
+  name: The Protocol Between the GOS and SPLM on the Resolution of Conflict in Abyei Area
+  date: '2004-05-26'
+  year: 2004
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1281
+  name: The Protocol Between the GOS and SPLM on the Resolution of Conflict in Southern Kordofan/Nuba Mountains and Blue Nile
+    States
+  date: '2004-05-26'
+  year: 2004
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1283
+  name: Accra III
+  date: '2004-07-30'
+  year: 2004
+  conflicts:
+  - 419
+  dyads:
+  - 882
+  incompatibility: '2'
+- id: 1284
+  name: Accord general de paix entre le gouvernement de la republique du Senegal el le Mouvement des forces democratique de
+    la Casamace (MFDC)
+  date: '2004-12-30'
+  year: 2004
+  conflicts:
+  - 375
+  dyads:
+  - 806
+  incompatibility: '1'
+- id: 1310
+  name: Framework on Wealth Sharing During the Pre-Interim and Interim Period
+  date: '2004-01-07'
+  year: 2004
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1532
+  name: Accord de Partage de Pouvoir au Burundi ("Burundi Power-Sharing Agreement")
+  date: '2004-08-06'
+  year: 2004
+  conflicts:
+  - 287
+  dyads:
+  - 595
+  incompatibility: '2'
+- id: 1543
+  name: Agreement Between the Government of the Sudan (GOS) and the Sudan People’s Liberation Movement/Sudan People’s Liberation
+    Army (SPLM/SPLA) on Implementation Modalities of the Protocols and Agreements
+  date: '2004-12-31'
+  year: 2004
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1545
+  name: Nairobi Declaration on the Final Phase of Peace in the Sudan
+  date: '2004-06-05'
+  year: 2004
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1546
+  name: Declaration on the Conclusion of the IGAD Negotiations on Peace in the Sudan
+  date: '2004-11-19'
+  year: 2004
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1547
+  name: The Implementation Modalities of the Protocol on Power Sharing, dated 26th May, 2004
+  date: '2004-12-31'
+  year: 2004
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1548
+  name: The Implementation Modalities of the Protocol on the Resolution of the Abyei Conflict, dated 26th May, 2004
+  date: '2004-12-31'
+  year: 2004
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1549
+  name: The Implementation Modalities for the Protocol on the Resolution of Conflict in Southern Kordofan and Blue Nile States,
+    dated 26th May, 2004
+  date: '2004-12-31'
+  year: 2004
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1273
+  name: Pretoria Agreement on the Peace Process in Côte dIvoire
+  date: '2005-04-06'
+  year: 2005
+  conflicts:
+  - 419
+  dyads:
+  - 882
+  incompatibility: '2'
+- id: 1274
+  name: Yebibou agreement 2005
+  date: '2005-08-18'
+  year: 2005
+  conflicts:
+  - 288
+  dyads:
+  - 616
+  incompatibility: '2'
+- id: 1276
+  name: Memorandum of Understanding between the Government of the Republic of Indonesia and the Free Aceh Movement
+  date: '2005-08-15'
+  year: 2005
+  conflicts:
+  - 366
+  dyads:
+  - 794
+  incompatibility: '1'
+- id: 1282
+  name: Sudan Comprehensive Peace Agreement
+  date: '2005-01-09'
+  year: 2005
+  conflicts:
+  - 309
+  dyads:
+  - 663
+  incompatibility: '2'
+- id: 1351
+  name: Agreement between the GoS and the NDA (Cairo Agreement)
+  date: '2005-06-18'
+  year: 2005
+  conflicts:
+  - 309
+  dyads:
+  - 664
+  incompatibility: '2'
+- id: 1352
+  name: Cairo Framework Agreement between the GoS and the NDA
+  date: '2005-01-16'
+  year: 2005
+  conflicts:
+  - 309
+  dyads:
+  - 664
+  incompatibility: '2'
+- id: 1526
+  name: Consensus Points on the Strands on Concept, Territory Resources, and Governance at TWG level
+  date: '2005-04-20'
+  year: 2005
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1554
+  name: Declaration of Principles for the Resolution of the Sudanese Conflict in Darfur
+  date: '2005-07-05'
+  year: 2005
+  conflicts:
+  - 309
+  dyads:
+  - 666
+  - 665
+  incompatibility: '2'
+- id: 1608
+  name: Declaration on the Implementation of the Pretoria Agreement on the Peace Process in the Côte d'Ivoire ('Pretoria II')
+  date: '2005-06-29'
+  year: 2005
+  conflicts:
+  - 419
+  dyads:
+  - 882
+  incompatibility: '2'
+- id: 1333
+  name: The Greentree agreement
+  date: '2006-06-12'
+  year: 2006
+  conflicts:
+  - 405
+  dyads:
+  - 858
+  incompatibility: '1'
+- id: 1334
+  name: Darfur Peace Agreement
+  date: '2006-05-05'
+  year: 2006
+  conflicts:
+  - 309
+  dyads:
+  - 668
+  incompatibility: '2'
+- id: 1335
+  name: Agreement of Principles Towards Lasting Peace, Security and Stability
+  date: '2006-06-18'
+  year: 2006
+  conflicts:
+  - 287
+  dyads:
+  - 596
+  incompatibility: '2'
+- id: 1336
+  name: Comprehensive Ceasefire Agreement between the Government of Burundi and the Palipehutu-FNL
+  date: '2006-09-07'
+  year: 2006
+  conflicts:
+  - 287
+  dyads:
+  - 596
+  incompatibility: '2'
+- id: 1337
+  name: Comprehensive Peace Agreement, 2006
+  date: '2006-11-21'
+  year: 2006
+  conflicts:
+  - 269
+  dyads:
+  - 562
+  incompatibility: '2'
+- id: 1338
+  name: Tripoli accord
+  date: '2006-12-24'
+  year: 2006
+  conflicts:
+  - 288
+  dyads:
+  - 617
+  incompatibility: '2'
+- id: 1353
+  name: Memorandum of Understanding on Peace and National Reconciliation in Cabinda province
+  date: '2006-08-01'
+  year: 2006
+  conflicts:
+  - 387
+  dyads:
+  - 831
+  incompatibility: '1'
+- id: 1436
+  name: Decisions of the Summit Meeting of the Seven-Party Alliance and the Communist Party of Nepal (Maoist)
+  date: '2006-11-08'
+  year: 2006
+  conflicts:
+  - 269
+  dyads:
+  - 562
+  incompatibility: '2'
+- id: 1437
+  name: The Eight-point SPA-Maoist Agreement
+  date: '2006-06-16'
+  year: 2006
+  conflicts:
+  - 269
+  dyads:
+  - 562
+  incompatibility: '2'
+- id: 1438
+  name: Ceasefire Code of Conduct
+  date: '2006-05-25'
+  year: 2006
+  conflicts:
+  - 269
+  dyads:
+  - 562
+  incompatibility: '2'
+- id: 1527
+  name: 'Joint Statement: Joint GRP-MILF- Technical Working Groups on Goverance of the Ancestral Domain Aspect of the Agreement
+    of Peace of 2001'
+  date: '2006-02-06'
+  year: 2006
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1528
+  name: Joint Statement (Joint Meeting of the GRP and MILF Technical Working Groups on Resources)
+  date: '2006-02-07'
+  year: 2006
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1529
+  name: Joint Statement
+  date: '2006-02-07'
+  year: 2006
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1354
+  name: Israeli-Palestinian Joint Understanding on Negotiations ("Annapolis Conference Joint Understanding on Negotiations")
+  date: '2007-11-27'
+  year: 2007
+  conflicts:
+  - 234
+  dyads:
+  - 476
+  incompatibility: '1'
+- id: 1355
+  name: Birao Agreement
+  date: '2007-04-01'
+  year: 2007
+  conflicts:
+  - 416
+  dyads:
+  - 875
+  incompatibility: '2'
+- id: 1359
+  name: Ouagadougou Political Agreement
+  date: '2007-03-04'
+  year: 2007
+  conflicts:
+  - 419
+  dyads:
+  - 882
+  incompatibility: '2'
+- id: 1360
+  name: First Complementary Agreement to the Ouagadougou Political Agreement
+  date: '2007-03-27'
+  year: 2007
+  conflicts:
+  - 419
+  dyads:
+  - 882
+  incompatibility: '2'
+- id: 1361
+  name: Second Complementary Agreement to the Ouagadougou Political Agreement
+  date: '2007-11-28'
+  year: 2007
+  conflicts:
+  - 419
+  dyads:
+  - 882
+  incompatibility: '2'
+- id: 1362
+  name: Third Complementary Agreement to the Ouagadougou Political Agreement
+  date: '2007-11-28'
+  year: 2007
+  conflicts:
+  - 419
+  dyads:
+  - 882
+  incompatibility: '2'
+- id: 1367
+  name: Agreement on Comprehensive Solutions between the Government of the Republic of Uganda and Lord’s Resistance Army/Movement
+  date: '2007-05-02'
+  year: 2007
+  conflicts:
+  - 314
+  dyads:
+  - 688
+  incompatibility: '2'
+- id: 1368
+  name: Agreement on Accountability and Reconciliation between the Government of the Republic of Uganda and the Lords Resistance
+    Army/Movement
+  date: '2007-06-29'
+  year: 2007
+  conflicts:
+  - 314
+  dyads:
+  - 688
+  incompatibility: '2'
+- id: 1499
+  name: 'Accord de Paix le Gouverment de la Republique du Tchad et les Mouvements Ci-Apres: UFDD, RFC, CNT, UFDDF ("Sirte
+    Agreement")'
+  date: '2007-10-25'
+  year: 2007
+  conflicts:
+  - 288
+  dyads:
+  - 619
+  incompatibility: '2'
+- id: 1373
+  name: Global Peace Agreement between the Government of the Central African Republic and the APRD, FDPC, and UFDR
+  date: '2008-06-21'
+  year: 2008
+  conflicts:
+  - 416
+  dyads:
+  - 875
+  incompatibility: '2'
+- id: 1374
+  name: Djibouti Agreement
+  date: '2008-08-19'
+  year: 2008
+  conflicts:
+  - 337
+  dyads:
+  - 749
+  incompatibility: '2'
+- id: 1376
+  name: Fourth Complementary Agreement to the Ouagadougou Political Agreement
+  date: '2008-12-22'
+  year: 2008
+  conflicts:
+  - 419
+  dyads:
+  - 882
+  incompatibility: '2'
+- id: 1377
+  name: Annex to the accountability and reconciliation protocol
+  date: '2008-02-19'
+  year: 2008
+  conflicts:
+  - 314
+  dyads:
+  - 688
+  incompatibility: '2'
+- id: 1378
+  name: Implementation protocol to the Agreement on Comprehensive Solutions
+  date: '2008-02-22'
+  year: 2008
+  conflicts:
+  - 314
+  dyads:
+  - 688
+  incompatibility: '2'
+- id: 1379
+  name: Agreement on a Permanent ceasefire
+  date: '2008-02-23'
+  year: 2008
+  conflicts:
+  - 314
+  dyads:
+  - 688
+  incompatibility: '2'
+- id: 1380
+  name: Agreement on Disarmament, Demobilisation and Reintegration
+  date: '2008-02-28'
+  year: 2008
+  conflicts:
+  - 314
+  dyads:
+  - 688
+  incompatibility: '2'
+- id: 1381
+  name: Agreement on Implementation and Monitoring Mechanisms
+  date: '2008-02-29'
+  year: 2008
+  conflicts:
+  - 314
+  dyads:
+  - 688
+  incompatibility: '2'
+- id: 1385
+  name: Decision of the High Level Committee, Djibouti Agreement
+  date: '2008-11-26'
+  year: 2008
+  conflicts:
+  - 337
+  dyads:
+  - 749
+  incompatibility: '2'
+- id: 1386
+  name: Declaration of the Summit of the Heads of State and Government of the Great Lakes region on the Burundi Peace Process
+  date: '2008-12-04'
+  year: 2008
+  conflicts:
+  - 287
+  dyads:
+  - 596
+  incompatibility: '2'
+- id: 1490
+  name: Joint PALIPEHUTU-FNL and Government of the Republic of Burundi Declaration on Cessation of Hostilities
+  date: '2008-05-26'
+  year: 2008
+  conflicts:
+  - 287
+  dyads:
+  - 596
+  incompatibility: '2'
+- id: 1491
+  name: Magaliesburg Declaration on the Burundi Peace Process
+  date: '2008-06-10'
+  year: 2008
+  conflicts:
+  - 287
+  dyads:
+  - 596
+  incompatibility: '2'
+- id: 1556
+  name: Joint Declaration between the Transitional Federal Government and the Alliance for the Re-Liberation of Somalia
+  date: '2008-10-26'
+  year: 2008
+  conflicts:
+  - 337
+  dyads:
+  - 749
+  incompatibility: '2'
+- id: 1384
+  name: Peace Agreement between the Government and CNDP (and the Implementation Plan) ("23 March 2009 Agreement")
+  date: '2009-03-23'
+  year: 2009
+  conflicts:
+  - 283
+  dyads:
+  - 588
+  incompatibility: '2'
+- id: 1430
+  name: Doha Agreement
+  date: '2010-02-23'
+  year: 2010
+  conflicts:
+  - 309
+  dyads:
+  - 665
+  incompatibility: '2'
+- id: 1432
+  name: Agreement between the State of Eritrea and the Republic of Djibouti
+  date: '2010-06-06'
+  year: 2010
+  conflicts:
+  - 435
+  dyads:
+  - 902
+  incompatibility: '1'
+- id: 1433
+  name: Ndele Peace Agreement
+  date: '2011-06-12'
+  year: 2011
+  conflicts:
+  - 416
+  dyads:
+  - 876
+  incompatibility: '2'
+- id: 1434
+  name: Addis Ababa Agreement (Framework Agreement between the Government of Sudan and the Sudan People´s Liberation Movement
+    (North) on Political Partnership between NCP and SPLMN, and Political and Security Arrangements in Blue Nile and Southern
+    Kordofan States)
+  date: '2011-06-28'
+  year: 2011
+  conflicts:
+  - 309
+  dyads:
+  - 11975
+  incompatibility: '2'
+- id: 1493
+  name: Ceasefire Agreement between UFDR and CPJP under the auspices of the National Mediation Council
+  date: '2011-10-08'
+  year: 2011
+  conflicts:
+  - 416
+  dyads:
+  - 875
+  - 876
+  incompatibility: '2'
+- id: 1520
+  name: The Seven Point Agreement
+  date: '2011-11-01'
+  year: 2011
+  conflicts:
+  - 269
+  dyads:
+  - 562
+  incompatibility: '2'
+- id: 1613
+  name: Kalo Htoo Baw (DKBA-5) Government Union Level peace agreement
+  date: '2011-12-11'
+  year: 2011
+  conflicts:
+  - 221
+  dyads:
+  - 430
+  incompatibility: '1'
+- id: 31
+  name: Agreement between the Government of the Republic of South Sudan (GRSS) and the South Sudan Democratic Movement/Army
+    (SSDM/A)
+  date: '2012-02-27'
+  year: 2012
+  conflicts:
+  - 11345
+  dyads:
+  - 11978
+  incompatibility: '2'
+- id: 1439
+  name: Framework Agreement on the Bangsamoro
+  date: '2012-10-15'
+  year: 2012
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1444
+  name: Addis Ababa Agreement on Cooperation
+  date: '2012-09-27'
+  year: 2012
+  conflicts:
+  - 11348
+  dyads:
+  - 11989
+  incompatibility: '1'
+- id: 1447
+  name: General Agreement for the Termination of the Conflict and the Construction of a Stable and Lasting Peace
+  date: '2012-08-26'
+  year: 2012
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1454
+  name: Acte d’Adhésion de la Convention des Patriotes pour la Justice et la Paix (CPJP) à l’Accord de Paix Global de Libreville
+  date: '2012-08-25'
+  year: 2012
+  conflicts:
+  - 416
+  dyads:
+  - 876
+  incompatibility: '2'
+- id: 1456
+  name: Addis Ababa Agreement on Border Issues
+  date: '2012-09-27'
+  year: 2012
+  conflicts:
+  - 11348
+  dyads:
+  - 11989
+  incompatibility: '1'
+- id: 1457
+  name: Addis Ababa Agreement on Security Arrangements
+  date: '2012-09-27'
+  year: 2012
+  conflicts:
+  - 11348
+  dyads:
+  - 11989
+  incompatibility: '1'
+- id: 1518
+  name: UWSA Government 6-point Union-level Peace Agreement
+  date: '2012-12-26'
+  year: 2012
+  conflicts:
+  - 422
+  dyads:
+  - 887
+  incompatibility: '1'
+- id: 1530
+  name: Government of the Philippines-MILF Decision Points on Principles as of April 2012
+  date: '2012-04-24'
+  year: 2012
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1468
+  name: Agenda for the Dialogue between the Government of the DRC and the M23 on the situation in Eastern Congo
+  date: '2013-01-16'
+  year: 2013
+  conflicts:
+  - 283
+  dyads:
+  - 11982
+  incompatibility: '2'
+- id: 1469
+  name: Liberville agreements - Declaration of principles to resolve the political and security crisis in the Central African
+    Republic
+  date: '2013-01-11'
+  year: 2013
+  conflicts:
+  - 416
+  dyads:
+  - 875
+  incompatibility: '2'
+- id: 1470
+  name: Annex on Transitional Arrangements and Modalities to the Framework Agreement on the Bangsamoro (FAB)
+  date: '2013-02-27'
+  year: 2013
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1471
+  name: Annex on Revenue Generation and Wealth-sharing to the Framework Agreement on the Bangsamoro (FAB)
+  date: '2013-07-13'
+  year: 2013
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1472
+  name: Annex on Power-Sharing to the Framework Agreement on the Bangsamoro (FAB)
+  date: '2013-12-08'
+  year: 2013
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1494
+  name: Liberville agreements - Ceasefire
+  date: '2013-01-11'
+  year: 2013
+  conflicts:
+  - 416
+  dyads:
+  - 875
+  incompatibility: '2'
+- id: 1495
+  name: Libreville Agreements - Political
+  date: '2013-01-11'
+  year: 2013
+  conflicts:
+  - 416
+  dyads:
+  - 875
+  incompatibility: '2'
+- id: 1506
+  name: 'Political participation: opening up democracy to build peace'
+  date: '2013-11-06'
+  year: 2013
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1531
+  name: Adoption of the Implementaiton Matrix by the Sudan and South Sudan
+  date: '2013-03-12'
+  year: 2013
+  conflicts:
+  - 11348
+  dyads:
+  - 11989
+  incompatibility: '1'
+- id: 1579
+  name: Joint Communique regarding Comprehensive Rural Reform
+  date: '2013-05-26'
+  year: 2013
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1609
+  name: Preliminary agreement for the presidential election and inclusive peace negotiations in Mali ("Ouagadougou Preliminary
+    Agreement")
+  date: '2013-06-18'
+  year: 2013
+  conflicts:
+  - 372
+  dyads:
+  - 11985
+  incompatibility: '1'
+- id: 1476
+  name: Annex on Normalization
+  date: '2014-01-25'
+  year: 2014
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1477
+  name: Comprehensive Agreement on the Bangsamoro
+  date: '2014-03-27'
+  year: 2014
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1478
+  name: Addendum on the Bangsamoro Waters and Zones of Joint Cooperation
+  date: '2014-01-25'
+  year: 2014
+  conflicts:
+  - 308
+  dyads:
+  - 657
+  incompatibility: '1'
+- id: 1480
+  name: Agreement on the Resolution of the Conflict in Jonglei state
+  date: '2014-05-09'
+  year: 2014
+  conflicts:
+  - 11345
+  dyads:
+  - 11805
+  incompatibility: '2'
+- id: 1482
+  name: Agreement to Resolve the Crisis in South Sudan
+  date: '2014-05-09'
+  year: 2014
+  conflicts:
+  - 11345
+  dyads:
+  - 12413
+  incompatibility: '2'
+- id: 1483
+  name: Agreement on the National Dialogue and Constitutional Process
+  date: '2014-09-04'
+  year: 2014
+  conflicts:
+  - 309
+  dyads:
+  - 11988
+  incompatibility: '2'
+- id: 1484
+  name: Framework for Intra-SPLM Dialogue
+  date: '2014-10-20'
+  year: 2014
+  conflicts:
+  - 11345
+  dyads:
+  - 12413
+  incompatibility: '2'
+- id: 1507
+  name: 'Joint Draft: Towards a new Colombian Countryside: Comprehensive Rural Reform'
+  date: '2014-06-06'
+  year: 2014
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1535
+  name: The Peace and National Partnership Agreement
+  date: '2014-09-21'
+  year: 2014
+  conflicts:
+  - 230
+  dyads:
+  - 10855
+  incompatibility: '2'
+- id: 1536
+  name: Protocol on the results of consultations of the Trilateral Contact Group with respect to the joint steps aimed at
+    the implementation of the Peace Plan of the President of Ukraine, P. Poroshenko,and the initiatives of the President of
+    Russia, V. Putin
+  date: '2014-09-05'
+  year: 2014
+  conflicts:
+  - 13246
+  dyads:
+  - 14124
+  incompatibility: '1'
+- id: 24
+  name: 'Agreement on the Reunification of the SPLM '
+  date: '2015-01-21'
+  year: 2015
+  conflicts:
+  - 11345
+  dyads:
+  - 12413
+  incompatibility: '2'
+- id: 28
+  name: Agreement on the Establishment of the Transitional Government of National Unity
+  date: '2015-02-01'
+  year: 2015
+  conflicts:
+  - 11345
+  dyads:
+  - 12413
+  incompatibility: '2'
+- id: 29
+  name: Agreement on the Resolution of the Conflict in the Republic of South Sudan
+  date: '2015-08-17'
+  year: 2015
+  conflicts:
+  - 11345
+  dyads:
+  - 12413
+  incompatibility: '2'
+- id: 30
+  name: Accord for peace and reconciliation in Mali emanating from the Algiers process
+  date: '2015-06-20'
+  year: 2015
+  conflicts:
+  - 372
+  dyads:
+  - 11985
+  incompatibility: '1'
+- id: 1485
+  name: 'Nationwide Ceasefire Agreement (NCA) '
+  date: '2015-10-15'
+  year: 2015
+  conflicts:
+  - 221
+  - 222
+  - 264
+  dyads:
+  - 430
+  - 434
+  - 428
+  - 550
+  incompatibility: 1, 2
+- id: 1486
+  name: Republican Pact for Peace, National Reconciliation and Reconstruction in the Central African Republic
+  date: '2015-05-11'
+  year: 2015
+  conflicts:
+  - 416
+  dyads:
+  - 12380
+  incompatibility: '2'
+- id: 1497
+  name: Agreement between the Transitional Government and the Armed Groups on the Principles of Disarmament, Demobilization,
+    Reintegration and Repatriation and of Integration into the Uniformed State Forces of the Central African Republic
+  date: '2015-05-10'
+  year: 2015
+  conflicts:
+  - 416
+  dyads:
+  - 12380
+  incompatibility: '2'
+- id: 1514
+  name: Framework Agreement between the Government of India (GOI) and the National Socialist Council of Nagaland (NSCN)
+  date: '2015-08-03'
+  year: 2015
+  conflicts:
+  - 251
+  dyads:
+  - 508
+  incompatibility: '1'
+- id: 1517
+  name: Summary of Conclusions of the Preparatory Consultations for Implementation of the Agreement for Peace and Reconciliation
+    in Mali stemming from the Algiers Process
+  date: '2015-06-05'
+  year: 2015
+  conflicts:
+  - 372
+  dyads:
+  - 11985
+  incompatibility: '1'
+- id: 1537
+  name: Package of measures for the Implementation of the Minsk agreements
+  date: '2015-02-12'
+  year: 2015
+  conflicts:
+  - 13306
+  dyads:
+  - 14210
+  incompatibility: '1'
+- id: 1580
+  name: 'Joint Communiqué # 60 regarding the Agreement of the Creation of a Special Jurisdiction for Peace'
+  date: '2015-09-23'
+  year: 2015
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1581
+  name: Agreement on the Victims of Conflict, 'Comprehensive System for Truth, Justice, Reparation and Non-repitition, including
+    the Special Jurisdiction for Peace; and Commitment on Human Rights
+  date: '2015-12-15'
+  year: 2015
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1611
+  name: Deed of Commitment for Peace and National Reconciliation
+  date: '2015-02-12'
+  year: 2015
+  conflicts:
+  - 221
+  - 264
+  dyads:
+  - 428
+  - 430
+  - 550
+  incompatibility: '1'
+- id: 1487
+  name: Acuerdo final para la terminación del conflicto y la construcción de una paz estable y duradera
+  date: '2016-11-24'
+  year: 2016
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1488
+  name: Kabul Agreement
+  date: '2016-09-22'
+  year: 2016
+  conflicts:
+  - 333
+  dyads:
+  - 726
+  incompatibility: '2'
+- id: 1508
+  name: Agreement on the Bilateral and Definitive Ceasefire and Cessation of Hostilities, and the Laydown of Weapons between
+    the National Government and the FARC-EP
+  date: '2016-06-23'
+  year: 2016
+  conflicts:
+  - 289
+  dyads:
+  - 623
+  incompatibility: '2'
+- id: 1542
+  name: Roadmap Agreement
+  date: '2016-08-08'
+  year: 2016
+  conflicts:
+  - 309
+  dyads:
+  - 11988
+  - 11975
+  incompatibility: '2'
+- id: 1498
+  name: Political Agreement for Peace in the Central African Republic
+  date: '2017-06-19'
+  year: 2017
+  conflicts:
+  - 416
+  - 15283
+  dyads:
+  - 12380
+  - 12391
+  incompatibility: 2, 1
+- id: 1619
+  name: Agreement on Peace, Friendship and Comprehensive Cooperation between Eritrea and Ethiopia
+  date: '2018-09-16'
+  year: 2018
+  conflicts:
+  - 409
+  dyads:
+  - 865
+  incompatibility: '1'
+- id: 1620
+  name: Joint Declaration of Peace and Friendship between Eritrea and Ethiopia
+  date: '2018-07-09'
+  year: 2018
+  conflicts:
+  - 409
+  dyads:
+  - 865
+  incompatibility: '1'
+- id: 1621
+  name: Joint Declaration Between the Federal Democratic Republic of Ethiopia And The Ogaden National Liberation Front
+  date: '2018-10-21'
+  year: 2018
+  conflicts:
+  - 329
+  dyads:
+  - 719
+  incompatibility: '1'
+- id: 1624
+  name: Nationwide Ceasefire Agreement (LDU and NMSP)
+  date: '2018-02-13'
+  year: 2018
+  conflicts:
+  - 224
+  dyads:
+  - 445
+  incompatibility: '1'
+- id: 1625
+  name: Revitalised agreement on the resolution of the conflict in the Republic of South Sudan (R-ARCSS)
+  date: '2018-09-12'
+  year: 2018
+  conflicts:
+  - 11345
+  dyads:
+  - 12413
+  incompatibility: '2'
+- id: 1660
+  name: Agreement on Outstanding issues of Governance
+  date: '2018-08-05'
+  year: 2018
+  conflicts:
+  - 11345
+  dyads:
+  - 12413
+  incompatibility: '2'
+- id: 1661
+  name: Khartoum Declaration of Agreement between parties of the Conflict of South Sudan
+  date: '2018-06-27'
+  year: 2018
+  conflicts:
+  - 11345
+  dyads:
+  - 12413
+  incompatibility: '2'
+- id: 1639
+  name: National Peace and Reconciliation Agreement
+  date: '2019-08-06'
+  year: 2019
+  conflicts:
+  - 332
+  dyads:
+  - 722
+  incompatibility: '2'
+- id: 1641
+  name: Political Agreement for Peace and Reconciliation in the Central African Republic
+  date: '2019-02-06'
+  year: 2019
+  conflicts:
+  - 416
+  - 15283
+  dyads:
+  - 15593
+  - 12380
+  - 12391
+  incompatibility: 2, 1
+- id: 1642
+  name: Agreement on the Provision of Humanitarian Assistance and Cessation of Hostilities For the Two Areas of Blue Nile
+    and Nuba Mountains/South Kordofan
+  date: '2019-12-17'
+  year: 2019
+  conflicts:
+  - 309
+  dyads:
+  - 11988
+  incompatibility: '2'
+- id: 1643
+  name: The Juba Declaration for Trust Building Measures and Pre-Negotiations Principles
+  date: '2019-09-11'
+  year: 2019
+  conflicts:
+  - 309
+  dyads:
+  - 11988
+  incompatibility: '2'
+- id: 1644
+  name: Framework Agreement between the Transitional Government of Sudan and the Darfur Track
+  date: '2019-12-28'
+  year: 2019
+  conflicts:
+  - 309
+  dyads:
+  - 11988
+  incompatibility: '2'
+- id: 1662
+  name: Political Declaration between the Government of the Republic of Sudan and the Sudan Revolutionary Front
+  date: '2019-10-21'
+  year: 2019
+  conflicts:
+  - 309
+  dyads:
+  - 11988
+  incompatibility: '2'
+- id: 1646
+  name: Juba Agreement
+  date: '2020-08-31'
+  year: 2020
+  conflicts:
+  - 309
+  dyads:
+  - 11988
+  incompatibility: '2'
+- id: 1647
+  name: Juba Agreement for Peace in Sudan
+  date: '2020-10-03'
+  year: 2020
+  conflicts:
+  - 309
+  dyads:
+  - 11988
+  incompatibility: '2'
+- id: 1648
+  name: Juba agreement Two areas Framework agreement
+  date: '2020-01-24'
+  year: 2020
+  conflicts:
+  - 309
+  dyads:
+  - 11988
+  incompatibility: '2'
+- id: 1649
+  name: Eastern Track Agreement between the Transitional Government of Sudan and the Sudan Revolutionary Front
+  date: '2020-02-21'
+  year: 2020
+  conflicts:
+  - 309
+  dyads:
+  - 11988
+  incompatibility: '2'
+- id: 1652
+  name: Addis Ababa Agreement on Principles
+  date: '2020-09-03'
+  year: 2020
+  conflicts:
+  - 309
+  dyads:
+  - 11975
+  incompatibility: '2'
+- id: 1657
+  name: Rome Declaration on the Peace Process in South Sudan
+  date: '2020-01-12'
+  year: 2020
+  conflicts:
+  - 11345
+  dyads:
+  - 15195
+  incompatibility: '2'
+- id: 1658
+  name: Union Accord Part III
+  date: '2020-08-21'
+  year: 2020
+  conflicts:
+  - 221
+  - 264
+  - 222
+  dyads:
+  - 428
+  - 550
+  - 10988
+  - 434
+  incompatibility: 1, 2
+- id: 1659
+  name: Memorandum of settlement
+  date: '2020-01-27'
+  year: 2020
+  conflicts:
+  - 421
+  dyads:
+  - 885
+  - 886
+  - 884
+  incompatibility: '1'
+- id: 1656
+  name: Joint statement of the Governmental delegations of the Republic of Tajikistan and the Kyrgyz Republic on the delimitation
+    and demarcation of the Tajik-Kyrgyz state border
+  date: '2021-05-02'
+  year: 2021
+  conflicts:
+  - 13324
+  dyads:
+  - 14236
+  incompatibility: '1'
+- id: 1663
+  name: Declaration of Principles between the Transitional Government of Sudan and the Sudan People's Liberation Movement
+    - North
+  date: '2021-03-28'
+  year: 2021
+  conflicts:
+  - 309
+  dyads:
+  - 11975
+  incompatibility: '2'

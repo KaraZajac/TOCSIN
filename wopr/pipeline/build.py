@@ -490,6 +490,85 @@ def build_month_tables(ged, cand) -> tuple[list[list], list[list]]:
     return [c_header] + c_rows, [d_header] + d_rows
 
 
+# ---------------------------------------------------------------- long tail
+
+TERMINATION_OUTCOMES = {
+    "1": "peace-agreement",
+    "2": "ceasefire",
+    "3": "government-victory",
+    "4": "rebel-victory",
+    "5": "low-activity",
+    "6": "actor-ceases",
+}
+
+
+def build_episodes() -> list[list]:
+    """data/tables/episode.csv from the UCDP termination dyad file: one row
+    per dyad-episode with validated bounds and how it ended (Kreutz coding).
+    The engine derives termination hazards from activity alone; this table is
+    the outcome detail and the cross-check."""
+    path = SOURCES / "ucdp-termination-dyad.csv"
+    if not path.exists():
+        return [["dyad_id", "epid", "start_year", "end_year", "terminated", "outcome"]]
+    episodes = {}
+    for r in read_csv(path):
+        epid = r["d_epid"]
+        if not epid:
+            continue
+        cur = episodes.setdefault(epid, r)
+        if int(r["year"]) >= int(cur["year"]):
+            episodes[epid] = r  # the episode's last coded year carries the end state
+    rows = []
+    for epid, r in episodes.items():
+        rows.append(
+            [
+                int(r["dyad_id"]),
+                epid,
+                int(r["d_ep_startyear"]),
+                int(r["d_ep_endyear"]) if r["d_ep_endyear"] else "",
+                1 if r["d_epterm"] == "1" else 0,
+                TERMINATION_OUTCOMES.get(r["d_outcome"], ""),
+            ]
+        )
+    rows.sort(key=lambda x: (x[0], x[2]))
+    return [["dyad_id", "epid", "start_year", "end_year", "terminated", "outcome"]] + rows
+
+
+def build_peace_agreements(states) -> list[dict]:
+    """data/registry/peace-agreements.yaml from the UCDP PA workbook. The PA
+    dataset updates irregularly (v22.2 ends 2021), so this is browsable
+    context and eventual confirmation — not a near-term resolution feed."""
+    from wopr.pipeline.xlsx import xlsx_rows
+
+    path = SOURCES / "ucdp-peace-agreements.xlsx"
+    if not path.exists():
+        return []
+    rows = xlsx_rows(path)
+    header = rows[0]
+    idx = {name: i for i, name in enumerate(header)}
+    out = []
+    for r in rows[1:]:
+        def col(name):
+            i = idx.get(name)
+            return r[i] if i is not None and i < len(r) else ""
+
+        if not col("paid"):
+            continue
+        out.append(
+            {
+                "id": int(float(col("paid"))),
+                "name": col("pa_name"),
+                "date": col("pa_date"),
+                "year": int(float(col("year"))) if col("year") else None,
+                "conflicts": gwno_list(col("conflict_id")),  # agreements can span conflicts
+                "dyads": gwno_list(col("dyad_id")),
+                "incompatibility": col("incompatibility"),
+            }
+        )
+    out.sort(key=lambda a: (a["year"] or 0, a["id"]))
+    return out
+
+
 # ---------------------------------------------------------------- regime
 
 # OWID entity name -> our states.yaml name, ONLY where they truly differ
@@ -704,12 +783,17 @@ def main() -> None:
     cm_table, dm_table = build_month_tables(ged, cand)
     pair_table = build_pair_year(states, dyadic_rows, last_year)
     regime_table = build_regime(states, last_year)
+    episode_table = build_episodes()
+    peace = build_peace_agreements(states)
+    if peace:
+        dump_yaml(REGISTRY / "peace-agreements.yaml", peace)
     write_csv(TABLES / "country-year.csv", cy_table[0], cy_table[1:])
     write_csv(TABLES / "dyad-year.csv", dy_table[0], dy_table[1:])
     write_csv(TABLES / "country-month.csv", cm_table[0], cm_table[1:])
     write_csv(TABLES / "dyad-month.csv", dm_table[0], dm_table[1:])
     write_csv(TABLES / "pair-year.csv", pair_table[0], pair_table[1:])
     write_csv(TABLES / "regime.csv", regime_table[0], regime_table[1:])
+    write_csv(TABLES / "episode.csv", episode_table[0], episode_table[1:])
 
     meta = {
         "ucdp_release": manifest["ucdp_release"],

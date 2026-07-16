@@ -110,6 +110,16 @@ def window_months(window: dict) -> tuple[int, int] | None:
 
 def engine_prior(criteria: dict) -> dict | None:
     scope, types = criteria["scope"], criteria["types"]
+    if criteria["measure"] == "terminates":
+        if scope["kind"] != "dyad":
+            return None
+        sub = baserate.load_substrate()
+        if scope["id"] not in sub["dyad"]:
+            return None
+        as_of = int(str(criteria["window"]["start"])[:4])
+        result = baserate.rate(baserate.Spec("dyad", scope["id"], "terminates", (), 25, as_of), sub)
+        result["unit_name"] = scope["name"]
+        return {"p": result["p"], "computed": store.now(), "engine": wopr.__version__, "detail": result}
     if criteria["measure"] != "deaths" or scope["kind"] not in ("country", "dyad", "pair"):
         return None
     if scope["kind"] == "dyad" and types != ["sb"]:
@@ -146,6 +156,12 @@ def engine_prior(criteria: dict) -> dict | None:
 
 def synthesize_question(criteria: dict) -> str:
     c = criteria
+    if c["measure"] == "terminates":
+        year = str(c["window"]["start"])[:4]
+        return (
+            f"Will the UCDP episode in the dyad {c['scope']['name']} terminate in {year} — "
+            f"active (≥25 battle-related deaths) in {year}, inactive in {int(year) + 1}?"
+        )
     what = "battle-related deaths" if c["types"] != ["os"] else "civilian fatalities"
     if c["measure"] == "events":
         what = "violent events"
@@ -213,6 +229,8 @@ def cmd_rate(args) -> None:
 def cmd_ask(args) -> None:
     scope, default_types = scope_from_args(args)
     types = args.types.split(",") if args.types else default_types
+    if args.measure == "terminates" and not args.year:
+        raise SystemExit("terminates questions are calendar-year questions: use --year")
     start, end, label = parse_window(args)
     criteria = {
         "scope": scope,
@@ -375,14 +393,14 @@ def main(argv: list[str] | None = None) -> None:
 
     p = sub.add_parser("rate", help="ad-hoc base rate")
     scope_flags(p)
-    p.add_argument("--measure", choices=("deaths", "acd-active"), default="deaths")
+    p.add_argument("--measure", choices=("deaths", "acd-active", "terminates"), default="deaths")
     p.add_argument("--as-of", type=int, default=0)
     p.add_argument("--months", type=int, help="rolling window length (monthly substrate)")
     p.add_argument("--start", help="rolling window start, YYYY-MM (default: first unobserved month)")
 
     p = sub.add_parser("ask", help="create a question")
     scope_flags(p)
-    p.add_argument("--measure", choices=("deaths", "events"), default="deaths")
+    p.add_argument("--measure", choices=("deaths", "events", "terminates"), default="deaths")
     p.add_argument("--year", type=int)
     p.add_argument("--window", help="START:END (ISO dates)")
     p.add_argument("--title")

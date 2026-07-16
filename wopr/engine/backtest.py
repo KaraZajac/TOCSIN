@@ -34,6 +34,7 @@ SUITE = (
     ("country", "deaths", ("sb", "ns", "os"), 100),
     ("country", "acd-active", (), 25),
     ("dyad", "acd-active", (), 25),
+    ("dyad", "terminates", (), 25),
     ("pair", "acd-active", (), 25),
 )
 

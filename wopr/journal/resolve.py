@@ -97,6 +97,41 @@ def accumulate(counted: list[tuple], threshold: int) -> dict:
     }
 
 
+def resolve_terminates(criteria: dict, meta: dict) -> dict | None:
+    """Termination questions read the committed dyad-year activity table:
+    yes ⇔ the dyad was active in the window year and inactive the year after.
+    Annual releases are the only authority — candidate months can prove
+    activity but never a quiet year — so these resolve on a long cycle
+    (year Y needs the release covering Y+1) and are never provisional."""
+    year = int(str(criteria["window"]["start"])[:4])
+    annual = meta["annual_end"].year
+    active = {}
+    with open(DATA / "tables" / "dyad-year.csv", newline="") as f:
+        for row in csv.DictReader(f):
+            if int(row["dyad_id"]) == criteria["scope"]["id"] and int(row["year"]) in (year, year + 1):
+                active[int(row["year"])] = row["acd_intensity"] != "0"
+    if annual >= year and not active.get(year, False):
+        outcome = "no"  # never at risk: nothing was active to terminate
+        decided = datetime.date(year, 12, 31)
+    elif annual >= year + 1:
+        outcome = "yes" if not active.get(year + 1, False) else "no"
+        decided = datetime.date(year + 1, 12, 31)
+    else:
+        return None
+    return {
+        "outcome": outcome,
+        "decided_on": str(decided),
+        "resolved": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "method": "auto",
+        "provisional": False,
+        "basis": {
+            "release": meta["ucdp_release"],
+            "active_in_year": active.get(year, False),
+            "active_next_year": active.get(year + 1, False),
+        },
+    }
+
+
 def evaluate(criteria: dict, meta: dict) -> dict:
     """Count matching events in the window across annual + candidate data."""
     ged = SOURCES / "ucdp-ged.csv"
@@ -170,7 +205,10 @@ def run(questions: list[dict], dry_run: bool = False) -> list[tuple[dict, dict |
         if not auto:
             continue
         if q["status"] == "open":
-            res = decide(evaluate(q["criteria"], meta), meta)
+            if q["criteria"]["measure"] == "terminates":
+                res = resolve_terminates(q["criteria"], meta)
+            else:
+                res = decide(evaluate(q["criteria"], meta), meta)
             if res is None:
                 out.append((q, None, "pending"))
                 continue

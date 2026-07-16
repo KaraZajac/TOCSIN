@@ -115,6 +115,30 @@ is discretization cost, left as-is deliberately (tuning bands on the same
 vantages the arena scores would be overfitting; a tune/validate split is
 future work). Country and dyad grains only; pairs stay annual.
 
+## Termination (the machinery inverted)
+
+`terminates` is a dyad-grain measure whose hit is "this was the episode's
+final active year" (active in y, inactive in y+1, from our own activity
+tables — validated at **99.6% agreement** against the UCDP Conflict
+Termination dataset's coded episode ends). The bucket is the episode's own
+activity state (the acd-active twin, allowed to see the final data year:
+activity there is known even though its terminality isn't). Walk-forward
+(2,797 at-risk dyad-years): the hazard falls monotonically with age and
+intensity — fresh minor episodes end at ~32%/yr, decade-old wars at ~9%;
+episodes entered from cold are ~50% one-and-done. Skill vs climatology is a
+modest +7% — termination is genuinely hard — but the buckets separate
+cleanly and the calibration tracks through the mass. Termination questions
+resolve on a long cycle by construction: year Y needs the release covering
+Y+1, annual authority only (candidate months can prove activity, never a
+quiet year).
+
+The UCDP long tail also lands: `data/registry/peace-agreements.yaml` (the
+PA dataset — browsable context and outcome detail; its release cadence is
+irregular and currently ends 2021, so it is **not** a near-term resolution
+feed), and the UCDP MIC download, which turns out to be *mediation/talks*
+data (third parties, good offices) rather than militarized confrontations —
+cached, unbuilt, honestly labeled.
+
 ## The pair universe (every country against every country)
 
 Observed dyads answer "will this conflict recur?" — they cannot price a pair

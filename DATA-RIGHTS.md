@@ -32,6 +32,12 @@ sources live only in the gitignored `sources/` directory (regenerable via
   Non-State Conflict Dataset. *Journal of Peace Research* 49(2): 351–362.
 - Eck, Kristine & Lisa Hultman (2007) One-Sided Violence Against Civilians in
   War. *Journal of Peace Research* 44(2): 233–246.
+- Kreutz, Joakim (2010) How and When Armed Conflicts End: Introducing the
+  UCDP Conflict Termination Dataset. *Journal of Peace Research* 47(2):
+  243–250.
+- Pettersson, Therése; Stina Högbladh & Magnus Öberg (2019) Organized
+  violence, 1989–2018 and peace agreements. *Journal of Peace Research*
+  56(4): 589–603. (UCDP Peace Agreement Dataset)
 
 **Gleditsch–Ward:** Gleditsch, Kristian S. & Michael D. Ward (1999) Interstate
 System Membership: A Revised List of the Independent States since 1816.

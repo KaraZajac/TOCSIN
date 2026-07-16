@@ -66,6 +66,13 @@ requires a myACLED access level above the automatic *Open* tier.
   relevant country pair per year (`via` = prox/region/major, `km` when
   known), with UCDP interstate activity/war as the outcome. Exposure for the
   pair grain is row presence.
+- `tables/episode.csv` — one row per UCDP dyad-episode (Kreutz termination
+  coding): bounds, terminated flag, outcome category. The engine derives
+  hazards from activity alone; this is the outcome detail and cross-check.
+- `tables/regime.csv` — V-Dem Regimes of the World per gwno-year (via OWID);
+  committed data, not engine conditioning (measured worse — method.md).
+- `registry/peace-agreements.yaml` — UCDP PA dataset (irregular cadence,
+  ends 2021): browsable context, manual-resolution support only.
 
 ## questions/ (committed — the journal)
 

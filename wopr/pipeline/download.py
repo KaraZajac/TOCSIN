@@ -55,8 +55,10 @@ def _get(url: str, timeout: int = 300) -> bytes:
         raise SystemExit(f"download failed: {url} ({e})")
 
 
-def scrape_downloads_page() -> tuple[str, list[str]]:
-    """Return (release, candidate CSV urls) from the UCDP downloads page."""
+def scrape_downloads_page() -> tuple[str, list[str], dict]:
+    """Return (release, candidate CSV urls, long-tail dataset urls) from the
+    UCDP downloads page. The long tail (termination, peace agreements, MIC)
+    is versioned irregularly, so links are discovered rather than pinned."""
     html = _get(f"{UCDP}/", timeout=60).decode("utf-8", "replace")
     releases = re.findall(r"/downloads/ged/ged(\d{3})-csv\.zip", html)
     if not releases:
@@ -65,7 +67,24 @@ def scrape_downloads_page() -> tuple[str, list[str]]:
     candidates = sorted(
         set(re.findall(r'href="(https://ucdp\.uu\.se/downloads/candidateged/[^"]+?\.csv)"', html))
     )
-    return release, candidates
+
+    def newest(pattern):
+        found = sorted(set(re.findall(pattern, html)))
+        return found[-1] if found else None
+
+    tail = {
+        "ucdp-termination-conflict.csv": newest(
+            r'href="(https://ucdp\.uu\.se/downloads/monadterm/[^"]*_Conflict\.csv)"'
+        ),
+        "ucdp-termination-dyad.csv": newest(
+            r'href="(https://ucdp\.uu\.se/downloads/monadterm/[^"]*_Dyad\.csv)"'
+        ),
+        "ucdp-peace-agreements.xlsx": newest(
+            r'href="(https://ucdp\.uu\.se/downloads/peace/ucdp-peace-agreements-[\d.]+\.xlsx)"'
+        ),
+        "ucdp-mic.zip": newest(r'href="(https://ucdp\.uu\.se/downloads/micmilc/ucdp-mic-[\d.]+\.zip)"'),
+    }
+    return release, candidates, tail
 
 
 def fetch_zip_csv(url: str, dest: Path) -> None:
@@ -91,7 +110,7 @@ def main() -> None:
     SOURCES.mkdir(exist_ok=True)
     CANDIDATE.mkdir(exist_ok=True)
 
-    release, candidate_urls = scrape_downloads_page()
+    release, candidate_urls, tail = scrape_downloads_page()
     version = f"{release[:2]}.{release[2:]}"
     print(f"UCDP release: {version}; candidate files: {len(candidate_urls)}")
 
@@ -126,6 +145,31 @@ def main() -> None:
             print(f"  cached {dest.relative_to(ROOT)}")
             continue
         fetch_file(url, dest)
+
+    for name, url in tail.items():
+        if url is None:
+            print(f"  ! no link found for {name} on the downloads page")
+            continue
+        manifest["files"][name.rsplit(".", 1)[0]] = name
+        if name.endswith(".zip"):
+            outdir = SOURCES / name.removesuffix(".zip")
+            if outdir.exists() and any(outdir.iterdir()) and not force:
+                print(f"  cached {outdir.relative_to(ROOT)}/")
+                continue
+            print(f"  GET {url}")
+            payload = _get(url)
+            outdir.mkdir(exist_ok=True)
+            with zipfile.ZipFile(io.BytesIO(payload)) as zf:
+                for m in zf.namelist():
+                    if m.lower().endswith((".csv", ".xlsx")) and "/" not in m.strip("/"):
+                        (outdir / Path(m).name).write_bytes(zf.read(m))
+            print(f"  -> {outdir.relative_to(ROOT)}/ ({len(list(outdir.iterdir()))} files)")
+        else:
+            dest = SOURCES / name
+            if dest.exists() and not force:
+                print(f"  cached {dest.relative_to(ROOT)}")
+                continue
+            fetch_file(url, dest)
 
     for name, url in GW_FILES.items():
         dest = SOURCES / name
