@@ -59,49 +59,49 @@ models:
       mean_p: 0.971
       observed: 0.946
   wopr:
-    brier: 0.06111
-    skill_vs_climatology: 0.3371
+    brier: 0.0461
+    skill_vs_climatology: 0.4999
     calibration:
     - bin: 0–10%
-      n: 5832
-      mean_p: 0.005
-      observed: 0.012
+      n: 6036
+      mean_p: 0.007
+      observed: 0.016
     - bin: 10–20%
-      n: 168
-      mean_p: 0.157
-      observed: 0.274
+      n: 396
+      mean_p: 0.141
+      observed: 0.225
     - bin: 20–30%
-      n: 240
-      mean_p: 0.241
-      observed: 0.4
-    - bin: 30–40%
-      n: 276
-      mean_p: 0.351
-      observed: 0.464
-    - bin: 40–50%
-      n: 180
-      mean_p: 0.447
-      observed: 0.4
-    - bin: 50–60%
-      n: 168
-      mean_p: 0.562
-      observed: 0.44
-    - bin: 60–70%
-      n: 96
-      mean_p: 0.639
-      observed: 0.458
-    - bin: 70–80%
       n: 108
-      mean_p: 0.778
+      mean_p: 0.242
+      observed: 0.194
+    - bin: 30–40%
+      n: 48
+      mean_p: 0.337
       observed: 0.75
+    - bin: 40–50%
+      n: 156
+      mean_p: 0.464
+      observed: 0.513
+    - bin: 50–60%
+      n: 84
+      mean_p: 0.538
+      observed: 0.536
+    - bin: 60–70%
+      n: 24
+      mean_p: 0.637
+      observed: 0.583
+    - bin: 70–80%
+      n: 60
+      mean_p: 0.782
+      observed: 0.95
     - bin: 80–90%
-      n: 240
-      mean_p: 0.859
-      observed: 0.85
+      n: 180
+      mean_p: 0.842
+      observed: 0.911
     - bin: 90–100%
-      n: 372
-      mean_p: 0.944
-      observed: 0.804
+      n: 588
+      mean_p: 0.958
+      observed: 0.867
   persistence:
     brier: 0.04326
     skill_vs_climatology: 0.5308
@@ -189,22 +189,22 @@ models:
 by_horizon:
   h1-3:
     views: 0.03371
-    wopr: 0.05815
+    wopr: 0.04131
     persistence: 0.03887
     climatology: 0.08774
   h4-6:
     views: 0.03962
-    wopr: 0.05966
+    wopr: 0.04252
     persistence: 0.04006
     climatology: 0.09294
   h7-12:
     views: 0.04579
-    wopr: 0.06332
+    wopr: 0.05029
     persistence: 0.04705
     climatology: 0.09404
 head_to_head:
-  wopr_better_on: 5241
-  views_better_on: 2411
-  delta_brier_wopr_minus_views: 0.01988
+  wopr_better_on: 5439
+  views_better_on: 2212
+  delta_brier_wopr_minus_views: 0.00487
 generated_from:
   records: 7680

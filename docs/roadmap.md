@@ -16,9 +16,11 @@
   automatically. Follow-ups: tempo-conditioned buckets (current intensity,
   not just threshold-recency — the Ethiopia-short-window blind spot), a
   rolling walk-forward backtest, pair grain at month grain.
-- **Bucket nowcasting**: use candidate months (and ACLED weeklies) to update
-  a unit's recency bucket for the current partial year, instead of taking
-  status at the annual data edge.
+- ~~Bucket nowcasting~~ **done** (0.2.0, promote-only from candidate months);
+  ~~tempo conditioning~~ **done at month grain** (0.3.0: active buckets carry
+  trailing hit-month bands; arena-verified, Brier .0611→.0461). Still open:
+  tempo bands at the annual grain, continuous-tempo with a proper
+  tune/validate split, ACLED weeklies as a tempo input.
 - **Proper hierarchical model** replacing the moment-matched EB (partial
   pooling over region × bucket, fitted once at build time).
 - **Conflict-scope priors** (aggregate dyad substrate per conflict id).

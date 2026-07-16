@@ -34,6 +34,12 @@ from wopr.paths import TABLES
 START = 1989 * 12  # month index of 1989-01; index = year*12 + (month-1)
 MIN_CLASS_MONTHS = MIN_CLASS_YEARS * 12
 
+# tempo bands refine ACTIVE buckets only: the count of individual months over
+# the threshold in the trailing year separates a sustained war (12/12) from a
+# single-spike year (1/12) — the arena priced pooling them at ~0.017 Brier.
+# A non-active unit necessarily has zero month-hits at the same threshold.
+TEMPO_BANDS = ((1, 3, "low"), (4, 8, "mid"), (9, 12, "high"))
+
 
 def mi(year: int, month: int) -> int:
     return year * 12 + (month - 1)
@@ -90,15 +96,26 @@ def load_monthly(substrate: dict, tables=TABLES) -> dict:
     return {"country": arrays["country"], "dyad": arrays["dyad"], "final_end": final_end, "data_end": data_end}
 
 
-def cumsum(monthly: dict, uid: int, types: tuple, data_end: int) -> list:
-    """Prefix sums C where C[i] = deaths in months [START, START+i)."""
+def cumsum(monthly: dict, uid: int, types: tuple, data_end: int, threshold: int = 25) -> list:
+    """Prefix sums C where C[i] = deaths in months [START, START+i). C carries
+    a companion hit-prefix as C.hits? No attributes on lists — returns C only;
+    see prefixes() for the pair."""
+    return prefixes(monthly, uid, types, data_end, threshold)[0]
+
+
+def prefixes(monthly: dict, uid: int, types: tuple, data_end: int, threshold: int = 25) -> tuple[list, list]:
+    """(C, H): C[i] = deaths in months [START, START+i); H[i] = count of
+    months in that span individually ≥ threshold (the tempo signal)."""
     raw = monthly.get(uid) or []
     n = data_end - START + 1
     C = [0] * (n + 1)
+    H = [0] * (n + 1)
     for i in range(n):
         cell = raw[i] if i < len(raw) and raw[i] else {}
-        C[i + 1] = C[i] + sum(cell.get(t, 0) for t in types)
-    return C
+        d = sum(cell.get(t, 0) for t in types)
+        C[i + 1] = C[i] + d
+        H[i + 1] = H[i] + (1 if d >= threshold else 0)
+    return C, H
 
 
 def window_sum(C: list, m0: int, W: int) -> int | None:
@@ -115,11 +132,12 @@ def exposed(u: Unit, spec: RollingSpec, m: int) -> bool:
     return year >= max(u.first_year, 1989)
 
 
-def bucket_series(C: list, spec: RollingSpec) -> dict[int, str]:
+def bucket_series(C: list, spec: RollingSpec, H: list | None = None) -> dict[int, str]:
     """Bucket entering each month, from trailing-12-month records strictly
     before it — one forward pass, so episode runs cost O(1) per month.
-    Defined from START+12 (a full trailing year of history) through the last
-    month with a complete trailing window."""
+    Active buckets carry a tempo suffix (trailing month-hits band) when the
+    hit-prefix H is supplied. Defined from START+12 (a full trailing year of
+    history) through the last month with a complete trailing window."""
     out: dict[int, str] = {}
     run = 0
     last_R = None
@@ -133,6 +151,10 @@ def bucket_series(C: list, spec: RollingSpec) -> dict[int, str]:
             years = (run + 11) // 12
             for lo, hi, name in AGE_BANDS:
                 if lo <= years <= hi:
+                    if H is not None:
+                        hits = H[m - START] - H[m - 12 - START]
+                        tempo = next((t for lo_t, hi_t, t in TEMPO_BANDS if lo_t <= hits <= hi_t), "low")
+                        name = f"{name}|{tempo}"
                     out[m] = name
                     break
         else:
@@ -179,17 +201,17 @@ def rate(spec: RollingSpec, substrate: dict, monthly: dict) -> dict:
         data_end = min(data_end, spec.class_end)
     last_start = final_end - spec.window + 1  # class windows stay inside final data
 
-    csums: dict[int, list] = {}
+    pref: dict[int, tuple] = {}
     bseries: dict[int, dict] = {}
 
     def C(uid: int) -> list:
-        if uid not in csums:
-            csums[uid] = cumsum(monthly[spec.grain], uid, spec.types, data_end)
-        return csums[uid]
+        if uid not in pref:
+            pref[uid] = prefixes(monthly[spec.grain], uid, spec.types, data_end, spec.threshold)
+        return pref[uid][0]
 
     def B(uid: int) -> dict:
         if uid not in bseries:
-            bseries[uid] = bucket_series(C(uid), spec)
+            bseries[uid] = bucket_series(C(uid), spec, pref[uid][1])
         return bseries[uid]
 
     bucket_at = min(spec.start, data_end + 1)

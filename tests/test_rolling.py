@@ -68,11 +68,32 @@ class TestBuckets(unittest.TestCase):
         b = bucket_series(C, RollingSpec("country", 1, ("sb",), 25, 12, 0))
         for year in (1992, 1993, 1995, 1996, 1998):
             self.assertEqual(
-                b[mi(year, 1)],
+                b[mi(year, 1)].split("|")[0],  # tempo suffix is month-grain-only refinement
                 bucket_of(u, year, annual),
                 f"January {year} bucket must match the annual engine",
             )
             self.assertEqual(window_sum(C, mi(year - 1, 1), 12), u.years[year - 1]["sb"])
+
+    def test_tempo_bands_split_active(self):
+        from wopr.engine.rolling import prefixes
+
+        sustained = {(y, m): 30 for y in (1992, 1993) for m in range(1, 13)}  # 12 hit-months/yr
+        spike = {(1992, 6): 400, (1993, 6): 400}  # one hit-month/yr, same activity status
+        for per_month, expect in ((sustained, "high"), (spike, "low")):
+            C, H = prefixes({1: monthly_country(per_month)}, 1, ("sb",), mi(1998, 12), 25)
+            b = bucket_series(C, RollingSpec("country", 1, ("sb",), 25, 12, 0), H)
+            got = b[mi(1993, 1)]
+            self.assertTrue(got.startswith("active-"), got)
+            self.assertTrue(got.endswith(f"|{expect}"), f"{per_month and 'case'}: {got}")
+
+    def test_sum_active_without_hit_months_reads_low_tempo(self):
+        from wopr.engine.rolling import prefixes
+
+        # 12 × 3 deaths = 36 ≥ 25 in sum, but no single month crosses 25
+        dribble = {(1992, m): 3 for m in range(1, 13)}
+        C, H = prefixes({1: monthly_country(dribble)}, 1, ("sb",), mi(1998, 12), 25)
+        b = bucket_series(C, RollingSpec("country", 1, ("sb",), 25, 12, 0), H)
+        self.assertEqual(b[mi(1993, 1)], "active-1|low")
 
 
 class TestRate(unittest.TestCase):

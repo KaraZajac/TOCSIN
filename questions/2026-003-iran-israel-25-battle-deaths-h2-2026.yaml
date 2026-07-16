@@ -24,9 +24,9 @@ resolution_policy:
   method: auto
 forecasts: []
 prior:
-  p: 0.7692
-  computed: '2026-07-16T13:33:16Z'
-  engine: 0.2.0
+  p: 0.6943
+  computed: '2026-07-16T14:07:33Z'
+  engine: 0.3.0
   detail:
     spec:
       grain: dyad
@@ -38,33 +38,33 @@ prior:
       window_months: 5
       start_month: 2026-08
     unit_name: Government of Iran - Government of Israel
-    bucket: active-4-9
+    bucket: active-4-9|low
     bucket_coarse: active
     bucket_data_end: 2026-05
     levels:
       self:
         units: 1
-        months: 52
-        hits: 40
-        rate: 0.7692
+        months: 30
+        hits: 22
+        rate: 0.7333
       region:
         units: 96
-        months: 910
-        hits: 700
-        rate: 0.7692
-        M: 5.0
-        posterior: 0.7692
+        months: 375
+        hits: 176
+        rate: 0.4693
+        M: 5.2
+        posterior: 0.6943
       global:
         units: 697
-        months: 5131
-        hits: 3592
-        rate: 0.7001
+        months: 2560
+        hits: 1234
+        rate: 0.482
         M: 5.0
-        posterior: 0.7632
+        posterior: 0.6974
     notes:
     - rolling 5-month window from 2026-08; class counts are overlapping window-starts (rates read fine;
       dispersion slightly overstated)
     - target bucket uses preliminary candidate months
     - dyad universe = dyads UCDP ever observed; recurrence rate, not an arbitrary-pair rate
     headline_level: region
-    p: 0.7692
+    p: 0.6943

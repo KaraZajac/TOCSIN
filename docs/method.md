@@ -60,13 +60,19 @@ the annual ones because trailing windows lag activity by up to a year — with
 that shift, January-start buckets provably equal the annual engine's (tested).
 Candidate months feed the target's bucket naturally (noted as provisional).
 
+At month grain, **active buckets carry a tempo band** — the count of
+trailing-year months individually over the threshold (`low` 1–3, `mid` 4–8,
+`high` 9–12) — so a sustained war and a single-spike year no longer share a
+class. (A sum-active year with no single hit-month reads `low`.) The arena
+priced this covariate: adding it moved WOPR's month-grain Brier from .0611
+to .0461, closing 75% of the gap to VIEWS.
+
 Caveats: window-starts overlap, so class counts are not independent — rates
 and calibration read fine, but shrinkage/floors modestly overstate certainty.
-Buckets still condition on threshold-recency, not current intensity: a
-country at full war tempo gets its whole-history class rate for short
-windows (Ethiopia, 6-month, reads ~0.63 despite current tempo making it
-near-certain) — tempo conditioning is the next covariate. Country and dyad
-grains only; pairs stay annual.
+Tempo is banded, not continuous — the residual ~.003 Brier to raw persistence
+is discretization cost, left as-is deliberately (tuning bands on the same
+vantages the arena scores would be overfitting; a tune/validate split is
+future work). Country and dyad grains only; pairs stay annual.
 
 ## The pair universe (every country against every country)
 
@@ -165,18 +171,19 @@ vantages using only information available then; WOPR runs walk-forward-
 clamped (`class_end`), one-step by design. Baselines: persistence (trailing-
 12-month rate) and climatology (full-history rate).
 
-First result (5 vantages, 7,680 country-months, UCDP 26.1): **VIEWS 0.0412,
-persistence 0.0433, WOPR 0.0611, climatology 0.0922** (Brier, lower better).
-Readings: (1) VIEWS leads, earning its covariates on transition cases — but
-only ~5% ahead of naive persistence, the standing embarrassment of this
-field, reproduced here independently. (2) WOPR wins 68% of individual months
-(the quiet mass) yet pays heavily on transitions: at month grain, a
-country's own tempo is the signal, and our buckets deliberately condition on
-threshold-recency instead — that design gap is now priced at ~0.017 Brier vs
-persistence. Tempo conditioning is the top engine item. (3) WOPR's
-annual/structural questions (its home turf) are *not* what this target
-measures; the arena needs an annual-grain event too, once enough journal
-questions resolve.
+Current standings (5 vantages, 7,680 country-months, UCDP 26.1; Brier, lower
+better): **VIEWS 0.0412, persistence 0.0433, WOPR 0.0461, climatology
+0.0922**. History: WOPR opened at 0.0611 with recency/age-only buckets; the
+arena priced that tempo gap at ~0.017, and adding the tempo band closed 75%
+of the deficit to VIEWS in one covariate. Readings: (1) VIEWS leads,
+earning its covariates on transitions — but only ~5% ahead of naive
+persistence, the standing embarrassment of this field, reproduced here
+independently. (2) WOPR is now within ~12% of the academic SOTA with a
+transparent lookup you can audit down to the class counts, and it wins 71%
+of individual months head-to-head. (3) The residual to persistence is
+banding discretization, deliberately not tuned against the arena. (4) Month
+grain is VIEWS's home target; the annual-grain arena — WOPR's design center —
+opens as journal questions resolve.
 
 ## Scoring rules
 
