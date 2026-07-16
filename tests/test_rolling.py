@@ -131,6 +131,37 @@ class TestRate(unittest.TestCase):
         self.assertGreater(r["p"], 0)
         self.assertLess(r["p"], 1)
 
+    def test_rate_is_one_step_frozen_but_state_can_price_horizons(self):
+        # class history: one-off 3-month bursts, then permanent quiet
+        from wopr.engine.rolling import assemble, build_state
+
+        bursts = {}
+        for uid, year in ((1, 1992), (2, 1993), (3, 1994)):
+            bursts[uid] = ("Africa", {(year, m): 100 for m in (1, 2, 3)})
+        bursts[9] = ("Africa", {(1998, m): 100 for m in (10, 11, 12)})  # fresh burst at data end
+        sub, monthly = substrate_with(bursts)
+        # rate() freezes the one-step number across staleness (measured better)
+        near = rate(RollingSpec("country", 9, ("sb",), 25, 1, start=mi(1999, 1)), sub, monthly)
+        far = rate(RollingSpec("country", 9, ("sb",), 25, 1, start=mi(1999, 7)), sub, monthly)
+        self.assertEqual(near["p"], far["p"])
+        self.assertTrue(any("one-step" in n for n in far["notes"]))
+        # …but the state machinery can produce true horizon curves when asked
+        state = build_state("country", sub, monthly, threshold=25, window=1, gaps=(0, 6))
+        p0 = assemble(state, 9, mi(1999, 1))["p"]
+        p6 = assemble(state, 9, mi(1999, 7))["p"]
+        self.assertGreater(p0, p6)
+
+    def test_neighbor_suffix_on_quiet_country_next_to_war(self):
+        war = {(y, m): 200 for y in range(1992, 1999) for m in range(1, 13)}
+        sub, monthly = substrate_with({1: ("Africa", war), 2: ("Africa", {(1990, 1): 0}), 3: ("Africa", {(1990, 1): 0})})
+        monthly["neighbors"] = {2: {y: {1} for y in range(1989, 1999)}}  # 2 borders the war; 3 does not
+        exposed_r = rate(RollingSpec("country", 2, ("sb",), 25, 12, mi(1996, 1)), sub, monthly)
+        isolated = rate(RollingSpec("country", 3, ("sb",), 25, 12, mi(1996, 1)), sub, monthly)
+        self.assertEqual(exposed_r["bucket"], "cold+nbr")
+        self.assertEqual(exposed_r["bucket_coarse"], "cold")
+        self.assertEqual(isolated["bucket"], "cold")
+        self.assertTrue(any("neighbor" in n for n in exposed_r["notes"]))
+
 
 if __name__ == "__main__":
     unittest.main()

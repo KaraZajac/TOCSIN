@@ -17,10 +17,15 @@
   not just threshold-recency — the Ethiopia-short-window blind spot), a
   rolling walk-forward backtest, pair grain at month grain.
 - ~~Bucket nowcasting~~ **done** (0.2.0, promote-only from candidate months);
-  ~~tempo conditioning~~ **done at month grain** (0.3.0: active buckets carry
-  trailing hit-month bands; arena-verified, Brier .0611→.0461). Still open:
-  tempo bands at the annual grain, continuous-tempo with a proper
-  tune/validate split, ACLED weeklies as a tempo input.
+  ~~tempo conditioning~~ **done at month grain** (0.3.0: arena-verified,
+  Brier .0611→.0461); ~~neighbor-at-war~~ **done at month grain** (0.3.0:
+  non-active buckets split by ≤400km-neighbor contagion — cold+nbr onsets at
+  7× cold; Brier-invisible at month grain, expected to matter at year grain).
+  **Horizon-aware class rates: built, ablated, measured worse (+.003) —
+  reverted to frozen one-step; machinery retained** (docs/method.md). Still
+  open: neighbor + tempo at the ANNUAL grain (backtest-verified), continuous
+  tempo with a tune/validate vantage split, self-level horizon decay curves,
+  ACLED weeklies as a tempo input.
 - **Proper hierarchical model** replacing the moment-matched EB (partial
   pooling over region × bucket, fitted once at build time).
 - **Conflict-scope priors** (aggregate dyad substrate per conflict id).

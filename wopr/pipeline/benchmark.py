@@ -62,17 +62,18 @@ def collect(force_pull: bool = False) -> tuple[list[dict], dict]:
             if v + 1 <= m <= v + HORIZON and r["main_dich"] is not None:
                 vrows[(to_gw(int(r["gwcode"]), m // 12), m)] = float(r["main_dich"])
 
+        # gaps=(0,): one-step frozen across the horizon — the horizon-aware
+        # variant was ablated and measured worse (see docs/method.md)
+        state = rolling.build_state(
+            "country", substrate, monthly, types=("sb",), threshold=25, window=1,
+            class_end=v, gaps=(0,),
+        )
         wopr_p, base = {}, {}
         for gwno, u in substrate["country"].items():
             if (gwno, months[0]) not in vrows and (gwno, months[-1]) not in vrows:
                 continue
-            try:
-                r = rolling.rate(
-                    RollingSpec("country", gwno, ("sb",), 25, 1, start=v + 1, class_end=v), substrate, monthly
-                )
-                wopr_p[gwno] = r["p"]
-            except KeyError:
-                continue
+            # horizon-aware: one price per (country, horizon month)
+            wopr_p[gwno] = {m: rolling.assemble(state, gwno, m)["p"] for m in months}
             k = n = k12 = n12 = 0
             for m in range(rolling.START, v + 1):
                 h = hits.get((gwno, m))
@@ -100,7 +101,7 @@ def collect(force_pull: bool = False) -> tuple[list[dict], dict]:
                         "outcome": outcome,
                         "provisional": m > final_end,
                         "views": p_views,
-                        "wopr": wopr_p[gwno],
+                        "wopr": wopr_p[gwno][m],
                         "climatology": round(base[gwno][0], 4),
                         "persistence": round(base[gwno][1], 4),
                     }

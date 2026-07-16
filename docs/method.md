@@ -67,6 +67,25 @@ class. (A sum-active year with no single hit-month reads `low`.) The arena
 priced this covariate: adding it moved WOPR's month-grain Brier from .0611
 to .0461, closing 75% of the gap to VIEWS.
 
+**Non-active buckets carry a neighbor flag** (`+nbr`: any ≤400km neighbor,
+from the pair universe's distances, with ≥25 sb deaths in its own trailing
+year). Measured contagion, walk-forward at a 2024 vantage: cold countries
+next to a war hit at **7× the isolated cold rate** (.0018 vs .00026/month;
+dormant 3×, recent 1.5×). Aggregate month-grain Brier barely moves (the
+rates are tiny against mostly-zero outcomes), but the class distinction is
+real and large — it is exactly the difference that matters for onset
+questions at year grain.
+
+**A measured negative result, kept on the record:** horizon-aware class
+rates — pricing a window g months past the data edge by class windows offset
+the same g — were built, ablated, and found **worse** (+.003 Brier overall,
+worst at long horizons). Mechanism: class-level decay pools units that exit
+conflict with units that persist, so it systematically underprices the
+persisters that dominate scoring. The engine therefore applies the one-step
+rate frozen across staleness (noted on affected outputs); the horizon
+machinery remains in `build_state(gaps=…)`, tested, for future self-level
+decay-curve work.
+
 Caveats: window-starts overlap, so class counts are not independent — rates
 and calibration read fine, but shrinkage/floors modestly overstate certainty.
 Tempo is banded, not continuous — the residual ~.003 Brier to raw persistence

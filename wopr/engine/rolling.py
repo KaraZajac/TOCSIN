@@ -2,30 +2,39 @@
 starting at month m0) — the exact question a "next 12 months" or "H2 2026"
 window asks, instead of the calendar-year approximation.
 
-Same estimator as the annual engine, ported to months. A unit's status
-entering month m is its trailing-12-month record R(m); buckets band the
-consecutive-R run (episode age) or the gap since R last held, in month units
-that mirror the annual bands. Class rates count member window-starts in the
-same bucket whose windows complete inside final (non-candidate) data; the
-target's own bucket may use candidate months — they are real observations at
-this grain, just provisional (noted).
+Same estimator family as the annual engine, ported to months, with three
+covariates the arena demanded:
 
-Honesty notes: window-starts overlap (a 12-month window shares 11 months
-with its neighbor), so counts are not independent observations — rates and
-calibration read fine, but dispersion-based shrinkage and floors treat
-months as independent and thus overstate certainty a little. January-start
-12-month windows are calendar years, where this engine provably matches the
-annual one (tested). Country and dyad grains only; pairs stay annual.
+  bucket    trailing-12-month status, episode age in month-years
+  tempo     active buckets carry the count of trailing months individually
+            over the threshold (low 1–3 / mid 4–8 / high 9–12) — sustained
+            wars and single-spike years are different classes
+  neighbor  NON-active buckets carry a "+nbr" suffix when any ≤400km
+            neighbor is in active conflict (trailing year ≥25 sb deaths) —
+            spatial contagion, the strongest known onset covariate, applied
+            exactly where onsets happen
+
+and one estimator upgrade: **horizon-aware class rates**. A window starting
+g months past the edge of observation is priced by class windows starting g
+months after each class month — P(hit in [m+g, m+g+W)| bucket at m) — not by
+the one-step rate applied flat.
+
+All paths (single-question rate() and the benchmark's batch tables) share
+build_state()/assemble(), so they cannot drift. Honesty notes: window-starts
+overlap (rates and calibration read fine; dispersion slightly overstated);
+tempo/neighbor bands were fixed a priori, never tuned against the arena.
+Country and dyad grains; neighbor applies to countries only; pairs stay
+annual.
 """
 
 import csv
+from collections import defaultdict
 from dataclasses import dataclass
 
 from wopr.engine.baserate import (
     AGE_BANDS,
     MIN_CLASS_YEARS,
     Unit,
-    class_units,
     coarse,
     eb_strength,
 )
@@ -33,6 +42,7 @@ from wopr.paths import TABLES
 
 START = 1989 * 12  # month index of 1989-01; index = year*12 + (month-1)
 MIN_CLASS_MONTHS = MIN_CLASS_YEARS * 12
+NEIGHBOR_KM = 400
 
 # tempo bands refine ACTIVE buckets only: the count of individual months over
 # the threshold in the trailing year separates a sustained war (12/12) from a
@@ -60,10 +70,26 @@ class RollingSpec:
     class_end: int = 0  # walk-forward clamp: use no data past this month (0 = all)
 
 
+# ---------------------------------------------------------------- loading
+
+
+def load_neighbors(tables=TABLES) -> dict:
+    """gwno -> year -> set of gwnos within NEIGHBOR_KM (from the pair table,
+    so succession and system exits are already year-resolved)."""
+    out: dict[int, dict[int, set]] = defaultdict(lambda: defaultdict(set))
+    with open(tables / "pair-year.csv", newline="") as f:
+        for r in csv.DictReader(f):
+            if r["km"] == "" or int(r["km"]) > NEIGHBOR_KM:
+                continue
+            a, b, y = int(r["gwno_a"]), int(r["gwno_b"]), int(r["year"])
+            out[a][y].add(b)
+            out[b][y].add(a)
+    return {g: dict(years) for g, years in out.items()}
+
+
 def load_monthly(substrate: dict, tables=TABLES) -> dict:
     """Dense per-unit monthly death arrays layered over the annual substrate
-    (which supplies exposure and regions). Returns {"country": {gwno: arr},
-    "dyad": {...}, "start": START, "final_end": mi, "data_end": mi}."""
+    (which supplies exposure and regions), plus the neighbor map."""
     final_end = mi(substrate["last_year"], 12)
     data_end = final_end
     arrays: dict[str, dict[int, list]] = {"country": {}, "dyad": {}}
@@ -71,7 +97,7 @@ def load_monthly(substrate: dict, tables=TABLES) -> dict:
     def arr_for(store: dict, uid: int, upto: int):
         a = store.get(uid)
         if a is None or len(a) < upto - START + 1:
-            new = [0] * (upto - START + 1)
+            new = [None] * (upto - START + 1)
             if a:
                 new[: len(a)] = a
             store[uid] = a = new
@@ -79,8 +105,7 @@ def load_monthly(substrate: dict, tables=TABLES) -> dict:
 
     with open(tables / "country-month.csv", newline="") as f:
         for r in csv.DictReader(f):
-            m = mi(int(r["year"]), int(r["month"]))
-            data_end = max(data_end, m)
+            data_end = max(data_end, mi(int(r["year"]), int(r["month"])))
     with open(tables / "country-month.csv", newline="") as f:
         for r in csv.DictReader(f):
             m = mi(int(r["year"]), int(r["month"]))
@@ -93,14 +118,13 @@ def load_monthly(substrate: dict, tables=TABLES) -> dict:
             m = mi(int(r["year"]), int(r["month"]))
             a = arr_for(arrays["dyad"], int(r["dyad_id"]), data_end)
             a[m - START] = {"sb": int(r["deaths"])}
-    return {"country": arrays["country"], "dyad": arrays["dyad"], "final_end": final_end, "data_end": data_end}
-
-
-def cumsum(monthly: dict, uid: int, types: tuple, data_end: int, threshold: int = 25) -> list:
-    """Prefix sums C where C[i] = deaths in months [START, START+i). C carries
-    a companion hit-prefix as C.hits? No attributes on lists — returns C only;
-    see prefixes() for the pair."""
-    return prefixes(monthly, uid, types, data_end, threshold)[0]
+    return {
+        "country": arrays["country"],
+        "dyad": arrays["dyad"],
+        "final_end": final_end,
+        "data_end": data_end,
+        "neighbors": load_neighbors(tables),
+    }
 
 
 def prefixes(monthly: dict, uid: int, types: tuple, data_end: int, threshold: int = 25) -> tuple[list, list]:
@@ -118,6 +142,10 @@ def prefixes(monthly: dict, uid: int, types: tuple, data_end: int, threshold: in
     return C, H
 
 
+def cumsum(monthly: dict, uid: int, types: tuple, data_end: int, threshold: int = 25) -> list:
+    return prefixes(monthly, uid, types, data_end, threshold)[0]
+
+
 def window_sum(C: list, m0: int, W: int) -> int | None:
     lo, hi = m0 - START, m0 - START + W
     if lo < 0 or hi > len(C) - 1:
@@ -125,19 +153,21 @@ def window_sum(C: list, m0: int, W: int) -> int | None:
     return C[hi] - C[lo]
 
 
-def exposed(u: Unit, spec: RollingSpec, m: int) -> bool:
+def exposed(u: Unit, grain: str, m: int) -> bool:
     year = m // 12
-    if spec.grain == "country":
+    if grain == "country":
         return year in u.years
     return year >= max(u.first_year, 1989)
 
 
-def bucket_series(C: list, spec: RollingSpec, H: list | None = None) -> dict[int, str]:
+# ---------------------------------------------------------------- buckets
+
+
+def bucket_series(C: list, spec: RollingSpec, H: list | None = None, nbr=None) -> dict[int, str]:
     """Bucket entering each month, from trailing-12-month records strictly
     before it — one forward pass, so episode runs cost O(1) per month.
-    Active buckets carry a tempo suffix (trailing month-hits band) when the
-    hit-prefix H is supplied. Defined from START+12 (a full trailing year of
-    history) through the last month with a complete trailing window."""
+    Active buckets carry a tempo suffix when the hit-prefix H is supplied;
+    non-active buckets carry "+nbr" when nbr(m) says a neighbor is at war."""
     out: dict[int, str] = {}
     run = 0
     last_R = None
@@ -160,13 +190,14 @@ def bucket_series(C: list, spec: RollingSpec, H: list | None = None) -> dict[int
         else:
             run = 0
             if last_R is None:
-                out[m] = "cold"
+                base = "cold"
             else:
                 # last_R trails the underlying activity by up to 12 months, so
                 # these cutoffs sit 12 under the annual bands (2-3y recent,
                 # 4-10y dormant) and align exactly in year terms at any phase
                 gap = m - last_R
-                out[m] = "recent" if gap <= 24 else "dormant" if gap <= 108 else "cold"
+                base = "recent" if gap <= 24 else "dormant" if gap <= 108 else "cold"
+            out[m] = f"{base}+nbr" if nbr is not None and nbr(m) else base
     return out
 
 
@@ -174,82 +205,133 @@ def bucket_m(C: list, m: int, spec: RollingSpec) -> str | None:
     return bucket_series(C, spec).get(m)
 
 
-def unit_counts(
-    C: list, buckets: dict[int, str], u: Unit, spec: RollingSpec, bucket: str, last_start: int
-) -> tuple[int, int]:
-    """(hits, window-starts) for u in `bucket`, windows completing in final data."""
-    k = n = 0
-    for m in range(START + 12, last_start + 1):
-        if buckets.get(m) != bucket or not exposed(u, spec, m):
-            continue
-        s = window_sum(C, m, spec.window)
-        if s is None:
-            continue
-        n += 1
-        k += int(s >= spec.threshold)
-    return k, n
+# ---------------------------------------------------------------- the core
 
 
-def rate(spec: RollingSpec, substrate: dict, monthly: dict) -> dict:
-    units = substrate[spec.grain]
-    if spec.unit not in units:
-        raise KeyError(f"unknown {spec.grain} id {spec.unit}")
-    me = units[spec.unit]
+def build_state(grain, substrate, monthly, types=("sb",), threshold=25, window=1, class_end=0, gaps=(0,)):
+    """Everything a query needs, computed once: per-unit bucket series (tempo
+    + neighbor suffixes), and per-(unit, bucket, gap) window-hit counts over
+    class months whose windows complete inside final data. Shared by rate()
+    and the benchmark so the two cannot diverge."""
+    units = substrate[grain]
     final_end, data_end = monthly["final_end"], monthly["data_end"]
-    if spec.class_end:  # retrospective vantage: nothing after class_end exists
-        final_end = min(final_end, spec.class_end)
-        data_end = min(data_end, spec.class_end)
-    last_start = final_end - spec.window + 1  # class windows stay inside final data
+    if class_end:
+        final_end = min(final_end, class_end)
+        data_end = min(data_end, class_end)
 
-    pref: dict[int, tuple] = {}
-    bseries: dict[int, dict] = {}
+    spec = RollingSpec(grain, 0, tuple(types), threshold, window, 0, class_end)
+    pref = {uid: prefixes(monthly[grain], uid, tuple(types), data_end, threshold) for uid in units}
 
-    def C(uid: int) -> list:
-        if uid not in pref:
-            pref[uid] = prefixes(monthly[spec.grain], uid, spec.types, data_end, spec.threshold)
-        return pref[uid][0]
+    nbr_of = {}
+    if grain == "country":
+        # a neighbor is "at war" when its own trailing year has ≥25 sb deaths
+        if tuple(types) == ("sb",) and threshold == 25:
+            p25 = pref
+        else:
+            p25 = {uid: prefixes(monthly[grain], uid, ("sb",), data_end, 25) for uid in units}
+        active25 = {}
+        for uid, (C25, _) in p25.items():
+            arr = [False] * (data_end + 2 - START)
+            for m in range(START + 12, data_end + 2):
+                s = window_sum(C25, m - 12, 12)
+                arr[m - START] = s is not None and s >= 25
+            active25[uid] = arr
+        neighbors = monthly.get("neighbors", {})
 
-    def B(uid: int) -> dict:
-        if uid not in bseries:
-            bseries[uid] = bucket_series(C(uid), spec, pref[uid][1])
-        return bseries[uid]
+        def make_nbr(uid):
+            def nbr(m):
+                for n in neighbors.get(uid, {}).get(m // 12, ()):
+                    a = active25.get(n)
+                    if a and m - START < len(a) and a[m - START]:
+                        return True
+                return False
 
-    bucket_at = min(spec.start, data_end + 1)
-    bucket = B(me.id).get(bucket_at) or "cold"
-    provisional = bucket_at - 1 > final_end
-    k_self, n_self = unit_counts(C(me.id), B(me.id), me, spec, bucket, last_start)
+            return nbr
 
-    # borrow the annual engine's class machinery via a shim spec
-    class _S:
-        grain = spec.grain
-        unit = spec.unit
+        nbr_of = {uid: make_nbr(uid) for uid in units}
 
-    out = {
-        "spec": {
-            "grain": spec.grain,
-            "unit": spec.unit,
-            "measure": "deaths",
-            "types": list(spec.types),
-            "threshold": spec.threshold,
-            "window_months": spec.window,
-            "start_month": ym(spec.start),
-        },
-        "unit_name": me.name or str(me.id),
-        "bucket": bucket,
-        "bucket_coarse": coarse(bucket),
-        "bucket_data_end": ym(min(spec.start - 1, data_end)),
-        "levels": {},
-        "notes": [],
+    buckets = {
+        uid: bucket_series(pref[uid][0], spec, pref[uid][1], nbr_of.get(uid))
+        for uid in units
     }
-    posteriors = {}
-    for level in ("self", "region", "global"):
-        members = class_units(_S, substrate, level)
-        counts = [unit_counts(C(m.id), B(m.id), m, spec, bucket, last_start) for m in members]
+
+    per_unit: dict[tuple, list] = defaultdict(lambda: [0, 0])  # (uid,b,g) -> [k,n]
+    for uid, u in units.items():
+        C = pref[uid][0]
+        bs = buckets[uid]
+        for m, b in bs.items():
+            if not exposed(u, grain, m):
+                continue
+            for g in gaps:
+                s = window_sum(C, m + g, window)
+                if s is None or m + g + window - 1 > final_end:
+                    continue
+                cell = per_unit[(uid, b, g)]
+                cell[1] += 1
+                cell[0] += int(s >= threshold)
+
+    sig_of = {uid: tuple(sorted(set(u.region))) or ("__all__",) for uid, u in units.items()}
+    members_by_sig = {
+        sig: [uid for uid, u in units.items() if sig == ("__all__",) or set(u.region) & set(sig)]
+        for sig in set(sig_of.values())
+    }
+    members_by_sig[("__global__",)] = list(units)
+
+    return {
+        "grain": grain,
+        "units": units,
+        "threshold": threshold,
+        "types": tuple(types),
+        "window": window,
+        "gaps": tuple(gaps),
+        "final_end": final_end,
+        "data_end": data_end,
+        "buckets": buckets,
+        "per_unit": per_unit,
+        "sig_of": sig_of,
+        "members_by_sig": members_by_sig,
+        "_cell_cache": {},
+    }
+
+
+def _class_cell(state, sig, bucket, g):
+    key = (sig, bucket, g)
+    if key not in state["_cell_cache"]:
+        counts = [tuple(state["per_unit"].get((uid, bucket, g), (0, 0))) for uid in state["members_by_sig"][sig]]
         K = sum(k for k, _ in counts)
         N = sum(n for _, n in counts)
-        entry = {"units": len(members), "months": N, "hits": K, "rate": round(K / N, 4) if N else None}
-        if level != "self" and N:
-            M = eb_strength(counts)
+        state["_cell_cache"][key] = (K, N, eb_strength(counts) if N else 0.0)
+    return state["_cell_cache"][key]
+
+
+def assemble(state, uid: int, target_month: int) -> dict:
+    """Price one unit-window using the state's cells: bucket at the edge of
+    observation, class windows offset by the same staleness gap."""
+    edge = min(target_month, state["data_end"] + 1)
+    g = target_month - edge
+    g = min(state["gaps"], key=lambda x: abs(x - g)) if g not in state["gaps"] else g
+    bucket = state["buckets"][uid].get(edge) or "cold"
+    k_self, n_self = state["per_unit"].get((uid, bucket, g), (0, 0))
+
+    out = {"bucket": bucket, "bucket_coarse": coarse(bucket), "gap": g, "edge": ym(edge), "levels": {}}
+    posteriors = {}
+    for level, sig in (("self", None), ("region", state["sig_of"][uid]), ("global", ("__global__",))):
+        if level == "self":
+            out["levels"]["self"] = {
+                "units": 1,
+                "months": n_self,
+                "hits": k_self,
+                "rate": round(k_self / n_self, 4) if n_self else None,
+            }
+            continue
+        K, N, M = _class_cell(state, sig, bucket, g)
+        entry = {
+            "units": len(state["members_by_sig"][sig]),
+            "months": N,
+            "hits": K,
+            "rate": round(K / N, 4) if N else None,
+        }
+        if N:
             post = (k_self + M * (K / N)) / (n_self + M)
             entry["M"] = round(M, 1)
             entry["posterior"] = round(post, 4)
@@ -266,12 +348,52 @@ def rate(spec: RollingSpec, substrate: dict, monthly: dict) -> dict:
     floor = 0.5 / (n_level + 1)
     out["headline_level"] = use
     out["p"] = round(min(max(p, floor), 1 - floor), 4)
-    out["notes"].append(
+    return out
+
+
+# ---------------------------------------------------------------- queries
+
+
+def rate(spec: RollingSpec, substrate: dict, monthly: dict) -> dict:
+    units = substrate[spec.grain]
+    if spec.unit not in units:
+        raise KeyError(f"unknown {spec.grain} id {spec.unit}")
+    me = units[spec.unit]
+    data_end = min(monthly["data_end"], spec.class_end) if spec.class_end else monthly["data_end"]
+    gap = max(0, spec.start - (data_end + 1))
+    # one-step frozen, deliberately: horizon-aware class decay was measured
+    # WORSE in the arena (+0.003 Brier) — class-level decay pools units that
+    # exit conflict, underpricing the ones that persist. See docs/method.md.
+    state = build_state(
+        spec.grain, substrate, monthly,
+        types=spec.types, threshold=spec.threshold, window=spec.window,
+        class_end=spec.class_end, gaps=(0,),
+    )
+    out = assemble(state, spec.unit, spec.start)
+    out["spec"] = {
+        "grain": spec.grain,
+        "unit": spec.unit,
+        "measure": "deaths",
+        "types": list(spec.types),
+        "threshold": spec.threshold,
+        "window_months": spec.window,
+        "start_month": ym(spec.start),
+    }
+    out["unit_name"] = me.name or str(me.id)
+    out["bucket_data_end"] = out.pop("edge")
+    out["notes"] = [
         f"rolling {spec.window}-month window from {ym(spec.start)}; class counts are overlapping "
         "window-starts (rates read fine; dispersion slightly overstated)"
-    )
-    if provisional:
+    ]
+    if gap:
+        out["notes"].append(
+            f"window starts {gap} month(s) past the data edge: bucket taken at the edge, one-step "
+            "rate applied frozen (horizon-aware class decay measured worse — see method.md)"
+        )
+    if spec.start - 1 > state["final_end"]:
         out["notes"].append("target bucket uses preliminary candidate months")
+    if "+nbr" in out["bucket"]:
+        out["notes"].append("a ≤400km neighbor is in active conflict (spatial-contagion class)")
     if spec.grain == "dyad":
         out["notes"].append("dyad universe = dyads UCDP ever observed; recurrence rate, not an arbitrary-pair rate")
     return out

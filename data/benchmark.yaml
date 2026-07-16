@@ -203,8 +203,8 @@ by_horizon:
     persistence: 0.04705
     climatology: 0.09404
 head_to_head:
-  wopr_better_on: 5439
-  views_better_on: 2212
+  wopr_better_on: 5386
+  views_better_on: 2271
   delta_brier_wopr_minus_views: 0.00487
 generated_from:
   records: 7680

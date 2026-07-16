@@ -45,8 +45,9 @@ ACD_START = 1946
 
 
 def coarse(bucket: str) -> str:
-    """active-2-3 -> active; anything else unchanged (for badges/map keys)."""
-    return "active" if bucket.startswith("active") else bucket
+    """active-2-3|high -> active, cold+nbr -> cold (for badges/map keys)."""
+    base = bucket.split("|")[0].split("+")[0]
+    return "active" if base.startswith("active") else base
 
 
 @dataclass
