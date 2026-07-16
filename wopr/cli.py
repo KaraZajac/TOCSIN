@@ -448,7 +448,8 @@ def main(argv: list[str] | None = None) -> None:
     p = sub.add_parser("benchmark", help="the arena: WOPR vs VIEWS vs baselines, retrospectively")
     p.add_argument("--force-pull", action="store_true", help="re-fetch cached VIEWS runs")
 
-    sub.add_parser("protocol", help="tune/validate a covariate (youth) on held-out vantages")
+    p = sub.add_parser("protocol", help="tune/validate candidate covariates on held-out vantages")
+    p.add_argument("--study", choices=("youth", "pair", "all"), default="all", help="which covariate study to run")
 
     sub.add_parser("watchfloor", help="tempo divergence board — heating/cooling/onsets")
     sub.add_parser("list", help="all questions, one line each")
@@ -489,7 +490,12 @@ def main(argv: list[str] | None = None) -> None:
     elif args.cmd == "protocol":
         from wopr.engine import protocol
 
-        print(protocol.render(protocol.run()))
+        if args.study in ("youth", "all"):
+            print(protocol.render(protocol.run()))
+        if args.study == "all":
+            print()
+        if args.study in ("pair", "all"):
+            print(protocol.render_pair(protocol.run_pair()))
     else:
         {
             "rate": cmd_rate,

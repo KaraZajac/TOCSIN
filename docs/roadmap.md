@@ -16,10 +16,13 @@
   ~3× the whole post–Cold-War era). ~~Correlates of War~~ **done** (dyadic
   MIDs 1946–2014 + trends chart, formal alliances 1946–2012, CINC v7 through
   2022 on country risk panels; COW→G-W crosswalk unit-tested; COW's missing
-  TLS intermediate pinned in wopr/pipeline/cow-ca.pem). MID/alliance
-  pair-year context is available to the engine as *protocol candidates*
-  (past-MID density, defense-pact flag) — must clear `wopr protocol` before
-  conditioning. Next trend ideas: small-multiple country trajectories,
+  TLS intermediate pinned in wopr/pipeline/cow-ca.pem). ~~MID/alliance protocol candidates~~
+  **tested and REJECTED** (`wopr protocol --study pair`: 0/4 beat baseline on
+  tune; ever-MID −0.7% on validate). The decomposition matters: cold pairs
+  with MID history onset at **30×** the never-MID rate, but Brier cannot see
+  rare-event refinement at pair base rates — signal ships as display (pair
+  rate() notes). A pair-grain adoption metric (log-loss) may be
+  pre-registered for a future vantage era. Next trend ideas: small-multiple country trajectories,
   protest trends, Maddison historical GDP via OWID.
 - **Covariate-widened reference classes**: regime type (V-Dem/Polity),
   GDP/capita, ethnic fractionalization — class = "countries like this one",

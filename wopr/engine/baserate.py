@@ -133,6 +133,35 @@ def load_youth(tables: Path = TABLES) -> dict:
     return out
 
 
+def load_mids(tables: Path = TABLES) -> dict:
+    """(gwno_a, gwno_b) a<b -> list of (year, hostility, fatal) militarized
+    dispute years (COW dyadic MID, 1946–2014). Context for the pair universe;
+    enters buckets only through the protocol's flag hook."""
+    path = tables / "mids.csv"
+    if not path.exists():
+        return {}
+    out: dict[tuple, list] = {}
+    with open(path, newline="") as f:
+        for r in csv.DictReader(f):
+            key = (int(r["gwno_a"]), int(r["gwno_b"]))
+            out.setdefault(key, []).append((int(r["year"]), int(r["hostility"]), int(r["fatal"])))
+    return out
+
+
+def load_alliances(tables: Path = TABLES) -> dict:
+    """(gwno_a, gwno_b) a<b -> set of years with a defense pact in force
+    (COW Formal Alliances, 1946–2012)."""
+    path = tables / "alliances.csv"
+    if not path.exists():
+        return {}
+    out: dict[tuple, set] = {}
+    with open(path, newline="") as f:
+        for r in csv.DictReader(f):
+            if r["defense"] == "1":
+                out.setdefault((int(r["gwno_a"]), int(r["gwno_b"])), set()).add(int(r["year"]))
+    return out
+
+
 def load_regime(tables: Path = TABLES) -> dict:
     """(gwno, year) -> 'aut'|'mid'|'dem' from the committed V-Dem/OWID table.
     The middle band (electoral autocracies + electoral democracies) is the
@@ -225,6 +254,7 @@ def load_substrate(tables: Path = TABLES) -> dict:
                 "sb": int(r["ged_deaths"]) if r["ged_deaths"] != "" else None,
             }
     pairs: dict[int, Unit] = {}
+    pair_ids: dict[tuple, int] = {}
     region_of = {g: u.region[0] for g, u in countries.items()}
     with open(tables / "pair-year.csv", newline="") as f:
         for r in csv.DictReader(f):
@@ -232,6 +262,7 @@ def load_substrate(tables: Path = TABLES) -> dict:
             u = pairs.get(pid)
             if u is None:
                 a, b = int(r["gwno_a"]), int(r["gwno_b"])
+                pair_ids[(a, b)] = pid
                 regions = sorted({region_of.get(a, ""), region_of.get(b, "")} - {""})
                 u = pairs[pid] = Unit(pid, "", regions, year, year)
             u.first_year = min(u.first_year, year)
@@ -265,6 +296,9 @@ def load_substrate(tables: Path = TABLES) -> dict:
         "nbr_active": _nbr_active(countries, neighbors),
         "regime": load_regime(tables),
         "youth": load_youth(tables),
+        "pair_ids": pair_ids,
+        "mids": load_mids(tables),
+        "alliances": load_alliances(tables),
     }
 
 
@@ -329,7 +363,7 @@ def bucket_of(
     spec: Spec,
     nbr: set | None = None,
     regime: dict | None = None,
-    youth: set | None = None,
+    flag: set | None = None,
 ) -> str | None:
     """Recency/episode-age bucket entering `year`, from history strictly
     before it. Active units are banded by consecutive hit-years (episode
@@ -337,9 +371,13 @@ def bucket_of(
     "+nbr" when `nbr` (the substrate's neighbor-at-war set, country grain)
     flags a ≤400km neighbor in conflict last year, and "~aut/~mid/~dem" from
     last year's regime band when `regime` covers the unit (V-Dem RoW,
-    collapsed; missing coverage simply omits the suffix). For `terminates`
-    the bucket is the episode's own activity state (the acd-active twin).
-    Runs touching the substrate start are left-censored (age reads low)."""
+    collapsed; missing coverage simply omits the suffix). `flag` is the
+    generic walk-forward-safe covariate hook — a set of (unit_id, year)
+    membership keys that splits non-active buckets %f/%o; default-off, passed
+    only by the tune/validate protocol until a covariate is adopted (youth:
+    tested, rejected; see docs/method.md). For `terminates` the bucket is the
+    episode's own activity state (the acd-active twin). Runs touching the
+    substrate start are left-censored (age reads low)."""
     spec = bucket_twin(spec)
     lo, _ = spec.period
     start = max(lo, u.first_year if spec.measure == "acd-active" else max(u.first_year, DEATHS_START))
@@ -371,21 +409,21 @@ def bucket_of(
         band = regime.get((u.id, year - 1))
         if band:
             base = f"{base}~{band}"
-    if youth is not None and not base.startswith("active"):
-        # youth predicts ONSET, so it refines non-active buckets only
-        base = f"{base}%y" if (u.id, year - 1) in youth else f"{base}%o"
+    if flag is not None and not base.startswith("active"):
+        # covariate flags refine ONSET (non-active) buckets only
+        base = f"{base}%f" if (u.id, year - 1) in flag else f"{base}%o"
     return base
 
 
 def unit_bucket_years(
-    u: Unit, spec: Spec, bucket: str, nbr: set | None = None, regime: dict | None = None, youth: set | None = None
+    u: Unit, spec: Spec, bucket: str, nbr: set | None = None, regime: dict | None = None, flag: set | None = None
 ) -> tuple[int, int]:
     """(hits k, exposure years n) for u restricted to years entered in `bucket`."""
     lo, hi = spec.period
     k = n = 0
     for y in range(lo + 1, hi + 1):
         h = hit(u, y, spec)
-        if h is None or bucket_of(u, y, spec, nbr, regime, youth) != bucket:
+        if h is None or bucket_of(u, y, spec, nbr, regime, flag) != bucket:
             continue
         n += 1
         k += int(h)
@@ -510,7 +548,7 @@ def rate(spec: Spec, substrate: dict) -> dict:
     floor = 0.5 / (n_level + 1)
     out["headline_level"] = use
     out["p"] = round(min(max(p, floor), 1 - floor), 4)
-    out["notes"] = notes(spec)
+    out["notes"] = notes(spec, substrate)
     if nowcast:
         out["notes"].append(
             f"bucket nowcast: {nowcast['year']} already meets the measure "
@@ -552,7 +590,7 @@ def nowcast_bucket(u: Unit, spec: Spec, partial: dict | None) -> dict | None:
     return {"bucket": f"{band}|{intensity}", "year": partial["year"], "months": partial["months"], "total": got}
 
 
-def notes(spec: Spec) -> list[str]:
+def notes(spec: Spec, substrate: dict | None = None) -> list[str]:
     ns = ["annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate"]
     horizon = spec.as_of - (spec.period[1] + 1)
     if horizon > 0:
@@ -564,6 +602,17 @@ def notes(spec: Spec) -> list[str]:
         ns.append("dyad universe = dyads UCDP ever observed; this is a recurrence rate, not a rate for arbitrary pairs")
     if spec.measure == "deaths":
         ns.append(f"death counts begin {DEATHS_START} (GED); earlier history invisible to this measure")
+    if spec.grain == "pair" and substrate is not None and substrate.get("mids"):
+        by_pid = {pid: ab for ab, pid in substrate.get("pair_ids", {}).items()}
+        disputes = substrate["mids"].get(by_pid.get(spec.unit, ()), [])
+        if disputes:
+            years = [y for y, _, _ in disputes]
+            hi = max(h for _, h, _ in disputes)
+            ns.append(
+                f"COW record: militarized disputes in {len(years)} year(s), {min(years)}–{max(years)} "
+                f"(max hostility {hi}/5). Cold pairs with MID history onset ~30× the never-MID rate "
+                f"(measured 2026-07) — context only; conditioning on it failed the protocol (see methods)"
+            )
     return ns
 
 

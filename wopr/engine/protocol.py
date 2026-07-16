@@ -2,9 +2,11 @@
 
 The rule that makes the arena and backtest mean anything: you may search for
 a conditioning scheme only on data you agree never to score, and you look at
-the held-out data exactly once. This module enforces that for the youth
-covariate (the descriptive-test winner), and it is the template for every
-future covariate.
+the held-out data exactly once. Two studies live here — youth on the country
+grain (run/render) and the COW pair covariates (run_pair/render_pair) — and
+they are the template for every future covariate. Verdicts so far: youth
+REJECTED, all four COW pair features REJECTED (see docs/method.md; the pair
+study also exposed that Brier is nearly blind at pair-grain base rates).
 
 Split (by time, matching real deployment — fit on the past, judge on the
 more-recent future):
@@ -69,7 +71,7 @@ def run() -> dict:
     schemes = {}
     for pctl in CANDIDATE_PCTL:
         ys = young_set(youth, pctl, SPLIT)
-        schemes[pctl] = walk(grain, measure, types, threshold, substrate, youth=ys)
+        schemes[pctl] = walk(grain, measure, types, threshold, substrate, flag=ys)
 
     # 1) search on TUNE only
     base_tune, n_tune = split_brier(baseline, hi=SPLIT)
@@ -105,6 +107,120 @@ def run() -> dict:
             "verdict": "ADOPT" if adopt else "REJECT — gain below the 1% bar / inconsistent on tune",
         },
     }
+
+
+PAIR_SUITE = ("pair", "acd-active", (), 25)
+
+
+def pair_candidates(substrate: dict) -> dict[str, set]:
+    """Pre-registered pair-level covariate candidates from COW, each a set of
+    (pair_id, year) keys meaning "true as of the end of `year`". All are
+    walk-forward-safe: membership at year Y uses only events ≤ Y.
+
+    Censoring note, fixed before looking at any score: MID coding ends 2014
+    and alliances end 2012. ever-/fatal-mid don't censor (history is
+    permanent). mid-25yr sees a shrinking window after 2014. defense-pact
+    carries the last observed (2012) status forward, the same rule as the
+    population table."""
+    pair_ids, mids, alliances = substrate["pair_ids"], substrate["mids"], substrate["alliances"]
+    last = substrate["last_year"]
+    ever, fatal, recent, defense = set(), set(), set(), set()
+    for key, disputes in mids.items():
+        pid = pair_ids.get(key)
+        if pid is None:
+            continue
+        years = sorted(y for y, _, _ in disputes)
+        for y in range(years[0], last + 1):
+            ever.add((pid, y))
+        fyears = sorted(y for y, _, f in disputes if f)
+        for y in range(fyears[0], last + 1) if fyears else ():
+            fatal.add((pid, y))
+        for y in range(years[0], last + 1):
+            if any(y - 24 <= d <= y for d in years):
+                recent.add((pid, y))
+    for key, years in alliances.items():
+        pid = pair_ids.get(key)
+        if pid is None:
+            continue
+        for y in years:
+            defense.add((pid, y))
+        if max(years) >= 2012:  # in force at the data edge -> carry forward
+            for y in range(2013, last + 1):
+                defense.add((pid, y))
+    return {"ever-mid": ever, "mid-25yr": recent, "fatal-mid": fatal, "defense-pact": defense}
+
+
+def run_pair() -> dict:
+    """The pair study: does COW dispute/alliance history earn a bucket split
+    in the pair universe? Same split and bar as the youth study; because the
+    candidates are heterogeneous features (not cuts of one variable), the
+    consistency guard becomes: the selected candidate must itself beat the
+    baseline on TUNE, not merely be the least bad."""
+    substrate = baserate.load_substrate()
+    if not substrate["mids"]:
+        raise SystemExit("no mids.csv built — run `wopr pull && wopr build` first")
+    grain, measure, types, threshold = PAIR_SUITE
+
+    baseline = walk(grain, measure, types, threshold, substrate)
+    candidates = pair_candidates(substrate)
+    schemes = {name: walk(grain, measure, types, threshold, substrate, flag=fs) for name, fs in candidates.items()}
+
+    base_tune, n_tune = split_brier(baseline, hi=SPLIT)
+    tune_scores = {name: split_brier(recs, hi=SPLIT)[0] for name, recs in schemes.items()}
+    best = min(tune_scores, key=lambda k: tune_scores[k])
+
+    base_val, n_val = split_brier(baseline, lo=SPLIT + 1)
+    best_val, _ = split_brier(schemes[best], lo=SPLIT + 1)
+    delta = best_val - base_val
+    rel_gain = -delta / base_val if base_val else 0.0
+    helped = sum(1 for v in tune_scores.values() if v < base_tune)
+    adopt = rel_gain >= MIN_REL_GAIN and tune_scores[best] < base_tune
+
+    return {
+        "split": SPLIT,
+        "suite": f"{grain}/{measure}",
+        "min_rel_gain": MIN_REL_GAIN,
+        "flag_sizes": {k: len(v) for k, v in candidates.items()},
+        "tune": {
+            "n": n_tune,
+            "baseline_brier": round(base_tune, 6),
+            "scheme_brier": {k: round(v, 6) for k, v in tune_scores.items()},
+            "selected": best,
+            "candidates_beating_baseline": f"{helped}/{len(tune_scores)}",
+        },
+        "validate": {
+            "n": n_val,
+            "baseline_brier": round(base_val, 6),
+            "selected_brier": round(best_val, 6),
+            "delta_brier": round(delta, 6),
+            "rel_gain": round(rel_gain, 4),
+            "verdict": "ADOPT" if adopt else "REJECT — below the 1% bar / doesn't beat baseline on tune",
+        },
+    }
+
+
+def render_pair(r: dict) -> str:
+    t, v = r["tune"], r["validate"]
+    lines = [
+        f"tune/validate protocol — COW pair covariates on {r['suite']} (split at {r['split']})",
+        "",
+        f"TUNE ({t['n']:,} pair-years, ≤{r['split']}): baseline {t['baseline_brier']}",
+        "  candidates (Brier, lower=better):",
+    ]
+    for name, b in sorted(t["scheme_brier"].items(), key=lambda kv: kv[1]):
+        mark = " ← selected" if name == t["selected"] else ""
+        lines.append(f"    {name:<14} {b}  ({r['flag_sizes'][name]:,} flagged pair-years){mark}")
+    lines += [
+        f"  candidates beating baseline on tune: {t['candidates_beating_baseline']}",
+        "",
+        f"VALIDATE ({v['n']:,} pair-years, >{r['split']}) — read once:",
+        f"  baseline           {v['baseline_brier']}",
+        f"  selected           {v['selected_brier']}",
+        f"  ΔBrier             {v['delta_brier']:+}  ({v['rel_gain']:+.1%} relative)",
+        f"  adoption bar       {r['min_rel_gain']:.0%} relative + selected beats baseline on tune",
+        f"  → {v['verdict']}",
+    ]
+    return "\n".join(lines)
 
 
 def render(r: dict) -> str:

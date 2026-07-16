@@ -268,6 +268,39 @@ covariate 0/4 cuts could beat on their own tuning data. That gap is the
 whole reason the protocol exists. The data stays committed (it's real and
 useful context on country pages); the live engine is unchanged.
 
+### The COW pair study: a 30× signal the metric cannot see
+
+`wopr protocol --study pair` ran the four pre-registered COW candidates on
+the pair universe (pair/acd-active, same 2007 split, same bar): **ever-MID,
+MID-in-25yr, fatal-MID, defense-pact**. Verdict: **all four REJECTED** —
+0/4 beat the baseline on tune; the selected one (ever-MID) was *worse* on
+validate (−0.7% relative).
+
+The decomposition is the finding. Descriptively the signal is enormous:
+**cold pairs with militarized-dispute history onset at 30× the rate of
+never-MID pairs** (0.194% vs 0.006%; 44/22,649 vs 14/215,855 pair-years).
+But at a base rate of ~0.0006, even *perfect* conditioning moves aggregate
+Brier by well under 0.1% — arithmetic, not noise: the no-history mass is
+already scored nearly perfectly, and the flagged class is too small for its
+improvement to register. **Brier is nearly blind to rare-event refinement at
+the pair grain.** (The same mechanism explains why the pair suite shows only
++19.6% skill, and why the neighbor flag — a 7× class signal — was
+Brier-invisible at country grain.)
+
+Per the a-priori-once rule the verdict is final for this feature on this
+history: the bar was pre-registered as Brier, and switching metrics after
+seeing the result would be p-hacking. The signal ships as *display*: pair
+`rate()` output now notes a pair's COW dispute record and the measured 30×
+class rate, explicitly labeled as context that failed the protocol. If the
+pair grain ever deserves its own adoption metric (log-loss would see this
+signal), it must be pre-registered before the *next* vantage era so the
+validate years are genuinely fresh.
+
+Protocol scoreboard: regime REJECTED, horizon-decay REJECTED, youth
+REJECTED, COW pair features REJECTED. Four for four — the recency-structured
+base rate keeps absorbing everything thrown at it, which is itself the
+strongest evidence yet for the Cederman–Weidmann position.
+
 ## Known approximations (read before trusting a prior)
 
 - **Windows.** The engine computes annual-hit probabilities. Sub-annual

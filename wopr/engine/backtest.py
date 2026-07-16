@@ -40,11 +40,11 @@ SUITE = (
 )
 
 
-def walk(grain: str, measure: str, types: tuple, threshold: int, substrate: dict, burn_in: int = 5, youth: set | None = None) -> list[dict]:
+def walk(grain: str, measure: str, types: tuple, threshold: int, substrate: dict, burn_in: int = 5, flag: set | None = None) -> list[dict]:
     """Score every observable unit-year, walking forward. Returns records
-    {year, unit, bucket, level, p, outcome}. `youth` (a set of young
-    (gwno,year), passed only by the tune/validate protocol) refines
-    non-active country buckets; off by default, so the live engine is
+    {year, unit, bucket, level, p, outcome}. `flag` (a set of (unit_id, year)
+    keys, passed only by the tune/validate protocol) splits non-active
+    buckets on a candidate covariate; off by default, so the live engine is
     untouched."""
     spec = Spec(grain, 0, measure, types, threshold).normalized(
         substrate["last_year"], substrate.get("coup_span")
@@ -72,7 +72,7 @@ def walk(grain: str, measure: str, types: tuple, threshold: int, substrate: dict
             h = hit(u, y, spec)
             if h is None:
                 continue
-            b = bucket_of(u, y, spec, nbr, regime, youth)
+            b = bucket_of(u, y, spec, nbr, regime, flag)
             if b is None:
                 continue
             hu[y], bu[y] = h, b

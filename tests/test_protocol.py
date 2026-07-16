@@ -12,11 +12,11 @@ class TestYouthHook(unittest.TestCase):
         s = Spec("country", 1, "acd-active", (), 25, 2021, (2000, 2020))
         young = {(1, 2010)}  # young entering 2011
         # non-active year gets the youth suffix
-        self.assertEqual(bucket_of(u, 2011, s, youth=young), "cold%y")
-        self.assertEqual(bucket_of(u, 2012, s, youth=young), "cold%o")  # not in set
+        self.assertEqual(bucket_of(u, 2011, s, flag=young), "cold%f")
+        self.assertEqual(bucket_of(u, 2012, s, flag=young), "cold%o")  # not in set
         # active buckets never get it (youth predicts onset, not continuation)
-        self.assertFalse(bucket_of(u, 2020, s, youth=young).startswith("active") and "%" in bucket_of(u, 2020, s, youth=young))
-        b2020 = bucket_of(u, 2020, s, youth={(1, 2019)})
+        self.assertFalse(bucket_of(u, 2020, s, flag=young).startswith("active") and "%" in bucket_of(u, 2020, s, flag=young))
+        b2020 = bucket_of(u, 2020, s, flag={(1, 2019)})
         self.assertNotIn("%", b2020)
 
     def test_off_by_default(self):
