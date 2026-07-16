@@ -11,7 +11,6 @@ window's end) — forecasts logged after the outcome was effectively knowable
 never count.
 """
 
-import datetime
 import math
 
 
@@ -59,12 +58,10 @@ def question_rows(questions: list[dict]) -> list[dict]:
 
 
 def aggregate(rows: list[dict]) -> dict:
+    # no timestamps in here: the scorecard must be byte-stable when nothing
+    # resolved, so the monthly refresh only commits meaningful diffs
     paired = [r for r in rows if r["user_p"] is not None and r["prior_p"] is not None]
-    out = {
-        "resolved": len(rows),
-        "paired": len(paired),
-        "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-    }
+    out = {"resolved": len(rows), "paired": len(paired)}
     if rows:
         withprior = [r for r in rows if r["prior_p"] is not None]
         if withprior:

@@ -1,0 +1,83 @@
+id: 2026-013
+slug: tunisia-sb-deaths-25-in-2027
+title: 'Tunisia: sb deaths ≥25 in 2027'
+question: Will UCDP record ≥25 battle-related deaths (best estimate, state-based) in Tunisia between 2027-01-01
+  and 2027-12-31 inclusive?
+created: '2026-07-16T04:26:29Z'
+status: open
+tags:
+- low-anchor
+criteria:
+  scope:
+    kind: country
+    id: 616
+    name: Tunisia
+  types:
+  - sb
+  measure: deaths
+  threshold: 25
+  window:
+    start: '2027-01-01'
+    end: '2027-12-31'
+resolution_policy:
+  method: auto
+forecasts: []
+prior:
+  p: 0.0462
+  computed: '2026-07-16T04:28:01Z'
+  engine: 0.1.0
+  detail:
+    spec:
+      grain: country
+      unit: 616
+      measure: deaths
+      types:
+      - sb
+      threshold: 25
+      as_of: 2027
+      period:
+      - 1989
+      - 2025
+    unit_name: Tunisia
+    bucket: dormant
+    bucket_data_end: 2025
+    levels:
+      self:
+        units: 1
+        years: 6
+        hits: 0
+        rate: 0.0
+      region:
+        units: 52
+        years: 216
+        hits: 18
+        rate: 0.0833
+        M: 7.4
+        posterior: 0.0462
+      global:
+        units: 181
+        years: 576
+        hits: 36
+        rate: 0.0625
+        M: 5.4
+        posterior: 0.0295
+    unconditional:
+      self:
+        years: 37
+        hits: 4
+        rate: 0.1081
+      region:
+        years: 1897
+        hits: 476
+        rate: 0.2509
+      global:
+        years: 6556
+        hits: 1146
+        rate: 0.1748
+    headline_level: region
+    p: 0.0462
+    notes:
+    - annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate
+    - 'as_of 2027 is 1 year(s) past the substrate (2025): bucket taken at the data edge, one-step rate
+      applied — slightly overstates persistence at longer horizons'
+    - death counts begin 1989 (GED); earlier history invisible to this measure

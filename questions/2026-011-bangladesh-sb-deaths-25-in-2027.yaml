@@ -1,0 +1,83 @@
+id: 2026-011
+slug: bangladesh-sb-deaths-25-in-2027
+title: 'Bangladesh: sb deaths ≥25 in 2027'
+question: Will UCDP record ≥25 battle-related deaths (best estimate, state-based) in Bangladesh between
+  2027-01-01 and 2027-12-31 inclusive?
+created: '2026-07-16T04:26:28Z'
+status: open
+tags:
+- asia
+criteria:
+  scope:
+    kind: country
+    id: 771
+    name: Bangladesh
+  types:
+  - sb
+  measure: deaths
+  threshold: 25
+  window:
+    start: '2027-01-01'
+    end: '2027-12-31'
+resolution_policy:
+  method: auto
+forecasts: []
+prior:
+  p: 0.0398
+  computed: '2026-07-16T04:28:01Z'
+  engine: 0.1.0
+  detail:
+    spec:
+      grain: country
+      unit: 771
+      measure: deaths
+      types:
+      - sb
+      threshold: 25
+      as_of: 2027
+      period:
+      - 1989
+      - 2025
+    unit_name: Bangladesh
+    bucket: dormant
+    bucket_data_end: 2025
+    levels:
+      self:
+        units: 1
+        years: 19
+        hits: 1
+        rate: 0.0526
+      region:
+        units: 37
+        years: 101
+        hits: 4
+        rate: 0.0396
+        M: 1000.0
+        posterior: 0.0398
+      global:
+        units: 181
+        years: 576
+        hits: 36
+        rate: 0.0625
+        M: 5.4
+        posterior: 0.0548
+    unconditional:
+      self:
+        years: 37
+        hits: 7
+        rate: 0.1892
+      region:
+        years: 1346
+        hits: 304
+        rate: 0.2259
+      global:
+        years: 6556
+        hits: 1146
+        rate: 0.1748
+    headline_level: region
+    p: 0.0398
+    notes:
+    - annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate
+    - 'as_of 2027 is 1 year(s) past the substrate (2025): bucket taken at the data edge, one-step rate
+      applied — slightly overstates persistence at longer horizons'
+    - death counts begin 1989 (GED); earlier history invisible to this measure

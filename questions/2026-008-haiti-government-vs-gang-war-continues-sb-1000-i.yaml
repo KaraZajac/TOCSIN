@@ -1,0 +1,84 @@
+id: 2026-008
+slug: haiti-government-vs-gang-war-continues-sb-1000-i
+title: 'Haiti: government-vs-gang war continues (sb ≥1000 in 2027)'
+question: Will UCDP record ≥1000 battle-related deaths (best estimate, state-based) in Haiti between 2027-01-01
+  and 2027-12-31 inclusive?
+created: '2026-07-16T04:26:28Z'
+status: open
+tags:
+- gangs
+- americas
+criteria:
+  scope:
+    kind: country
+    id: 41
+    name: Haiti
+  types:
+  - sb
+  measure: deaths
+  threshold: 1000
+  window:
+    start: '2027-01-01'
+    end: '2027-12-31'
+resolution_policy:
+  method: auto
+forecasts: []
+prior:
+  p: 0.7143
+  computed: '2026-07-16T04:28:54Z'
+  engine: 0.1.0
+  detail:
+    spec:
+      grain: country
+      unit: 41
+      measure: deaths
+      types:
+      - sb
+      threshold: 1000
+      as_of: 2027
+      period:
+      - 1989
+      - 2025
+    unit_name: Haiti
+    bucket: active
+    bucket_data_end: 2025
+    levels:
+      self:
+        units: 1
+        years: 0
+        hits: 0
+        rate: null
+      region:
+        units: 29
+        years: 15
+        hits: 9
+        rate: 0.6
+        M: 1000.0
+        posterior: 0.6
+      global:
+        units: 181
+        years: 315
+        hits: 225
+        rate: 0.7143
+        M: 5.8
+        posterior: 0.7143
+    unconditional:
+      self:
+        years: 37
+        hits: 1
+        rate: 0.027
+      region:
+        years: 1073
+        hits: 16
+        rate: 0.0149
+      global:
+        years: 6556
+        hits: 330
+        rate: 0.0503
+    headline_level: global
+    p: 0.7143
+    notes:
+    - annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate
+    - 'as_of 2027 is 1 year(s) past the substrate (2025): bucket taken at the data edge, one-step rate
+      applied — slightly overstates persistence at longer horizons'
+    - death counts begin 1989 (GED); earlier history invisible to this measure

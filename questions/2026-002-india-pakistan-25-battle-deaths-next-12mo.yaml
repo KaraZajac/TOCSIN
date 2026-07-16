@@ -1,0 +1,83 @@
+id: 2026-002
+slug: india-pakistan-25-battle-deaths-next-12mo
+title: 'India-Pakistan: 25+ battle deaths (next 12mo)'
+question: Will UCDP record ≥25 battle-related deaths (best estimate, state-based) in the dyad Government
+  of India - Government of Pakistan between 2026-08-01 and 2027-07-31 inclusive?
+created: '2026-07-16T04:26:25Z'
+status: open
+tags:
+- interstate
+- south-asia
+criteria:
+  scope:
+    kind: dyad
+    id: 422
+    name: Government of India - Government of Pakistan
+  types:
+  - sb
+  measure: deaths
+  threshold: 25
+  window:
+    start: '2026-08-01'
+    end: '2027-07-31'
+resolution_policy:
+  method: auto
+forecasts: []
+prior:
+  p: 0.7952
+  computed: '2026-07-16T04:27:59Z'
+  engine: 0.1.0
+  detail:
+    spec:
+      grain: dyad
+      unit: 422
+      measure: deaths
+      types:
+      - sb
+      threshold: 25
+      as_of: 2026
+      period:
+      - 1989
+      - 2025
+    unit_name: Government of India - Government of Pakistan
+    bucket: active
+    bucket_data_end: 2025
+    levels:
+      self:
+        units: 1
+        years: 21
+        hits: 17
+        rate: 0.8095
+      region:
+        units: 192
+        years: 680
+        hits: 500
+        rate: 0.7353
+        M: 5.0
+        posterior: 0.7952
+      global:
+        units: 697
+        years: 2003
+        hits: 1396
+        rate: 0.697
+        M: 5.0
+        posterior: 0.7879
+    unconditional:
+      self:
+        years: 37
+        hits: 22
+        rate: 0.5946
+      region:
+        years: 5774
+        hits: 702
+        rate: 0.1216
+      global:
+        years: 19495
+        hits: 2081
+        rate: 0.1067
+    headline_level: region
+    p: 0.7952
+    notes:
+    - annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate
+    - dyad universe = dyads UCDP ever observed; this is a recurrence rate, not a rate for arbitrary pairs
+    - death counts begin 1989 (GED); earlier history invisible to this measure

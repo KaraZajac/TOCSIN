@@ -34,6 +34,13 @@ in now. The first substrate year is skipped (no observable history), and
 "never" is left-censored: a country quiet since 1989 may not truly be `cold`
 in the long-run sense.
 
+The target's bucket is taken **at the edge of observation** (substrate end +
+1). A question about a year beyond that — e.g. calendar 2027 asked in
+mid-2026 with annual data through 2025 — does not decay the bucket for years
+nobody has observed; the one-step conditional rate is applied at the longer
+horizon, with a note, which slightly overstates persistence. Nowcasting the
+bucket from candidate months is on the roadmap.
+
 ## The ladder and shrinkage
 
 For target u in bucket B:
@@ -58,6 +65,17 @@ own history dominate.
 class-years, else the global posterior; clamped by a Jeffreys floor
 `0.5/(n+1)` so the engine never says 0 or 1. If the bucket is empty even
 globally, it falls back to the global unconditional rate and says so.
+
+## Measured reliability (walk-forward backtest)
+
+`wopr backtest` replays the engine over every observable unit-year using only
+prior data (~47k pseudo-forecasts; results in `data/backtest.yaml`). As of
+UCDP 26.1: country-grain priors are well calibrated end to end (sb≥25 skill
++71% vs climatology; 90–100% bin predicts .947, observes .934). **Dyad-grain
+priors run overconfident at the top** (active-bucket continuation predicted
+.79, observed .73; 70–90% bins ~5–6 points high) — dyad episodes terminate
+more than pooled persistence implies. Until duration-dependent hazards land
+(roadmap), shade active-dyad continuation priors down a few points.
 
 ## Known approximations (read before trusting a prior)
 

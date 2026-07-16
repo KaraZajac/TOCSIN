@@ -1,0 +1,83 @@
+id: 2026-010
+slug: ecuador-sb-deaths-25-in-2027
+title: 'Ecuador: sb deaths ≥25 in 2027'
+question: Will UCDP record ≥25 battle-related deaths (best estimate, state-based) in Ecuador between 2027-01-01
+  and 2027-12-31 inclusive?
+created: '2026-07-16T04:26:28Z'
+status: open
+tags:
+- americas
+criteria:
+  scope:
+    kind: country
+    id: 130
+    name: Ecuador
+  types:
+  - sb
+  measure: deaths
+  threshold: 25
+  window:
+    start: '2027-01-01'
+    end: '2027-12-31'
+resolution_policy:
+  method: auto
+forecasts: []
+prior:
+  p: 0.022
+  computed: '2026-07-16T04:28:00Z'
+  engine: 0.1.0
+  detail:
+    spec:
+      grain: country
+      unit: 130
+      measure: deaths
+      types:
+      - sb
+      threshold: 25
+      as_of: 2027
+      period:
+      - 1989
+      - 2025
+    unit_name: Ecuador
+    bucket: cold
+    bucket_data_end: 2025
+    levels:
+      self:
+        units: 1
+        years: 26
+        hits: 1
+        rate: 0.0385
+      region:
+        units: 29
+        years: 843
+        hits: 7
+        rate: 0.0083
+        M: 31.4
+        posterior: 0.022
+      global:
+        units: 181
+        years: 4388
+        hits: 74
+        rate: 0.0169
+        M: 5.9
+        posterior: 0.0345
+    unconditional:
+      self:
+        years: 37
+        hits: 1
+        rate: 0.027
+      region:
+        years: 1073
+        hits: 77
+        rate: 0.0718
+      global:
+        years: 6556
+        hits: 1146
+        rate: 0.1748
+    headline_level: region
+    p: 0.022
+    notes:
+    - annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate
+    - 'as_of 2027 is 1 year(s) past the substrate (2025): bucket taken at the data edge, one-step rate
+      applied — slightly overstates persistence at longer horizons'
+    - death counts begin 1989 (GED); earlier history invisible to this measure

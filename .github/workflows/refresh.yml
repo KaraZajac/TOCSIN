@@ -1,0 +1,63 @@
+# Monthly heartbeat: pull the newest UCDP data (candidate GED lands monthly,
+# the annual release mid-year), rebuild the tables, auto-resolve due
+# questions, refresh the scorecard and engine backtest, and commit whatever
+# changed. ACLED pulls are local-only (they need .env credentials); to enable
+# them here, add ACLED_USERNAME/ACLED_PASSWORD as repo secrets and export
+# them in the resolve step.
+
+name: refresh
+
+on:
+  schedule:
+    - cron: "23 6 20 * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install pyyaml
+
+      - name: Pull and build
+        run: |
+          python3 -m wopr pull
+          python3 -m wopr build
+
+      - name: Resolve due questions
+        run: python3 -m wopr resolve
+
+      - name: Verify
+        run: |
+          python3 -m wopr verify
+          python3 -m unittest discover -s tests -q
+
+      - name: Refresh scorecard and backtest
+        run: |
+          python3 -m wopr score --write
+          python3 -m wopr backtest --write
+
+      - name: Commit changes
+        run: |
+          git config user.name "wopr-refresh"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "no data changes this month"
+          else
+            git commit -m "refresh: $(date -u +%Y-%m-%d) — new UCDP data, resolutions, scorecard"
+            git push
+          fi

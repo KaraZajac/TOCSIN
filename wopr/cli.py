@@ -334,6 +334,10 @@ def main(argv: list[str] | None = None) -> None:
     p = sub.add_parser("score", help="Brier/log/calibration, you vs the prior")
     p.add_argument("--write", action="store_true", help="also write data/scorecard.yaml")
 
+    p = sub.add_parser("backtest", help="walk-forward test: is the engine itself calibrated?")
+    p.add_argument("--burn-in", type=int, default=5, help="years of history before scoring starts")
+    p.add_argument("--write", action="store_true", help="also write data/backtest.yaml")
+
     sub.add_parser("list", help="all questions, one line each")
     p = sub.add_parser("show", help="one question in full")
     p.add_argument("id")
@@ -357,6 +361,14 @@ def main(argv: list[str] | None = None) -> None:
         from wopr.pipeline import acled
 
         acled.api_check() if args.api_check else acled.pull(force=args.force)
+    elif args.cmd == "backtest":
+        from wopr.engine import backtest
+
+        report = backtest.run(burn_in=args.burn_in)
+        if args.write:
+            with open(DATA / "backtest.yaml", "w") as f:
+                yaml.safe_dump(report, f, sort_keys=False, allow_unicode=True)
+            print(f"wrote {DATA / 'backtest.yaml'}")
     else:
         {
             "rate": cmd_rate,

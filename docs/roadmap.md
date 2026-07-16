@@ -12,6 +12,9 @@
 - **Rolling sub-annual rates** from the month tables (P(threshold in next 12
   months) computed from rolling windows rather than calendar-year
   approximation).
+- **Bucket nowcasting**: use candidate months (and ACLED weeklies) to update
+  a unit's recency bucket for the current partial year, instead of taking
+  status at the annual data edge.
 - **Proper hierarchical model** replacing the moment-matched EB (partial
   pooling over region × bucket, fitted once at build time).
 - **Conflict-scope priors** (aggregate dyad substrate per conflict id).

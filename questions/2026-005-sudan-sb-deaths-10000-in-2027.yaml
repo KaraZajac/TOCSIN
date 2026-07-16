@@ -1,0 +1,84 @@
+id: 2026-005
+slug: sudan-sb-deaths-10000-in-2027
+title: 'Sudan: sb deaths ≥10000 in 2027'
+question: Will UCDP record ≥10000 battle-related deaths (best estimate, state-based) in Sudan between
+  2027-01-01 and 2027-12-31 inclusive?
+created: '2026-07-16T04:26:27Z'
+status: open
+tags:
+- war
+- africa
+criteria:
+  scope:
+    kind: country
+    id: 625
+    name: Sudan
+  types:
+  - sb
+  measure: deaths
+  threshold: 10000
+  window:
+    start: '2027-01-01'
+    end: '2027-12-31'
+resolution_policy:
+  method: auto
+forecasts: []
+prior:
+  p: 0.5118
+  computed: '2026-07-16T04:28:00Z'
+  engine: 0.1.0
+  detail:
+    spec:
+      grain: country
+      unit: 625
+      measure: deaths
+      types:
+      - sb
+      threshold: 10000
+      as_of: 2027
+      period:
+      - 1989
+      - 2025
+    unit_name: Sudan
+    bucket: active
+    bucket_data_end: 2025
+    levels:
+      self:
+        units: 1
+        years: 1
+        hits: 0
+        rate: 0.0
+      region:
+        units: 52
+        years: 12
+        hits: 5
+        rate: 0.4167
+        M: 1000.0
+        posterior: 0.4163
+      global:
+        units: 181
+        years: 41
+        hits: 25
+        rate: 0.6098
+        M: 5.2
+        posterior: 0.5118
+    unconditional:
+      self:
+        years: 37
+        hits: 2
+        rate: 0.0541
+      region:
+        years: 1897
+        hits: 13
+        rate: 0.0069
+      global:
+        years: 6556
+        hits: 44
+        rate: 0.0067
+    headline_level: global
+    p: 0.5118
+    notes:
+    - annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate
+    - 'as_of 2027 is 1 year(s) past the substrate (2025): bucket taken at the data edge, one-step rate
+      applied — slightly overstates persistence at longer horizons'
+    - death counts begin 1989 (GED); earlier history invisible to this measure

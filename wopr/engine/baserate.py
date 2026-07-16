@@ -209,7 +209,10 @@ def rate(spec: Spec, substrate: dict) -> dict:
     if spec.unit not in units:
         raise KeyError(f"unknown {spec.grain} id {spec.unit}")
     me = units[spec.unit]
-    bucket = bucket_of(me, spec.as_of, spec) or "cold"
+    # the unit's bucket is its status at the edge of observation — unobserved
+    # years between the substrate end and as_of must not decay it toward cold
+    bucket_year = min(spec.as_of, spec.period[1] + 1)
+    bucket = bucket_of(me, bucket_year, spec) or "cold"
     k_self, n_self = unit_bucket_years(me, spec, bucket)
 
     out = {
@@ -260,6 +263,12 @@ def rate(spec: Spec, substrate: dict) -> dict:
 
 def notes(spec: Spec) -> list[str]:
     ns = ["annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate"]
+    horizon = spec.as_of - (spec.period[1] + 1)
+    if horizon > 0:
+        ns.append(
+            f"as_of {spec.as_of} is {horizon} year(s) past the substrate ({spec.period[1]}): bucket taken at the "
+            f"data edge, one-step rate applied — slightly overstates persistence at longer horizons"
+        )
     if spec.grain == "dyad":
         ns.append("dyad universe = dyads UCDP ever observed; this is a recurrence rate, not a rate for arbitrary pairs")
     if spec.measure == "deaths":

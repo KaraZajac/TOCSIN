@@ -1,0 +1,84 @@
+id: 2026-009
+slug: colombia-os-deaths-100-in-2027
+title: 'Colombia: os deaths ≥100 in 2027'
+question: Will UCDP record ≥100 civilian fatalities (best estimate, one-sided) in Colombia between 2027-01-01
+  and 2027-12-31 inclusive?
+created: '2026-07-16T04:26:28Z'
+status: open
+tags:
+- civilians
+- americas
+criteria:
+  scope:
+    kind: country
+    id: 100
+    name: Colombia
+  types:
+  - os
+  measure: deaths
+  threshold: 100
+  window:
+    start: '2027-01-01'
+    end: '2027-12-31'
+resolution_policy:
+  method: auto
+forecasts: []
+prior:
+  p: 0.8595
+  computed: '2026-07-16T04:28:00Z'
+  engine: 0.1.0
+  detail:
+    spec:
+      grain: country
+      unit: 100
+      measure: deaths
+      types:
+      - os
+      threshold: 100
+      as_of: 2027
+      period:
+      - 1989
+      - 2025
+    unit_name: Colombia
+    bucket: active
+    bucket_data_end: 2025
+    levels:
+      self:
+        units: 1
+        years: 25
+        hits: 22
+        rate: 0.88
+      region:
+        units: 29
+        years: 47
+        hits: 36
+        rate: 0.766
+        M: 5.5
+        posterior: 0.8595
+      global:
+        units: 181
+        years: 501
+        hits: 372
+        rate: 0.7425
+        M: 5.5
+        posterior: 0.855
+    unconditional:
+      self:
+        years: 37
+        hits: 26
+        rate: 0.7027
+      region:
+        years: 1073
+        hits: 49
+        rate: 0.0457
+      global:
+        years: 6556
+        hits: 516
+        rate: 0.0787
+    headline_level: region
+    p: 0.8595
+    notes:
+    - annual-hit probability; sub-annual or cross-year windows approximated by the calendar-year rate
+    - 'as_of 2027 is 1 year(s) past the substrate (2025): bucket taken at the data edge, one-step rate
+      applied — slightly overstates persistence at longer horizons'
+    - death counts begin 1989 (GED); earlier history invisible to this measure

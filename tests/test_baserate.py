@@ -81,9 +81,33 @@ class TestRate(unittest.TestCase):
         p_cold = rate(spec(3), sub)["p"]
         self.assertGreater(p_active, p_cold)
 
+    def test_unobserved_years_do_not_decay_bucket(self):
+        # unit hit in the substrate's final year; a question two years out must
+        # still see it as `active` (status at the data edge), not `recent`
+        sub = self.substrate()
+        near = rate(spec(1, as_of=2021), sub)
+        far = rate(spec(1, as_of=2022), sub)
+        self.assertEqual(near["bucket"], "active")
+        self.assertEqual(far["bucket"], "active")
+        self.assertEqual(near["p"], far["p"])
+        self.assertTrue(any("past the substrate" in n for n in far["notes"]))
+
     def test_unknown_unit_raises(self):
         with self.assertRaises(KeyError):
             rate(spec(99), self.substrate())
+
+    def test_backtest_parity_with_live_engine(self):
+        # the walk-forward prior at year Y must equal rate() restricted to <Y
+        from wopr.engine.backtest import walk
+
+        sub = self.substrate()
+        records = walk("country", "deaths", ("sb",), 25, sub, burn_in=5)
+        final = [r for r in records if r["year"] == 2020]
+        self.assertTrue(final)
+        for r in final:
+            live = rate(Spec("country", r["unit"], "deaths", ("sb",), 25, as_of=2020, period=(2000, 2019)), sub)
+            self.assertEqual(live["bucket"], r["bucket"])
+            self.assertLess(abs(live["p"] - r["p"]), 5e-5, f"unit {r['unit']}: {live['p']} vs {r['p']}")
 
 
 if __name__ == "__main__":
