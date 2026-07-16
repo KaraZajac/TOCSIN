@@ -17,6 +17,7 @@ sources live only in the gitignored `sources/` directory (regenerable via
 | VIEWS forecasts | `sources/views/` (gitignored) and aggregate scores in `data/benchmark.yaml` | Uppsala VIEWS open API (api.viewsforecasting.org), fatalities002 runs | openly published forecasts; cite Hegre et al. (2019) *JPR* 56(2) and the VIEWS platform; only derived benchmark scores are committed |
 | Regime classifications | `data/tables/regime.csv` | V-Dem "Regimes of the World" (Lührmann, Tannenberg & Lindberg 2018), via Our World in Data's maintained extract | OWID: **CC BY**; cite V-Dem (Coppedge et al.) and OWID as processor |
 | Coup d'état records | `data/tables/coup.csv` (`sources/pt-coups.tsv` gitignored) | Powell & Thyne coup dataset, uky.edu (fetched via the Internet Archive Wayback Machine) | freely published academic data; cite Powell & Thyne (2011) *JPR* 48(2): 249–259 |
+| Population | `data/tables/population.csv` | Our World in Data population series (UN WPP / HYDE composite) | OWID: **CC BY**; used for per-capita normalization on the trends page |
 | Original contributions | the pipeline/engine/journal code, question files in `questions/`, computed priors and scorecards, documentation | this project | code MIT; data outputs CC BY 4.0 (attribution chains back to UCDP) |
 
 **Required citations (UCDP):**

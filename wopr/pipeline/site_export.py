@@ -438,6 +438,139 @@ def build_watchfloor():
     return board
 
 
+REGIME_LABEL = {0: "closed autocracy", 1: "electoral autocracy", 2: "electoral democracy", 3: "liberal democracy"}
+
+
+def build_trends(conflicts, dyads):
+    """Long-run trend series for the /trends page — all from committed tables."""
+    cy = rows_of("country-year.csv")
+    dy = rows_of("dyad-year.csv")
+    pop = {(int(r["gwno"]), int(r["year"])): int(r["population"]) for r in rows_of("population.csv")}
+    dyad_type = {d["id"]: d["type"] for d in dyads}
+
+    # 1. the long peace — active conflicts per year by type, 1946–
+    active_by_type = defaultdict(lambda: defaultdict(set))
+    for r in dy:
+        if r["acd_intensity"] == "0":
+            continue
+        t = dyad_type.get(int(r["dyad_id"]), r["type"] or "intrastate")
+        kind = "interstate" if t == "interstate" else "intrastate"
+        active_by_type[int(r["year"])][kind].add(int(r["dyad_id"]))
+    long_peace = [
+        [y, len(active_by_type[y]["interstate"]), len(active_by_type[y]["intrastate"])]
+        for y in range(1946, max(active_by_type) + 1)
+    ]
+
+    # 2. deaths by region over time (1989–), + global per-capita
+    region_year = defaultdict(lambda: defaultdict(int))
+    global_deaths = defaultdict(int)
+    global_pop = defaultdict(int)
+    for r in cy:
+        if r["sb_deaths"] == "":
+            continue
+        y = int(r["year"])
+        d = int(r["sb_deaths"]) + int(r["ns_deaths"]) + int(r["os_deaths"])
+        region_year[y][r["region"]] += d
+        global_deaths[y] += d
+        global_pop[y] += pop.get((int(r["gwno"]), y), 0)
+    regions = ["Africa", "Americas", "Asia", "Europe", "Middle East"]
+    deaths_region = [[y] + [region_year[y][reg] for reg in regions] for y in sorted(region_year)]
+    per_capita = [
+        [y, round(global_deaths[y] / global_pop[y] * 1e6, 2) if global_pop[y] else None]
+        for y in sorted(global_deaths)
+    ]
+
+    # 3. coups per decade — attempts vs successes
+    dec_att = defaultdict(int)
+    dec_succ = defaultdict(int)
+    for r in rows_of("coup.csv"):
+        dec = (int(r["year"]) // 10) * 10
+        dec_att[dec] += int(r["attempts"])
+        dec_succ[dec] += int(r["successes"])
+    coups_decade = [[f"{d}s", dec_att[d], dec_succ[d]] for d in sorted(dec_att)]
+
+    # 4. the world by regime type, 1946– (share of states)
+    reg_year = defaultdict(lambda: defaultdict(int))
+    for r in rows_of("regime.csv"):
+        reg_year[int(r["year"])][int(r["regime"])] += 1
+    regime_share = [
+        [y] + [reg_year[y][b] for b in (0, 1, 2, 3)]
+        for y in range(1946, max(reg_year) + 1)
+    ]
+
+    # 5. how conflicts end — outcome mix by era, + survival curve
+    eps = rows_of("episode.csv")
+    outcome_era = defaultdict(lambda: defaultdict(int))
+    durations = []
+    for e in eps:
+        if e["terminated"] != "1" or not e["outcome"]:
+            continue
+        end = int(e["end_year"]) if e["end_year"] else None
+        if end:
+            era = "1946–89" if end < 1990 else "1990–2009" if end < 2010 else "2010–now"
+            outcome_era[era][e["outcome"]] += 1
+        if e["end_year"] and e["start_year"]:
+            durations.append(int(e["end_year"]) - int(e["start_year"]) + 1)
+    outcomes = ["low-activity", "government-victory", "peace-agreement", "ceasefire", "actor-ceases", "rebel-victory"]
+    endings = {era: [outcome_era[era][o] for o in outcomes] for era in ("1946–89", "1990–2009", "2010–now")}
+    n = len(durations)
+    survival = [[t, round(sum(1 for d in durations if d > t) / n, 4)] for t in range(0, 26)] if n else []
+
+    return {
+        "long_peace": long_peace,
+        "deaths_by_region": {"regions": regions, "series": deaths_region},
+        "per_capita": per_capita,
+        "coups_decade": coups_decade,
+        "regime_share": {"bands": [REGIME_LABEL[b] for b in (0, 1, 2, 3)], "series": regime_share},
+        "endings": {"outcomes": outcomes, "by_era": endings, "median_duration": sorted(durations)[n // 2] if n else None, "n": n},
+        "survival": survival,
+    }
+
+
+def build_timeline(conflicts, dyads):
+    """A layered timeline of global conflict, 1946–: per-year counts of the
+    things that mark eras — onsets, wars, terminations, coups — plus a short
+    list of marquee labeled events."""
+    dy = rows_of("dyad-year.csv")
+    dyad_type = {d["id"]: d["type"] for d in dyads}
+    by_year = defaultdict(lambda: {"active": 0, "wars": 0, "onsets": 0, "terminations": 0, "coups": 0})
+
+    active_prev = set()
+    years = sorted({int(r["year"]) for r in dy})
+    active_in = defaultdict(set)
+    war_in = defaultdict(set)
+    for r in dy:
+        if r["acd_intensity"] != "0":
+            active_in[int(r["year"])].add(int(r["dyad_id"]))
+        if r["acd_intensity"] == "2":
+            war_in[int(r["year"])].add(int(r["dyad_id"]))
+    prev = set()
+    for y in years:
+        cur = active_in[y]
+        by_year[y]["active"] = len(cur)
+        by_year[y]["wars"] = len(war_in[y])
+        by_year[y]["onsets"] = len(cur - prev)
+        by_year[y]["terminations"] = len(prev - cur)
+        prev = cur
+    for e in rows_of("episode.csv"):  # authoritative terminations
+        if e["terminated"] == "1" and e["end_year"]:
+            by_year[int(e["end_year"])]["terminations"] = by_year[int(e["end_year"])].get("terminations", 0)
+    for r in rows_of("coup.csv"):
+        by_year[int(r["year"])]["coups"] += int(r["attempts"])
+
+    series = [
+        [y, by_year[y]["active"], by_year[y]["wars"], by_year[y]["onsets"], by_year[y]["coups"]]
+        for y in range(1946, max(by_year) + 1)
+    ]
+    eras = [
+        {"from": 1946, "to": 1991, "label": "Cold War"},
+        {"from": 1991, "to": 2001, "label": "Post–Cold War"},
+        {"from": 2001, "to": 2014, "label": "War on Terror"},
+        {"from": 2014, "to": 2026, "label": "Great-power return"},
+    ]
+    return {"series": series, "eras": eras}
+
+
 # ---------------------------------------------------------------- main
 
 
@@ -528,6 +661,9 @@ def main() -> None:
     dump("questions.json", questions)
     dump("dyads.json", dyad_rows)
     dump("watchfloor.json", watch)
+    print("computing trends & timeline…")
+    dump("trends.json", build_trends(conflicts, dyads))
+    dump("timeline.json", build_timeline(conflicts, dyads))
     backtest_path = DATA / "backtest.yaml"
     if backtest_path.exists():
         dump("backtest.json", yaml.safe_load(backtest_path.read_text()))

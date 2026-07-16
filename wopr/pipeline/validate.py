@@ -141,6 +141,15 @@ def main() -> None:
         span = sorted(int(c["year"]) for c in coups)
         check(span[0] <= 1955 and span[-1] >= 2020, f"coup coverage spans {span[0]}–{span[-1]}")
 
+    pop_path = TABLES / "population.csv"
+    if pop_path.exists():
+        pops = rows_of("population.csv")
+        check(all(int(p["population"]) > 0 for p in pops), "population values positive")
+        recent = {int(p["gwno"]) for p in pops if int(p["year"]) == 2023}
+        cy_recent = {int(r["gwno"]) for r in rows_of("country-year.csv") if r["year"] == "2023" and r["main_system"] == "1"}
+        cov = len(recent & cy_recent) / max(len(cy_recent), 1)
+        check(cov > 0.9, f"population covers 2023 main-system states ({cov:.0%})")
+
     questions = store.load_all()
     errs = [e for q in questions for e in store.validate_question(q)]
     for e in errs:

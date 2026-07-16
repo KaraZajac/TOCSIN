@@ -30,6 +30,10 @@
   --map-4: #a75962; --map-5: #923745; --map-6: #7c0a29;
   --map-nd: #dce0e8;
   --map-stroke: #e6e9ef;
+  /* nominal chart series (validated adjacent order: blue peach teal mauve pink) */
+  --c1: #1e66f5; --c2: #fe640b; --c3: #179299; --c4: #8839ef; --c5: #ea76cb;
+  /* ordinal ramp (blue, light→dark) for ordered categories like regime */
+  --seq1: #86b6ef; --seq2: #5598e7; --seq3: #2a78d6; --seq4: #1c5cab;
 }
 
 [data-theme="mocha"] {
@@ -55,6 +59,8 @@
   --map-4: #b06780; --map-5: #d17994; --map-6: #f38ba8;
   --map-nd: #313244;
   --map-stroke: #181825;
+  --c1: #89b4fa; --c2: #fab387; --c3: #94e2d5; --c4: #cba6f7; --c5: #f5c2e7;
+  --seq1: #b8d3fc; --seq2: #89b4fa; --seq3: #5590e0; --seq4: #3b6bc0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -81,6 +87,8 @@
     --map-4: #b06780; --map-5: #d17994; --map-6: #f38ba8;
     --map-nd: #313244;
     --map-stroke: #181825;
+    --c1: #89b4fa; --c2: #fab387; --c3: #94e2d5; --c4: #cba6f7; --c5: #f5c2e7;
+    --seq1: #b8d3fc; --seq2: #89b4fa; --seq3: #5590e0; --seq4: #3b6bc0;
   }
 }
 
@@ -182,6 +190,8 @@ h3 { font-size: 15.5px; }
 .line-sb { stroke: var(--sb); }
 .line-accent { stroke: var(--accent); stroke-width: 2; fill: none; stroke-linejoin: round; stroke-linecap: round; }
 .line-baseline { stroke: var(--baseline); stroke-width: 2; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.line-2 { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.mark-warn { fill: var(--warn); }
 .area-wash { fill: var(--wash); }
 .gridline { stroke: var(--grid); stroke-width: 1; }
 .baseline-line { stroke: var(--baseline); stroke-width: 1.5; }

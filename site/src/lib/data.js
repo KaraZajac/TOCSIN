@@ -38,6 +38,8 @@ function optional(rel) {
 export const arena = () => optional("site/benchmark.json");
 export const dyads = () => optional("site/dyads.json") || [];
 export const watchfloor = () => optional("site/watchfloor.json") || { units: [] };
+export const trends = () => optional("site/trends.json");
+export const timeline = () => optional("site/timeline.json");
 
 /** Countries sorted by current risk, descending. */
 export function countryList() {

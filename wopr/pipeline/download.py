@@ -44,6 +44,8 @@ GW_FILES = {
     # via Our World in Data's maintained extract — V-Dem's own site is
     # form-gated and unfetchable unattended
     "owid-regime.csv": "https://ourworldindata.org/grapher/political-regime.csv",
+    # Population (OWID) — the per-capita denominator for every trend
+    "owid-population.csv": "https://ourworldindata.org/grapher/population.csv",
 }
 
 

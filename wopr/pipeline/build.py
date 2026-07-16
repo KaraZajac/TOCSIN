@@ -628,6 +628,38 @@ OWID_NAMES = {
 }
 
 
+def build_population(states, last_year: int) -> list[list]:
+    """data/tables/population.csv: gwno-year population from the OWID extract,
+    YEAR_MIN–present, name-matched. The per-capita denominator for trends."""
+    by_name = {s["name"]: s["gwno"] for s in states}
+    path = SOURCES / "owid-population.csv"
+    if not path.exists():
+        return [["gwno", "year", "population"]]
+    dedup = {}
+    with open(path, newline="", encoding="utf-8-sig") as f:
+        for r in csv.DictReader(f):
+            try:
+                year = int(r["Year"])
+            except ValueError:
+                continue
+            if year < YEAR_MIN or not r["Population"].strip():
+                continue
+            gwno = by_name.get(OWID_NAMES.get(r["Entity"], r["Entity"]))
+            if gwno is None:
+                continue
+            dedup[(to_gw(gwno, year), year)] = int(float(r["Population"]))
+    # OWID population lags ~2 years behind the conflict data; carry the last
+    # known value forward so recent per-capita rates have a denominator
+    latest = {}
+    for (g, y), p in dedup.items():
+        if y > latest.get(g, (0, 0))[0]:
+            latest[g] = (y, p)
+    for g, (y0, p) in latest.items():
+        for y in range(y0 + 1, last_year + 1):
+            dedup[(g, y)] = p
+    return [["gwno", "year", "population"]] + [[g, y, p] for (g, y), p in sorted(dedup.items())]
+
+
 def build_regime(states, last_year: int) -> list[list]:
     """data/tables/regime.csv: Regimes of the World (0–3) per gwno-year,
     1945–present, name-matched from the OWID/V-Dem extract."""
@@ -816,6 +848,7 @@ def main() -> None:
     regime_table = build_regime(states, last_year)
     episode_table = build_episodes()
     coup_table = build_coups(states, last_year)
+    population_table = build_population(states, last_year)
     peace = build_peace_agreements(states)
     if peace:
         dump_yaml(REGISTRY / "peace-agreements.yaml", peace)
@@ -827,6 +860,7 @@ def main() -> None:
     write_csv(TABLES / "regime.csv", regime_table[0], regime_table[1:])
     write_csv(TABLES / "episode.csv", episode_table[0], episode_table[1:])
     write_csv(TABLES / "coup.csv", coup_table[0], coup_table[1:])
+    write_csv(TABLES / "population.csv", population_table[0], population_table[1:])
 
     meta = {
         "ucdp_release": manifest["ucdp_release"],

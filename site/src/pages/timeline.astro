@@ -1,0 +1,62 @@
+---
+import Base from "../layouts/Base.astro";
+import Timeline from "../components/Timeline.astro";
+import { summary, timeline } from "../lib/data.js";
+import { num, url } from "../lib/format.js";
+
+const s = summary();
+const tl = timeline();
+const series = tl.series;
+
+// era summaries computed from the series
+const eraStats = tl.eras.map((e) => {
+  const rows = series.filter((r) => r[0] >= e.from && r[0] < e.to);
+  return {
+    ...e,
+    peakActive: Math.max(...rows.map((r) => r[1])),
+    wars: Math.max(...rows.map((r) => r[2])),
+    onsets: rows.reduce((a, r) => a + r[3], 0),
+    coups: rows.reduce((a, r) => a + r[4], 0),
+  };
+});
+---
+
+<Base title="Timeline" description="A layered timeline of global conflict, 1946–present.">
+  <h1>The timeline</h1>
+  <p class="lede">
+    Every year since 1946, in one frame: how many conflicts were active, how many reached war
+    intensity, and where the coups fell — across the four eras that shaped the postwar order.
+    The trends behind it are on the <a href={url("/trends")}>trends page</a>.
+  </p>
+
+  <Timeline series={series} eras={tl.eras} />
+
+  <h2>The four eras</h2>
+  <div class="card viz">
+    <table class="data">
+      <thead>
+        <tr><th>era</th><th class="n">years</th><th class="n">peak active</th><th class="n">peak at war</th>
+          <th class="n">onsets</th><th class="n">coup attempts</th></tr>
+      </thead>
+      <tbody>
+        {eraStats.map((e) => (
+          <tr>
+            <td><b>{e.label}</b></td>
+            <td class="n">{e.from}–{e.to - 1}</td>
+            <td class="n">{num(e.peakActive)}</td>
+            <td class="n">{num(e.wars)}</td>
+            <td class="n">{num(e.onsets)}</td>
+            <td class="n">{num(e.coups)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="lede" style="margin-top:20px">
+    The shape tells the story: the Cold War's coup-driven instability, the surge of intrastate
+    conflict after 1991, the mid-2010s reversal as active conflicts climbed back toward Cold-War
+    highs. What the timeline can't show is what comes next — that's what the
+    <a href={url("/questions")}>journal</a> and the <a href={url("/watchfloor")}>watchfloor</a> are for.
+  </p>
+</Base>

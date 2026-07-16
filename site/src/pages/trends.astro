@@ -1,0 +1,146 @@
+---
+import Base from "../layouts/Base.astro";
+import MultiLine from "../components/MultiLine.astro";
+import StackedArea from "../components/StackedArea.astro";
+import LineChart from "../components/LineChart.astro";
+import Bars from "../components/Bars.astro";
+import StatTile from "../components/StatTile.astro";
+import { summary, trends } from "../lib/data.js";
+import { num, pct, url } from "../lib/format.js";
+
+const s = summary();
+const t = trends();
+
+const longPeace = t.long_peace;
+const deathsRegion = t.deaths_by_region;
+const perCapita = t.per_capita.filter((r) => r[1] != null);
+const coups = t.coups_decade;
+const regime = t.regime_share;
+const endings = t.endings;
+const survival = t.survival;
+
+const latestInterstate = longPeace.at(-1)[1];
+const latestIntrastate = longPeace.at(-1)[2];
+const coupsLatest = coups.at(-1);
+const coupsPeak = [...coups].sort((a, b) => b[1] - a[1])[0];
+// endings share for the current era
+const era = endings.by_era["2010–now"];
+const eraTotal = era.reduce((a, b) => a + b, 0);
+---
+
+<Base title="Trends" description="The long-run trends in organized violence — the long peace, the coup decline, how conflicts end.">
+  <h1>Trends</h1>
+  <p class="lede">
+    The long-run shape of organized violence, entirely from the committed record — no forecasts
+    here, just what happened across eight decades. For the annotated year-by-year version see the
+    <a href={url("/timeline")}>timeline</a>.
+  </p>
+
+  <div class="kpis">
+    <StatTile hero={true} label="Interstate conflicts active now" value={num(latestInterstate)} sub={`vs ${num(latestIntrastate)} intrastate — the long peace, still holding`} />
+    <StatTile label="Coup attempts, current decade" value={num(coupsLatest[1])} sub={`down from ${num(coupsPeak[1])} in the ${coupsPeak[0]}`} />
+    <StatTile label="Median conflict episode" value={`${endings.median_duration} yr`} sub={`half of ${num(endings.n)} episodes ended within a year`} />
+  </div>
+
+  <h2>The long peace</h2>
+  <MultiLine
+    title="Active conflicts per year, 1946–present"
+    sub="interstate war has all but vanished while intrastate conflict dominates — the defining shift of the postwar era"
+    series={longPeace}
+    keys={["interstate", "intrastate"]}
+    fmt={(v) => String(v)}
+    w={1040}
+  />
+
+  <div class="grid-2" style="margin-top:14px">
+    <LineChart
+      title="Global battle deaths per million people"
+      sub="organized-violence deaths ÷ world population (per-capita normalizes the 1994 and 2022 spikes)"
+      series={perCapita}
+      fmt={(v) => String(v)}
+      unit="per million"
+      wash={true}
+    />
+    <StackedArea
+      title="Deaths by region, 1989–present"
+      sub="where the world's organized violence has concentrated"
+      series={deathsRegion.series}
+      keys={deathsRegion.regions}
+      w={520}
+    />
+  </div>
+
+  <h2>The decline of the coup</h2>
+  <div class="grid-2">
+    <div class="card viz">
+      <h3>Coups per decade — attempts and successes</h3>
+      <p class="viz-sub">Powell–Thyne; both the frequency and the success rate have fallen since the 1960s peak</p>
+      <div class="viz-scroll">
+        <table class="data">
+          <thead><tr><th>decade</th><th class="n">attempts</th><th class="n">successful</th><th class="n">success rate</th></tr></thead>
+          <tbody>
+            {coups.map((c) => (
+              <tr>
+                <td>{c[0]}</td>
+                <td class="n">{c[1]}</td>
+                <td class="n">{c[2]}</td>
+                <td class="n">{pct(c[2] / c[1], 0)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <Bars
+      title="Coup attempts by decade"
+      sub="the coup as a mode of political change is fading"
+      rows={coups.map((c) => [c[0], c[1], false])}
+      fmt={(v) => String(v)}
+    />
+  </div>
+
+  <h2>The world by regime type</h2>
+  <StackedArea
+    title="Number of states by Regimes-of-the-World band, 1946–present"
+    sub="V-Dem via OWID — the post-1989 democratization wave and its recent partial reversal (ordered dark→light: autocracy→democracy)"
+    series={regime.series}
+    keys={regime.bands}
+    ordinal={true}
+    w={1040}
+    h={240}
+  />
+
+  <h2>How conflicts end</h2>
+  <div class="grid-2">
+    <LineChart
+      title="Conflict episode survival curve"
+      sub={`P(an episode lasts longer than t years); median ${endings.median_duration} years across ${num(endings.n)} episodes`}
+      series={survival}
+      yMax={1}
+      fmt={(v) => pct(v, 0)}
+      unit="survive"
+      markLast={false}
+    />
+    <div class="card viz">
+      <h3>How episodes end, this era (2010–now)</h3>
+      <p class="viz-sub">UCDP/Kreutz termination outcomes for episodes that ended since 2010</p>
+      <table class="data">
+        <tbody>
+          {endings.outcomes.map((o, i) => (
+            era[i] > 0 && (
+              <tr>
+                <td>{o.replace("-", " ")}</td>
+                <td class="n">{era[i]}</td>
+                <td class="n">{pct(era[i] / eraTotal, 0)}</td>
+              </tr>
+            )
+          ))}
+        </tbody>
+      </table>
+      <p class="viz-sub" style="margin-top:10px">
+        Most conflicts don't end in victory or a signed peace — they fade to low activity. That's
+        the empirical base rate behind every termination question in the <a href={url("/dyads")}>dyads</a> list.
+      </p>
+    </div>
+  </div>
+</Base>

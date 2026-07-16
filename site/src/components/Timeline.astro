@@ -1,0 +1,61 @@
+---
+// Layered conflict timeline: active conflicts as a filled area, wars as a
+// darker band, with onset and coup counts as marks along the top, and era
+// bands behind. series = [[year, active, wars, onsets, coups]].
+import { linePath, scale, ticks } from "../lib/scale.js";
+import { num } from "../lib/format.js";
+
+const { series = [], eras = [], w = 1040, h = 300 } = Astro.props;
+const PAD = { l: 44, r: 12, t: 40, b: 26 };
+const years = series.map((r) => r[0]);
+const x = scale(years[0], years[years.length - 1], PAD.l, w - PAD.r);
+const maxActive = Math.max(...series.map((r) => r[1]), 1);
+const tks = ticks(maxActive);
+const y = scale(0, tks[tks.length - 1], h - PAD.b, PAD.t);
+const maxCoups = Math.max(...series.map((r) => r[4]), 1);
+
+const activeArea = `${linePath(series.map((r) => [x(r[0]), y(r[1])]))}L${x(years[years.length - 1])},${y(0)}L${x(years[0])},${y(0)}Z`;
+const warArea = `${linePath(series.map((r) => [x(r[0]), y(r[2])]))}L${x(years[years.length - 1])},${y(0)}L${x(years[0])},${y(0)}Z`;
+---
+
+<div class="card viz">
+  <div class="viz-scroll">
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} role="img" aria-label="Global conflict timeline">
+      {eras.map((e, i) => (
+        <>
+          <rect x={x(e.from)} y={PAD.t} width={x(e.to) - x(e.from)} height={h - PAD.t - PAD.b}
+            fill={i % 2 ? "var(--surface-2)" : "transparent"} opacity="0.5" />
+          <text class="tick-text" x={(x(e.from) + x(Math.min(e.to, years[years.length - 1]))) / 2} y={PAD.t - 22} text-anchor="middle" style="font-weight:600;fill:var(--ink-2)">{e.label}</text>
+        </>
+      ))}
+      {tks.map((t) => (
+        <>
+          <line class="gridline" x1={PAD.l} x2={w - PAD.r} y1={y(t)} y2={y(t)} />
+          <text class="tick-text" x={PAD.l - 6} y={y(t) + 3} text-anchor="end">{t}</text>
+        </>
+      ))}
+      <path d={activeArea} style="fill:var(--accent);opacity:0.16" />
+      <path class="line-accent" d={linePath(series.map((r) => [x(r[0]), y(r[1])]))} />
+      <path d={warArea} style="fill:var(--crit);opacity:0.30" />
+      {series.map((r) =>
+        r[4] > 0 ? (
+          <circle cx={x(r[0])} cy={PAD.t - 6} r={2 + (r[4] / maxCoups) * 4} style="fill:var(--warn)"
+            tabindex="0" data-tip-value={`${r[0]}: ${r[4]} coup attempt${r[4] > 1 ? "s" : ""}`} />
+        ) : null
+      )}
+      {series.map((r, i) =>
+        r[0] % 10 === 0 ? <text class="tick-text" x={x(r[0])} y={h - 8} text-anchor="middle">{r[0]}</text> : null
+      )}
+      {series.map((r) => (
+        <rect class="hit" x={x(r[0]) - 3} y={PAD.t} width="6" height={h - PAD.t - PAD.b} tabindex="0"
+          data-tip-value={`${r[0]}`}
+          data-tip-label={`${r[1]} active · ${r[2]} at war · ${r[3]} onsets · ${r[4]} coups`} />
+      ))}
+    </svg>
+  </div>
+  <div class="viz-legend">
+    <span class="key"><span class="swatch accent"></span> active conflicts</span>
+    <span class="key"><span class="swatch" style="background:var(--crit)"></span> at war intensity (≥1,000)</span>
+    <span class="key"><span class="swatch" style="background:var(--warn)"></span> coup attempts (top marks)</span>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+---
+// 2–4 lines over a shared numeric x axis (one y scale — never dual-axis).
+// series = [[x, y1, y2, …]] aligned to `keys`. Legend + direct end-labels +
+// per-x hover + table view.
+import { linePath, scale, ticks } from "../lib/scale.js";
+import { num } from "../lib/format.js";
+
+const {
+  title,
+  sub = "",
+  series = [],
+  keys = [],
+  w = 520,
+  h = 210,
+  fmt = num,
+  yMax = null,
+} = Astro.props;
+
+const colorOf = (ki) => `var(--c${(ki % 5) + 1})`; // validated categorical order
+const PAD = { l: 46, r: 52, t: 10, b: 22 };
+const vals = series.flatMap((r) => r.slice(1));
+const top = yMax ?? Math.max(...vals, 1);
+const tks = ticks(top);
+const x = scale(series[0]?.[0] ?? 0, series[series.length - 1]?.[0] ?? 1, PAD.l, w - PAD.r);
+const y = scale(0, tks[tks.length - 1], h - PAD.b, PAD.t);
+const lines = keys.map((_, ki) => series.map((r) => [x(r[0]), y(r[ki + 1])]));
+---
+
+<div class="card viz">
+  <h3>{title}</h3>
+  {sub && <p class="viz-sub">{sub}</p>}
+  <div class="viz-scroll">
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} role="img" aria-label={title}>
+      {tks.map((t) => (
+        <>
+          <line class="gridline" x1={PAD.l} x2={w - PAD.r} y1={y(t)} y2={y(t)} />
+          <text class="tick-text" x={PAD.l - 6} y={y(t) + 3} text-anchor="end">{fmt(t)}</text>
+        </>
+      ))}
+      {series.map((r, i) =>
+        i % Math.max(1, Math.round(series.length / 8)) === 0 ? (
+          <text class="tick-text" x={x(r[0])} y={h - 6} text-anchor="middle">{r[0]}</text>
+        ) : null
+      )}
+      {keys.map((k, ki) => (
+        <>
+          <path class="line-2" style={`stroke:${colorOf(ki)}`} fill="none" stroke-width="2" d={linePath(lines[ki])} />
+          <circle cx={lines[ki][lines[ki].length - 1][0]} cy={lines[ki][lines[ki].length - 1][1]} r="4" style={`fill:${colorOf(ki)}`} class="dot-ring" />
+        </>
+      ))}
+      {series.map((r) => (
+        <rect
+          class="hit" x={x(r[0]) - 3} y={PAD.t} width="6" height={h - PAD.t - PAD.b} tabindex="0"
+          data-tip-value={`${r[0]}`}
+          data-tip-label={keys.map((k, ki) => `${k}: ${fmt(r[ki + 1])}`).join(" · ")}
+        />
+      ))}
+    </svg>
+  </div>
+  <div class="viz-legend">
+    {keys.map((k, ki) => (
+      <span class="key"><span class="swatch" style={`background:${colorOf(ki)}`}></span> {k}</span>
+    ))}
+  </div>
+  <details class="tableview">
+    <summary>table view</summary>
+    <table class="data">
+      <thead><tr><th>year</th>{keys.map((k) => <th class="n">{k}</th>)}</tr></thead>
+      <tbody>
+        {series.map((r) => (
+          <tr><td>{r[0]}</td>{r.slice(1).map((v) => <td class="n">{fmt(v)}</td>)}</tr>
+        ))}
+      </tbody>
+    </table>
+  </details>
+</div>

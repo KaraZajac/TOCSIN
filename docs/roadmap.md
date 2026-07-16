@@ -7,6 +7,12 @@
   coverage, walk-forward backtested. Follow-ups: per-pair GED death sums
   (thresholds beyond activity), candidate-month pair nowcasting, and a pair
   risk layer on the site.
+- ~~Trends & timeline pages~~ **done**: /trends (the long peace, per-capita
+  battle deaths, deaths by region, coup decline, regime shift, conflict
+  survival + how-wars-end) and /timeline (layered conflict timeline with era
+  bands). Population added (OWID) for per-capita normalization. Next trend
+  ideas: pre-1989 battle deaths (PRIO) to extend death series to 1946,
+  small-multiple country trajectories, protest trends.
 - **Covariate-widened reference classes**: regime type (V-Dem/Polity),
   GDP/capita, ethnic fractionalization — class = "countries like this one",
   not just "countries near this one". Sensitivity across class definitions in
