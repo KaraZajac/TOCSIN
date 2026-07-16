@@ -152,6 +152,17 @@ def build_countries(meta, states, conflicts, substrate):
             if int(r["attempts"]) > 0:
                 coups[int(r["gwno"])].append([int(r["year"]), int(r["attempts"]), int(r["successes"])])
 
+    # latest structural covariates per country (World Bank + EPR)
+    covariates = {}
+    cov_cols = ["gdp_pc", "inflation", "pop_0014", "urban_pct", "infant_mort", "excluded_share"]
+    with open(TABLES / "covariates.csv", newline="") as f:
+        for r in csv.DictReader(f):
+            g = int(r["gwno"])
+            cur = covariates.setdefault(g, {})
+            for c in cov_cols:
+                if r[c] != "":
+                    cur[c] = float(r[c])  # last (latest year) wins
+
     by_country = defaultdict(list)
     for c in conflicts:
         for g in c["countries"]:
@@ -193,6 +204,7 @@ def build_countries(meta, states, conflicts, substrate):
             "tempo": [[mk, v["deaths"], v["provisional"]] for mk, v in sorted(tempo.get(g, {}).items())],
             "conflicts": sorted(by_country.get(g, []), key=lambda c: -c["last"]),
             "coups": sorted(coups.get(g, [])),
+            "covariates": covariates.get(g, {}),
         }
         if coups.get(g) is not None and g in substrate["country"]:
             try:

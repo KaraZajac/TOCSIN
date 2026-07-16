@@ -218,6 +218,11 @@ a .map-country:hover { filter: brightness(1.12); }
 .map-swatch-4 { background: var(--map-4); } .map-swatch-5 { background: var(--map-5); }
 .map-swatch-6 { background: var(--map-6); } .map-swatch-nd { background: var(--map-nd); }
 
+/* facts grid (structural covariates) */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px 24px; }
+.facts .fact .k { color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; }
+.facts .fact .v { margin-top: 2px; font-size: 18px; font-weight: 600; }
+
 /* meter (probability fill) */
 .meter {
   position: relative; height: 8px; border-radius: 4px;

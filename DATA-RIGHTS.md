@@ -18,6 +18,8 @@ sources live only in the gitignored `sources/` directory (regenerable via
 | Regime classifications | `data/tables/regime.csv` | V-Dem "Regimes of the World" (Lührmann, Tannenberg & Lindberg 2018), via Our World in Data's maintained extract | OWID: **CC BY**; cite V-Dem (Coppedge et al.) and OWID as processor |
 | Coup d'état records | `data/tables/coup.csv` (`sources/pt-coups.tsv` gitignored) | Powell & Thyne coup dataset, uky.edu (fetched via the Internet Archive Wayback Machine) | freely published academic data; cite Powell & Thyne (2011) *JPR* 48(2): 249–259 |
 | Population | `data/tables/population.csv` | Our World in Data population series (UN WPP / HYDE composite) | OWID: **CC BY**; used for per-capita normalization on the trends page |
+| Structural covariates | `data/tables/covariates.csv` (WDI columns) | World Bank Open Data / WDI (income, age structure, urbanization, infant mortality — World Bank/UN-compiled; **inflation** is IMF IFS, redistributed by the Bank under its open terms) | **CC BY 4.0** (World Bank Terms of Use for Datasets); attribute "The World Bank: WDI". Third-party series (IMF inflation) carry the provider's terms; kept as covariate context |
+| Ethnic exclusion | `data/tables/covariates.csv` (`excluded_share`) | Ethnic Power Relations (EPR-2021) core dataset, ETH Zürich / ICR | freely published academic data; cite Vogt et al. (2015) *JCR* 59(7) and Cederman, Wimmer & Min (2010) |
 | Original contributions | the pipeline/engine/journal code, question files in `questions/`, computed priors and scorecards, documentation | this project | code MIT; data outputs CC BY 4.0 (attribution chains back to UCDP) |
 
 **Required citations (UCDP):**

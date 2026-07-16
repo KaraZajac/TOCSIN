@@ -46,6 +46,9 @@ GW_FILES = {
     "owid-regime.csv": "https://ourworldindata.org/grapher/political-regime.csv",
     # Population (OWID) — the per-capita denominator for every trend
     "owid-population.csv": "https://ourworldindata.org/grapher/population.csv",
+    # Ethnic Power Relations (ETH Zürich) — group access to power; the
+    # excluded-population share is a strong onset correlate
+    "epr-core.csv": "https://icr.ethz.ch/data/epr/core/EPR-2021.csv",
 }
 
 
@@ -209,6 +212,21 @@ def main() -> None:
                 raise SystemExit("Wayback snapshot did not contain the Powell–Thyne data file")
     else:
         print(f"  cached {dest.relative_to(ROOT)}")
+
+    # World Bank WDI covariates (its own paginated API module)
+    from wopr.pipeline import worldbank
+
+    print("World Bank WDI covariates:")
+    worldbank.pull(force=force)
+    import json as _json
+    import urllib.request as _u
+
+    countries = SOURCES / "worldbank" / "countries.json"
+    if not countries.exists() or force:
+        req = _u.Request(f"{worldbank.API}/country?format=json&per_page=400", headers={"User-Agent": UA})
+        with _u.urlopen(req, timeout=60) as r:
+            countries.write_bytes(r.read())
+        print(f"  -> {countries.relative_to(ROOT)}")
 
     with open(SOURCES / "manifest.yaml", "w") as f:
         yaml.safe_dump(manifest, f, sort_keys=False)

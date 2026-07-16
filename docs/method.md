@@ -218,6 +218,36 @@ dyad grain, and fresh onsets (`active-1`) are the least predictable class
 (country sb: predicted .65, observed .56) — when your question sits in
 `active-1`, treat the prior as soft — it is where challengers have the best shot.
 
+## Structural covariates — what actually predicts onset (a finding)
+
+We ingested World Bank WDI (income, inflation, age structure, urbanization,
+infant mortality) and EPR ethnic-exclusion data (`data/tables/covariates.csv`)
+and tested, descriptively, which separate conflict onsets from quiet years —
+6,280 at-risk (currently-quiet) country-years, base onset rate ~3.3%:
+
+| condition at year Y | P(active at Y+1) |
+|---|---|
+| baseline | 3.3% |
+| **young population** (>39% under 14) | **6.5%** |
+| older population | 1.7% |
+| high inflation (>7%) | 3.7% |
+| low inflation | 3.1% |
+| young **and** politically-excluded (EPR) | **8.6%** |
+| older, low-exclusion | 2.9% |
+
+**The finding:** youth structure is a strong onset signal (~4× lift) and
+ethnic exclusion compounds it; **inflation is weak and does not combine the
+way one might expect** — the young/high-inflation cell (5.4%) is actually
+*below* young/low-inflation (7.5%). This tested a specific hypothesis
+(inflation + a young population → more onsets) and the honest answer was:
+youth yes, exclusion yes, inflation no.
+
+This is descriptive, not yet in the engine. Wiring youth/exclusion in as
+conditioning is a covariate change which — per the reverted regime result —
+needs the **tune/validate vantage split** first (fitting bins on the same
+history we score is p-hacking). The data and finding are committed; the
+engine change is gated behind that protocol.
+
 ## Known approximations (read before trusting a prior)
 
 - **Windows.** The engine computes annual-hit probabilities. Sub-annual

@@ -150,6 +150,15 @@ def main() -> None:
         cov = len(recent & cy_recent) / max(len(cy_recent), 1)
         check(cov > 0.9, f"population covers 2023 main-system states ({cov:.0%})")
 
+    cov_path = TABLES / "covariates.csv"
+    if cov_path.exists():
+        cov = rows_of("covariates.csv")
+        check(len({(c["gwno"], c["year"]) for c in cov}) == len(cov), "covariate key unique")
+        young = [float(c["pop_0014"]) for c in cov if c["pop_0014"]]
+        check(all(0 <= v <= 60 for v in young), "youth share in plausible range")
+        excl = [float(c["excluded_share"]) for c in cov if c["excluded_share"]]
+        check(all(0 <= v <= 1.01 for v in excl), "excluded share is a fraction")
+
     questions = store.load_all()
     errs = [e for q in questions for e in store.validate_question(q)]
     for e in errs:

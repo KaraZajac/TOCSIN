@@ -23,6 +23,7 @@ dyad-grain tables (they still count at country grain).
 
 import csv
 import datetime
+import json
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -490,6 +491,103 @@ def build_month_tables(ged, cand) -> tuple[list[list], list[list]]:
     return [c_header] + c_rows, [d_header] + d_rows
 
 
+# ---------------------------------------------------------------- covariates
+
+# World Bank country name -> states.yaml name, where they differ
+WB_NAMES = {
+    "United States": "United States of America",
+    "Congo, Dem. Rep.": "DR Congo (Zaire)",
+    "Congo, Rep.": "Congo",
+    "Cote d'Ivoire": "Ivory Coast",
+    "Myanmar": "Myanmar (Burma)",
+    "Russian Federation": "Russia (Soviet Union)",
+    "Yemen, Rep.": "Yemen (North Yemen)",
+    "Vietnam": "Vietnam (North Vietnam)",
+    "Cambodia": "Cambodia (Kampuchea)",
+    "Zimbabwe": "Zimbabwe (Rhodesia)",
+    "Eswatini": "Kingdom of eSwatini (Swaziland)",
+    "Czechia": "Czech Republic",
+    "Bosnia and Herzegovina": "Bosnia-Herzegovina",
+    "Iran, Islamic Rep.": "Iran (Persia)",
+    "Turkiye": "Turkey (Türkiye)",
+    "Egypt, Arab Rep.": "Egypt",
+    "Syrian Arab Republic": "Syria",
+    "Kyrgyz Republic": "Kyrgyz Republic",
+    "Lao PDR": "Laos",
+    "Slovak Republic": "Slovakia",
+    "Korea, Rep.": "South Korea",
+    "Korea, Dem. People's Rep.": "North Korea",
+    "Venezuela, RB": "Venezuela",
+    "Gambia, The": "Gambia",
+    "Sri Lanka": "Sri Lanka (Ceylon)",
+    "Belarus": "Belarus (Byelorussia)",
+    "Burkina Faso": "Burkina Faso (Upper Volta)",
+    "Madagascar": "Madagascar (Malagasy)",
+    "North Macedonia": "Macedonia, FYR",
+    "Timor-Leste": "East Timor",
+}
+
+COVARIATE_COLS = ["gdp_pc", "inflation", "pop_0014", "pop_1564", "urban_pct", "infant_mort", "pop_growth", "excluded_share"]
+EPR_EXCLUDED = {"POWERLESS", "DISCRIMINATED", "SELF-EXCLUSION"}  # out of central power
+
+
+def epr_excluded_share() -> dict:
+    """(gwno, year) -> share of population in politically-excluded ethnic
+    groups (EPR status POWERLESS/DISCRIMINATED/SELF-EXCLUSION)."""
+    path = SOURCES / "epr-core.csv"
+    if not path.exists():
+        return {}
+    out: dict[tuple, float] = defaultdict(float)
+    for r in read_csv(path):
+        if not r["size"] or r["status"] not in EPR_EXCLUDED:
+            continue
+        gwno, lo, hi = int(r["gwid"]), int(r["from"]), int(r["to"])
+        for y in range(lo, hi + 1):
+            out[(gwno, y)] += float(r["size"])
+    return out
+
+
+def build_covariates(states, last_year: int) -> list[list]:
+    """data/tables/covariates.csv: World Bank WDI structural covariates per
+    gwno-year, name-matched via the WB country list. gwno-year keyed so it
+    joins the conflict spine directly."""
+    wb_dir = SOURCES / "worldbank"
+    if not (wb_dir / "countries.json").exists():
+        return [["gwno", "year"] + COVARIATE_COLS]
+    countries = json.loads((wb_dir / "countries.json").read_text())[1]
+    by_name = {s["name"]: s["gwno"] for s in states}
+    iso_gwno, unmatched = {}, set()
+    for c in countries:
+        if c["region"]["id"] == "NA":
+            continue
+        gwno = by_name.get(WB_NAMES.get(c["name"], c["name"]))
+        if gwno is not None:
+            iso_gwno[c["id"]] = gwno
+        else:
+            unmatched.add(c["name"])
+    if unmatched:
+        print(f"  covariates: {len(unmatched)} unmatched WB countries: {sorted(unmatched)[:6]}")
+
+    cells: dict[tuple, dict] = defaultdict(dict)
+    for logical in COVARIATE_COLS:
+        path = wb_dir / f"{logical}.json"
+        if not path.exists():
+            continue
+        for r in json.loads(path.read_text()):
+            gwno = iso_gwno.get(r["iso3"])
+            if gwno is None or r["year"] > last_year:
+                continue
+            cells[(to_gw(gwno, r["year"]), r["year"])][logical] = r["value"]
+    for (gwno, year), share in epr_excluded_share().items():
+        if year <= last_year:
+            cells[(gwno, year)]["excluded_share"] = round(share, 3)
+
+    rows = []
+    for (gwno, year), vals in sorted(cells.items()):
+        rows.append([gwno, year] + [round(vals[c], 3) if c in vals else "" for c in COVARIATE_COLS])
+    return [["gwno", "year"] + COVARIATE_COLS] + rows
+
+
 # ---------------------------------------------------------------- long tail
 
 TERMINATION_OUTCOMES = {
@@ -849,6 +947,7 @@ def main() -> None:
     episode_table = build_episodes()
     coup_table = build_coups(states, last_year)
     population_table = build_population(states, last_year)
+    covariate_table = build_covariates(states, last_year)
     peace = build_peace_agreements(states)
     if peace:
         dump_yaml(REGISTRY / "peace-agreements.yaml", peace)
@@ -861,6 +960,7 @@ def main() -> None:
     write_csv(TABLES / "episode.csv", episode_table[0], episode_table[1:])
     write_csv(TABLES / "coup.csv", coup_table[0], coup_table[1:])
     write_csv(TABLES / "population.csv", population_table[0], population_table[1:])
+    write_csv(TABLES / "covariates.csv", covariate_table[0], covariate_table[1:])
 
     meta = {
         "ucdp_release": manifest["ucdp_release"],
