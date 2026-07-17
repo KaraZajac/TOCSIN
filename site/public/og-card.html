@@ -1,0 +1,65 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1200px; height:630px; overflow:hidden; }
+  body {
+    position:relative;
+    background: radial-gradient(130% 150% at 82% -12%, #1e1e2e 0%, #181825 52%, #11111b 100%);
+    color:#cdd6f4; font-family:"Inter",system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  .ridge { position:absolute; inset:0; z-index:0; }
+  .topbar { position:absolute; top:0; left:0; right:0; height:6px;
+    background:linear-gradient(90deg,#eba0ac 0%,#f38ba8 52%,#89b4fa 100%); z-index:3; }
+  .pad { position:absolute; inset:0; padding:64px 72px; z-index:2; display:flex; flex-direction:column; }
+  .eyebrow { font-family:"JetBrains Mono",monospace; font-weight:500; font-size:20px;
+    letter-spacing:.30em; text-transform:uppercase; color:#89b4fa; }
+  .eyebrow .a { color:#f38ba8; }
+  .wordmark { font-weight:900; font-size:152px; line-height:.96; letter-spacing:.012em;
+    color:#eff1f5; margin-top:12px; }
+  .tagline { font-weight:400; font-size:32px; line-height:1.33; color:#bac2de;
+    max-width:1010px; margin-top:22px; }
+  .tagline b { font-weight:700; color:#eff1f5; }
+  .spacer { flex:1; }
+  .facts { display:flex; gap:50px; align-items:flex-end; }
+  .fact .n { font-family:"JetBrains Mono",monospace; font-weight:600; font-size:45px;
+    color:#eff1f5; letter-spacing:-.015em; }
+  .fact .k { font-family:"JetBrains Mono",monospace; font-weight:500; font-size:14.5px;
+    text-transform:uppercase; letter-spacing:.11em; color:#7f849c; margin-top:7px; }
+  .foot { display:flex; justify-content:space-between; align-items:center; margin-top:30px;
+    font-family:"JetBrains Mono",monospace; font-size:19px; }
+  .foot .url { color:#89b4fa; font-weight:600; letter-spacing:.02em; }
+  .foot .src { color:#6c7086; letter-spacing:.04em; }
+</style></head>
+<body>
+  <svg class="ridge" viewBox="0 0 1200 630" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="rg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f38ba8" stop-opacity="0.17"/>
+        <stop offset="1" stop-color="#f38ba8" stop-opacity="0.012"/>
+      </linearGradient>
+    </defs>
+    <path d="M 0.0,630 L 0.0,513.3 L 33.3,438.3 L 66.7,480.0 L 100.0,496.8 L 133.3,504.9 L 166.7,330.0 L 200.0,530.1 L 233.3,471.6 L 266.7,521.7 L 300.0,538.2 L 333.3,429.9 L 366.7,446.7 L 400.0,588.3 L 433.3,563.4 L 466.7,571.8 L 500.0,596.7 L 533.3,630.0 L 566.7,621.6 L 600.0,613.2 L 633.3,579.9 L 666.7,546.6 L 700.0,605.1 L 733.3,555.0 L 766.7,455.1 L 800.0,405.0 L 833.3,380.1 L 866.7,388.2 L 900.0,396.6 L 933.3,413.4 L 966.7,463.2 L 1000.0,488.4 L 1033.3,421.8 L 1066.7,354.9 L 1100.0,338.4 L 1133.3,371.7 L 1166.7,363.3 L 1200.0,346.8 L 1200.0,630 Z" fill="url(#rg)"/>
+    <path d="M 0.0,513.3 L 33.3,438.3 L 66.7,480.0 L 100.0,496.8 L 133.3,504.9 L 166.7,330.0 L 200.0,530.1 L 233.3,471.6 L 266.7,521.7 L 300.0,538.2 L 333.3,429.9 L 366.7,446.7 L 400.0,588.3 L 433.3,563.4 L 466.7,571.8 L 500.0,596.7 L 533.3,630.0 L 566.7,621.6 L 600.0,613.2 L 633.3,579.9 L 666.7,546.6 L 700.0,605.1 L 733.3,555.0 L 766.7,455.1 L 800.0,405.0 L 833.3,380.1 L 866.7,388.2 L 900.0,396.6 L 933.3,413.4 L 966.7,463.2 L 1000.0,488.4 L 1033.3,421.8 L 1066.7,354.9 L 1100.0,338.4 L 1133.3,371.7 L 1166.7,363.3 L 1200.0,346.8" fill="none" stroke="#eba0ac" stroke-opacity="0.30" stroke-width="1.6"/>
+  </svg>
+  <div class="topbar"></div>
+  <div class="pad">
+    <div class="eyebrow">Geopolitical <span class="a">Early&#8209;Warning</span></div>
+    <div class="wordmark">TOCSIN</div>
+    <div class="tagline">Reference&#8209;class base rates for where organized violence goes next — <b>honestly scored against the prior.</b></div>
+    <div class="spacer"></div>
+    <div class="facts">
+      <div class="fact"><div class="n">417,968</div><div class="k">Georeferenced events</div></div>
+      <div class="fact"><div class="n">303</div><div class="k">Armed conflicts</div></div>
+      <div class="fact"><div class="n">697</div><div class="k">Conflict dyads</div></div>
+      <div class="fact"><div class="n">225</div><div class="k">States, 1946&#8211;2025</div></div>
+    </div>
+    <div class="foot">
+      <span class="url">tocsin.karazajac.io</span>
+      <span class="src">UCDP/PRIO · release 26.1</span>
+    </div>
+  </div>
+</body></html>
