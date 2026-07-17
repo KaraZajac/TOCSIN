@@ -113,6 +113,15 @@ question's deciding date — once the threshold crosses, the book is closed
   so out loud. Read [docs/method.md](docs/method.md) before trusting any
   number.
 
+## The paper
+
+The system's findings are written up as a preprint —
+[*Transparent Base Rates Approach the State of the Art in Conflict
+Forecasting*](paper/tocsin-preprint.md): the 12% transparency tax, five
+preregistered covariate failures, the metric-blindness decomposition, and
+the equal-weight pool that beats every model. Every number regenerates from
+this repository.
+
 ## Setup
 
 Python ≥ 3.11 and PyYAML; nothing else. `pip install -e .` for the `tocsin`
