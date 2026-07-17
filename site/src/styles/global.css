@@ -317,3 +317,23 @@ table.data tbody tr:hover td { background: color-mix(in srgb, var(--surface) 55%
 .dumbbell .pt.prior { background: var(--baseline); }
 .dumbbell .pt.you { background: var(--accent); }
 .dumbbell .outcome-line { position: absolute; top: 3px; bottom: 3px; width: 2px; background: var(--ink-2); }
+
+/* ------------------------------------------------------------------ mobile
+   The rule (same as JUDGMENT/AUSPEX): wide content scrolls inside its own
+   container — the page body never scrolls or pans horizontally. body has
+   overflow-x: clip, so anything without its own scroll container would be
+   CUT OFF, not scrollable; these make every wide element self-scrolling. */
+@media (max-width: 900px) {
+  /* bare data tables (watchfloor, arena, dyads, …) become their own
+     horizontal scroll containers instead of stretching the page */
+  table.data { display: block; overflow-x: auto; max-width: 100%; }
+  table.data th, table.data td.n { white-space: nowrap; }
+}
+@media (max-width: 760px) {
+  /* wide charts pan at full size inside .viz-scroll rather than shrinking
+     to unreadable tick text (overrides the global .viz svg max-width) */
+  .viz-scroll svg { max-width: none; }
+  .card { padding: 14px; }
+  .hero-value { font-size: 40px; }
+  h1 { font-size: 22px; }
+}
