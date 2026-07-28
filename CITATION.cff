@@ -5,5 +5,86 @@ type: software
 authors:
   - family-names: Zajac
     given-names: Kara
+    orcid: "https://orcid.org/0009-0001-7400-1394"
+repository-code: "https://github.com/KaraZajac/TOCSIN"
+url: "https://tocsin.karazajac.io"
 license: MIT
-repository-code: https://github.com/KaraZajac/TOCSIN
+keywords:
+  - conflict forecasting
+  - armed conflict
+  - base rates
+  - reference-class forecasting
+  - calibration
+  - Brier score
+  - forecast combination
+  - UCDP
+  - VIEWS
+abstract: >-
+  A conflict-forecasting system whose every probability is a transparent
+  reference-class base rate: an explicit ladder (the unit's own history, its
+  region, the world) over the UCDP record, conditioned on recency structure,
+  with empirical-Bayes shrinkage and the class counts in view; walk-forward
+  calibration scoring on ~280k historical unit-years; a journal of
+  operational questions with UCDP-pinned criteria that resolve mechanically
+  from each data refresh; and a challenger arena scoring other forecasts
+  (VIEWS, naive baselines, analyst overrides) against the engine on
+  identical resolved outcomes. Evaluated walk-forward on the VIEWS target
+  (7,680 country-months, five historical vantages), the system attains
+  Brier 0.0461 against VIEWS's 0.0412 — within 12% of the state of the art
+  — while five preregistered covariate families (regime type, horizon
+  decay, youth bulges, militarized-dispute and alliance history, ethnic
+  exclusion) all fail out-of-sample against the recency-conditioned base
+  rates. The preprint in paper/ documents the transparency tax, an exact
+  metric-blindness decomposition of the Brier score at rare-event base
+  rates, and the equal-weight pool that beats every individual model.
+  Derived tables and registries are CC BY 4.0, built from UCDP/PRIO and
+  other public sources; see DATA-RIGHTS.md for the layered rights and
+  required citations.
+references:
+  - type: article
+    title: Introducing the UCDP Georeferenced Event Dataset
+    authors:
+      - family-names: Sundberg
+        given-names: Ralph
+      - family-names: Melander
+        given-names: Erik
+    journal: Journal of Peace Research
+    volume: 50
+    issue: 4
+    year: 2013
+    start: 523
+    end: 532
+  - type: article
+    title: "Armed Conflict 1946–2001: A New Dataset"
+    authors:
+      - family-names: Gleditsch
+        given-names: Nils Petter
+      - family-names: Wallensteen
+        given-names: Peter
+      - family-names: Eriksson
+        given-names: Mikael
+      - family-names: Sollenberg
+        given-names: Margareta
+      - family-names: Strand
+        given-names: Håvard
+    journal: Journal of Peace Research
+    volume: 39
+    issue: 5
+    year: 2002
+    start: 615
+    end: 637
+  - type: article
+    title: Organized Violence 1989–2025 (UCDP Annual Update)
+    authors:
+      - family-names: Davies
+        given-names: Shawn
+      - family-names: Engström
+        given-names: Garoun
+      - family-names: Pettersson
+        given-names: Therése
+      - family-names: Öberg
+        given-names: Magnus
+    journal: Journal of Peace Research
+    volume: 63
+    year: 2026
+    notes: Forthcoming at time of archiving; verify final citation.

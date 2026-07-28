@@ -1,0 +1,36 @@
+{
+  "title": "TOCSIN: a conflict-forecasting system with reference-class base rates and calibration scoring",
+  "upload_type": "software",
+  "description": "A conflict-forecasting system whose every probability is a transparent reference-class base rate computed from the UCDP record: an explicit ladder (the unit's own history, its region, the world) conditioned on recency structure, with empirical-Bayes shrinkage and the class counts in view; a journal of operational questions with UCDP-pinned resolution criteria that grade themselves from each data refresh; and an arena that scores challenger forecasts (VIEWS, naive baselines, analyst overrides) against the engine on identical resolved outcomes. Evaluated walk-forward on the VIEWS target (7,680 country-months across five historical vantages), the system attains Brier 0.0461 against VIEWS's 0.0412 — within 12% of the state of the art — and five preregistered covariate families (regime type, horizon decay, youth bulges, militarized-dispute and alliance history, ethnic exclusion) all fail out-of-sample against the recency-conditioned base rates. The preprint in paper/ documents the transparency tax, an exact metric-blindness decomposition of the Brier score at rare-event base rates, and the equal-weight pool that beats every individual model. Code is MIT; the derived tables and registries are CC BY 4.0, built from UCDP/PRIO, Gleditsch–Ward, Correlates of War, EPR, V-Dem/OWID, Powell & Thyne, and World Bank sources — see DATA-RIGHTS.md for the layered attribution and required citations. The redistributable dataset bundle (tocsin-dataset-26.1, with full codebook) is attached to the GitHub release; the live deployment is at https://tocsin.karazajac.io.",
+  "creators": [
+    {
+      "name": "Zajac, Kara",
+      "orcid": "0009-0001-7400-1394"
+    }
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "keywords": [
+    "conflict forecasting",
+    "armed conflict",
+    "base rates",
+    "reference-class forecasting",
+    "calibration",
+    "Brier score",
+    "forecast combination",
+    "UCDP",
+    "VIEWS"
+  ],
+  "related_identifiers": [
+    {
+      "relation": "isDerivedFrom",
+      "identifier": "https://ucdp.uu.se",
+      "resource_type": "dataset"
+    },
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://tocsin.karazajac.io",
+      "resource_type": "other"
+    }
+  ]
+}
