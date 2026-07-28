@@ -8,6 +8,7 @@ authors:
     orcid: "https://orcid.org/0009-0001-7400-1394"
 repository-code: "https://github.com/KaraZajac/TOCSIN"
 url: "https://tocsin.karazajac.io"
+doi: 10.5281/zenodo.21634193  # concept DOI - resolves to the latest archived version
 license: MIT
 keywords:
   - conflict forecasting

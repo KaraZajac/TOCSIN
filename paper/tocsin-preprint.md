@@ -9,7 +9,8 @@ Preprint · July 2026 · v1.0
 
 Code, data, and a continuously updating deployment are public:
 https://github.com/KaraZajac/TOCSIN · https://tocsin.karazajac.io ·
-dataset bundle `tocsin-dataset-26.1` (CC BY 4.0).
+dataset bundle `tocsin-dataset-26.1` (CC BY 4.0) · archived at DOI
+[10.5281/zenodo.21634193](https://doi.org/10.5281/zenodo.21634193).
 
 ---
 

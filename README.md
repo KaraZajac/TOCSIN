@@ -1,5 +1,7 @@
 # TOCSIN
 
+[![DOI](https://zenodo.org/badge/1302288210.svg)](https://doi.org/10.5281/zenodo.21634193)
+
 > *"A strange game. The only winning move is to check whether anything
 > actually beats the base rate."*
 
@@ -121,6 +123,13 @@ Forecasting*](paper/tocsin-preprint.md): the 12% transparency tax, five
 preregistered covariate failures, the metric-blindness decomposition, and
 the equal-weight pool that beats every model. Every number regenerates from
 this repository.
+
+To cite this project, see [CITATION.cff](CITATION.cff) or use the archival
+concept DOI [10.5281/zenodo.21634193](https://doi.org/10.5281/zenodo.21634193),
+which always resolves to the latest archived version (v1.0.0:
+10.5281/zenodo.21634194). Each release carries the CC BY 4.0 dataset bundle
+(`tocsin-dataset-*.tar.gz`, with codebook); rights and attribution for the
+layered data are documented in [DATA-RIGHTS.md](DATA-RIGHTS.md).
 
 ## Setup
 
