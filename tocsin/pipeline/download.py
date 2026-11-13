@@ -8,7 +8,9 @@ sources/manifest.yaml for the rest of the pipeline.
 """
 
 import datetime
+import hashlib
 import io
+import json
 import re
 import ssl
 import sys
@@ -92,15 +94,22 @@ COW_FILES = {
 }
 
 
+def _pinned_ca(pem: str) -> ssl.SSLContext:
+    """Default verification (system roots, hostname check) plus one pinned
+    public intermediate from tocsin/pipeline/, for a host that serves its leaf
+    certificate without it."""
+    ctx = ssl.create_default_context()
+    ctx.load_verify_locations(cafile=str(Path(__file__).parent / pem))
+    return ctx
+
+
 def _cow_context() -> ssl.SSLContext:
     """correlatesofwar.org serves its leaf certificate without the InCommon
     intermediate, so default verification fails ('unable to verify the first
     certificate'). We complete the chain with a pinned copy of the public
     intermediate (tocsin/pipeline/cow-ca.pem, verified against the system
     USERTrust root; see the file header) on top of the default trust store."""
-    ctx = ssl.create_default_context()
-    ctx.load_verify_locations(cafile=str(Path(__file__).parent / "cow-ca.pem"))
-    return ctx
+    return _pinned_ca("cow-ca.pem")
 
 
 def _get_cow(url: str, timeout: int = 300) -> bytes:
@@ -189,6 +198,68 @@ def fetch_file(url: str, dest: Path) -> None:
     print(f"  GET {url}")
     dest.write_bytes(_get(url))
     print(f"  -> {dest.relative_to(ROOT)} ({dest.stat().st_size:,} bytes)")
+
+
+# ------------------------------------------------------------ Powell–Thyne coups
+
+# The authors' copy comes first. uky.edu serves its leaf certificate without
+# the Sectigo DV R36 intermediate (completed from uky-ca.pem, as for COW), and
+# even then answered 403 Forbidden to automated clients on 2026-11-13. So in
+# practice the source is the Wayback Machine's newest capture, fetched raw
+# (id_; the year-hint redirect can land on an HTML interstitial), with one
+# capture pinned by sha256 as the last resort.
+PT_URL = "https://www.uky.edu/~clthyn2/coup_data/powell_thyne_ccode_year.txt"
+PT_CDX = (
+    "https://web.archive.org/cdx/search/cdx?url=uky.edu/~clthyn2/coup_data/"
+    "powell_thyne_ccode_year.txt&output=json&filter=statuscode:200&limit=-1"
+)
+PT_PINNED = f"https://web.archive.org/web/20260311172726id_/{PT_URL}"
+PT_PINNED_SHA256 = "b19c175420a6c052499783c9e50d0a908828ea444ec43ed83e4da62bc684eb23"  # 708,318 bytes
+
+
+def pull_powell_thyne(dest: Path) -> None:
+    """Powell–Thyne coups (country-year panel, updated ~annually) from the
+    first source whose answer is the data file (it starts 'ccode<TAB>'),
+    naming that source; stops with every source's error if none is."""
+
+    def authors():
+        print(f"  GET {PT_URL}")
+        return _get(PT_URL, context=_pinned_ca("uky-ca.pem")), "uky.edu"
+
+    def newest_capture():
+        print(f"  GET {PT_CDX}")
+        try:
+            _header, *captures = json.loads(_get(PT_CDX, timeout=60))
+            ts, orig = captures[-1][1], captures[-1][2]  # limit=-1: just the newest
+        except (ValueError, IndexError, TypeError):
+            raise SystemExit("the Wayback CDX answer lists no capture")
+        url = f"https://web.archive.org/web/{ts}id_/{orig}"
+        print(f"  GET {url}")
+        return _get(url), f"Wayback capture {ts}"
+
+    def pinned_capture():
+        print(f"  GET {PT_PINNED}")
+        data = _get(PT_PINNED)
+        if hashlib.sha256(data).hexdigest() != PT_PINNED_SHA256:
+            raise SystemExit(f"{PT_PINNED} does not match its pinned sha256")
+        return data, "pinned Wayback capture 20260311172726"
+
+    errors = []
+    for source in (authors, newest_capture, pinned_capture):
+        try:
+            data, label = source()
+        except SystemExit as e:
+            errors.append(str(e))
+            print(f"  ! {e}", flush=True)
+            continue
+        if not data.startswith(b"ccode\t"):
+            errors.append(f"{label} is not the data file (it starts {data[:24]!r})")
+            print(f"  ! {errors[-1]}", flush=True)
+            continue
+        dest.write_bytes(data)
+        print(f"  -> {dest.relative_to(ROOT)} ({len(data):,} bytes, from {label})")
+        return
+    raise SystemExit("Powell–Thyne coups: every source failed —\n  " + "\n  ".join(errors))
 
 
 def main() -> None:
@@ -292,32 +363,10 @@ def main() -> None:
             continue
         fetch_file(url, dest)
 
-    # Powell–Thyne coups (country-year panel, updated ~annually). Their uky
-    # host rejects unattended clients, so the fallback of record is the
-    # Wayback Machine's newest 200-status snapshot, resolved through the CDX
-    # index and fetched with the id_ (raw content) URL — the year-hint
-    # redirect sometimes lands on an HTML interstitial instead of the file.
     dest = SOURCES / "pt-coups.tsv"
     manifest["files"]["pt-coups"] = dest.name
     if not dest.exists() or force:
-        pt = "http://www.uky.edu/~clthyn2/coup_data/powell_thyne_ccode_year.txt"
-        try:
-            fetch_file(pt, dest)
-            assert dest.read_text(errors="replace")[:6] == "ccode\t"
-        except (SystemExit, AssertionError):
-            import json
-
-            cdx = (
-                "http://web.archive.org/cdx/search/cdx?url=uky.edu/~clthyn2/coup_data/"
-                "powell_thyne_ccode_year.txt&output=json&filter=statuscode:200&limit=-1"
-            )
-            rows = json.loads(_get(cdx, timeout=60))
-            if len(rows) < 2:
-                raise SystemExit("no Wayback snapshot of the Powell–Thyne file")
-            ts, orig = rows[-1][1], rows[-1][2]
-            fetch_file(f"https://web.archive.org/web/{ts}id_/{orig}", dest)
-            if dest.read_text(errors="replace")[:6] != "ccode\t":
-                raise SystemExit("Wayback snapshot did not contain the Powell–Thyne data file")
+        pull_powell_thyne(dest)
     else:
         print(f"  cached {dest.relative_to(ROOT)}")
 
@@ -326,11 +375,9 @@ def main() -> None:
 
     print("World Bank WDI covariates:")
     worldbank.pull(force=force)
-    import json as _json
-
     countries = SOURCES / "worldbank" / "countries.json"
     if not countries.exists() or force:
-        countries.write_text(_json.dumps(worldbank._get(f"{worldbank.API}/country?format=json&per_page=400")))
+        countries.write_text(json.dumps(worldbank._get(f"{worldbank.API}/country?format=json&per_page=400")))
         print(f"  -> {countries.relative_to(ROOT)}")
 
     print("Correlates of War (MIDs, capabilities, alliances):")
