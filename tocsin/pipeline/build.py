@@ -877,25 +877,41 @@ def build_population(states, last_year: int) -> list[list]:
     return [["gwno", "year", "population"]] + [[g, y, p] for (g, y), p in sorted(dedup.items())]
 
 
+# Regimes of the World class by label: OWID's grapher CSV switched from the
+# 0–3 code to these labels between 2026-10-20 and 2026-11-13
+ROW_CODES = {"closed autocracy": 0, "electoral autocracy": 1, "electoral democracy": 2, "liberal democracy": 3}
+
+
 def build_regime(states, last_year: int) -> list[list]:
     """data/tables/regime.csv: Regimes of the World (0–3) per gwno-year,
-    1945–present, name-matched from the OWID/V-Dem extract."""
+    1945–present, name-matched from the OWID/V-Dem extract. A value that is
+    neither a code nor a known label stops the build: skipping it wrote an
+    empty table, which the verify gate does not catch."""
     by_name = {s["name"]: s["gwno"] for s in states}
     rows = []
-    unmatched = set()
+    unmatched, unknown = set(), set()
     with open(SOURCES / "owid-regime.csv", newline="", encoding="utf-8-sig") as f:
         for r in csv.DictReader(f):
             year = int(r["Year"])
-            if year < YEAR_MIN - 1 or not r["Political regime"].strip().isdigit():
+            value = r["Political regime"].strip()
+            if year < YEAR_MIN - 1 or not value:
+                continue
+            code = int(value) if value.isdigit() else ROW_CODES.get(value.lower())
+            if code is None:
+                unknown.add(value)
                 continue
             name = OWID_NAMES.get(r["Entity"], r["Entity"])
             gwno = by_name.get(name)
             if gwno is None:
                 unmatched.add(r["Entity"])
                 continue
-            rows.append([to_gw(gwno, year), year, int(r["Political regime"])])
+            rows.append([to_gw(gwno, year), year, code])
+    if unknown:
+        raise SystemExit(f"owid-regime.csv: unknown Political regime values {sorted(unknown)[:8]} — OWID format changed?")
     if unmatched:
         print(f"  regime: no gwno for {len(unmatched)} OWID entities: {sorted(unmatched)[:8]}")
+    if not rows:
+        raise SystemExit("owid-regime.csv gave no regime rows — OWID format changed?")
     rows.sort()
     dedup = {(g, y): v for g, y, v in rows}  # succession alias can collide; last wins
     return [["gwno", "year", "regime"]] + [[g, y, v] for (g, y), v in sorted(dedup.items())]
