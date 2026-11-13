@@ -1,11 +1,11 @@
 ucdp_release: '26.1'
-downloaded: '2026-09-20T11:32:14Z'
-built: '2026-09-20T11:33:29Z'
+downloaded: '2026-11-13T14:46:09Z'
+built: '2026-11-13T14:47:18Z'
 annual_coverage_end: '2025-12-31'
-data_through: '2026-07-31'
+data_through: '2026-09-30'
 candidate_files:
-- GEDEvent_v26_01_26_06.csv
-- GEDEvent_v26_0_7.csv
+- GEDEvent_v26_0_9.csv
+- GEDEvent_v26_01_26_09.csv
 candidate_months:
 - 2026-01
 - 2026-02
@@ -14,11 +14,13 @@ candidate_months:
 - 2026-05
 - 2026-06
 - 2026-07
+- 2026-08
+- 2026-09
 counts:
   ged_events: 417968
   ged_bad_dates: 0
-  candidate_events: 11867
-  candidate_unattributed: 2494
+  candidate_events: 16633
+  candidate_unattributed: 3672
   states: 225
   conflicts: 303
   dyads: 697
@@ -26,6 +28,6 @@ counts:
   onesided_actors: 378
   country_years: 12703
   dyad_years: 4642
-  country_months: 15692
-  dyad_months: 44118
+  country_months: 15790
+  dyad_months: 44484
   pair_years: 243609
