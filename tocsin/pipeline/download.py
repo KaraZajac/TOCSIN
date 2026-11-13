@@ -321,7 +321,7 @@ def main() -> None:
     else:
         print(f"  cached {dest.relative_to(ROOT)}")
 
-    # World Bank WDI covariates (its own paginated API module)
+    # World Bank WDI covariates (its own module: bulk CSV, else the JSON API)
     from tocsin.pipeline import worldbank
 
     print("World Bank WDI covariates:")
