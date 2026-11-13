@@ -22,6 +22,11 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    env:
+      # unbuffered stdout: an error then prints after the progress lines it
+      # interrupted, not above them (the 2026-10 traceback landed at the top
+      # of the step, so its tail read as a silent exit)
+      PYTHONUNBUFFERED: "1"
     steps:
       - uses: actions/checkout@v4
 

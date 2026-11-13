@@ -13,12 +13,11 @@ honest.
 """
 
 import json
-import urllib.request
 
 from tocsin.paths import ROOT, SOURCES
+from tocsin.pipeline.download import _get as fetch
 
 API = "https://api.worldbank.org/v2"
-UA = "TOCSIN-pipeline/0.5 (academic research)"
 DEST = SOURCES / "worldbank"
 
 # logical name -> (indicator code, source label for attribution)
@@ -34,8 +33,23 @@ INDICATORS = {
 
 
 def _get(url: str):
-    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=120) as r:
-        return json.loads(r.read())
+    """One API page as (meta, rows), through download's retrying fetcher.
+    Uncached all-country requests can take minutes before the first byte
+    (118s, then over 120s, then 298s on 2026-11-13; cached ones about 1s),
+    and the old 120s timeout is what failed the 2026-10 refresh. The API's
+    Cloudflare front gives up at 300s with an HTTP 524, which the fetcher
+    retries; 600s just keeps our own timeout out of its way.
+    A 200 that is not a data page (the API's error message for a bad or
+    retired indicator, an HTML error page) stops the pull, showing what came
+    back."""
+    body = fetch(url, timeout=600)
+    try:
+        meta, rows = json.loads(body)
+    except (ValueError, TypeError):  # not JSON, or the one-element error message
+        meta = rows = None
+    if not isinstance(meta, dict) or "pages" not in meta:
+        raise SystemExit(f"World Bank API returned no data page for {url}: {body[:300].decode(errors='replace')}")
+    return meta, rows
 
 
 def fetch_indicator(code: str) -> list[dict]:

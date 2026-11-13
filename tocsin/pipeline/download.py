@@ -12,7 +12,9 @@ import io
 import re
 import ssl
 import sys
+import time
 import zipfile
+from http.client import HTTPException
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -53,12 +55,31 @@ GW_FILES = {
 }
 
 
-def _get(url: str, timeout: int = 300) -> bytes:
-    try:
-        with urlopen(Request(url, headers={"User-Agent": UA}), timeout=timeout) as resp:
-            return resp.read()
-    except (HTTPError, URLError, TimeoutError) as e:
-        raise SystemExit(f"download failed: {url} ({e})")
+ATTEMPTS = 4  # first try + 3 retries, 15s / 30s / 60s apart
+
+
+def _get(url: str, timeout: int = 300, context: ssl.SSLContext | None = None) -> bytes:
+    """GET with bounded retries. One slow or flaky host used to sink the whole
+    monthly refresh (2026-08 a Wayback CDX 503, 2026-10 a World Bank timeout),
+    so timeouts, dropped connections and HTTP 408/429/5xx are retried with
+    backoff. Any other HTTP status, or a certificate failure, is an answer,
+    not a blip, and fails at once (it also lets Powell–Thyne's fallback start
+    straight away)."""
+    for attempt in range(1, ATTEMPTS + 1):
+        try:
+            with urlopen(Request(url, headers={"User-Agent": UA}), timeout=timeout, context=context) as resp:
+                return resp.read()
+        except HTTPError as e:
+            err, transient = f"HTTP {e.code} {e.reason}", e.code in (408, 429) or e.code >= 500
+        except (OSError, HTTPException) as e:  # URLError, timeouts, resets, truncated bodies
+            err = f"{type(e).__name__}: {e}"
+            cause = e.reason if isinstance(e, URLError) else e
+            transient = not isinstance(cause, ssl.SSLCertVerificationError)
+        if not transient or attempt == ATTEMPTS:
+            raise SystemExit(f"download failed: {url} ({err}; attempt {attempt}/{ATTEMPTS})")
+        wait = 15 * 2 ** (attempt - 1)
+        print(f"  ! attempt {attempt}/{ATTEMPTS} failed: {url} ({err}) — retrying in {wait}s", flush=True)
+        time.sleep(wait)
 
 
 # ------------------------------------------------------------ Correlates of War
@@ -83,12 +104,7 @@ def _cow_context() -> ssl.SSLContext:
 
 
 def _get_cow(url: str, timeout: int = 300) -> bytes:
-    try:
-        req = Request(url, headers={"User-Agent": UA})
-        with urlopen(req, timeout=timeout, context=_cow_context()) as resp:
-            return resp.read()
-    except (HTTPError, URLError, TimeoutError) as e:
-        raise SystemExit(f"download failed: {url} ({e})")
+    return _get(url, timeout, context=_cow_context())
 
 
 def _zip_member(zf: zipfile.ZipFile, basename: str) -> str:
@@ -311,13 +327,10 @@ def main() -> None:
     print("World Bank WDI covariates:")
     worldbank.pull(force=force)
     import json as _json
-    import urllib.request as _u
 
     countries = SOURCES / "worldbank" / "countries.json"
     if not countries.exists() or force:
-        req = _u.Request(f"{worldbank.API}/country?format=json&per_page=400", headers={"User-Agent": UA})
-        with _u.urlopen(req, timeout=60) as r:
-            countries.write_bytes(r.read())
+        countries.write_text(_json.dumps(worldbank._get(f"{worldbank.API}/country?format=json&per_page=400")))
         print(f"  -> {countries.relative_to(ROOT)}")
 
     print("Correlates of War (MIDs, capabilities, alliances):")
