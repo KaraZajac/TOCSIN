@@ -33,6 +33,28 @@ def rows_of(name: str) -> list[dict]:
         return list(csv.DictReader(f))
 
 
+def regime_checks(regime: list[dict], cy: list[dict]) -> list[tuple[bool, str]]:
+    """(ok, label) checks that regime.csv holds real data: rows; a latest
+    year at most one behind the annual conflict data (V-Dem and UCDP both
+    publish the previous year, months apart; 0 behind on 2026-11-13); and
+    ≥90% of main-system states coded in the latest year both tables cover
+    (98.3%, 171/174, in 2025; never under 95.8% since 1946). An OWID format
+    change once emptied this table without tripping any other check."""
+    if not regime:
+        return [(False, "regime table has rows")]
+    latest = max(int(r["year"]) for r in regime)
+    cy_latest = max(int(r["year"]) for r in cy)
+    year = min(latest, cy_latest)
+    coded = {r["gwno"] for r in regime if int(r["year"]) == year}
+    main = {r["gwno"] for r in cy if int(r["year"]) == year and r["main_system"] == "1"}
+    cov = len(coded & main) / max(len(main), 1)
+    return [
+        (True, f"regime table has rows ({len(regime):,})"),
+        (latest >= cy_latest - 1, f"regime data reaches {latest} (conflict data {cy_latest})"),
+        (cov >= 0.9, f"regime covers {year} main-system states ({cov:.0%})"),
+    ]
+
+
 def main() -> None:
     if not (DATA / "meta.yaml").exists():
         raise SystemExit("data/meta.yaml missing — run `tocsin build` first")
@@ -149,6 +171,10 @@ def main() -> None:
         cy_recent = {int(r["gwno"]) for r in rows_of("country-year.csv") if r["year"] == "2023" and r["main_system"] == "1"}
         cov = len(recent & cy_recent) / max(len(cy_recent), 1)
         check(cov > 0.9, f"population covers 2023 main-system states ({cov:.0%})")
+
+    if (TABLES / "regime.csv").exists():
+        for ok, label in regime_checks(rows_of("regime.csv"), cy):
+            check(ok, label)
 
     bdh_path = TABLES / "battle-deaths-history.csv"
     if bdh_path.exists():
